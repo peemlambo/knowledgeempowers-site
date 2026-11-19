@@ -230,3 +230,29 @@ figcaption{font-size:.82rem;color:var(--mut);text-align:center;margin-top:14px}
 .page.after{padding-top:56px}
 @media (min-width:1181px){.phead .hero.solo{padding-block:80px 88px}.phead .hero.solo h1{font-size:3.6rem}.page.after{padding-top:72px}}
 @media (max-width:900px){.phead .hero.solo{padding-block:48px 56px}}
+
+/* ===== Calmer type scale: smaller headings, more air ===== */
+h1{font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.18;letter-spacing:0}
+h2{font-size:clamp(1.4rem,2.3vw,1.85rem);line-height:1.22}
+h3{font-size:1.12rem}
+.hero .txt,.brand-hero .txt{gap:20px}
+.hero .lead,.brand-hero .lead{font-size:1.05rem;line-height:1.7}
+.brand-hero h1{font-size:clamp(2.1rem,3.8vw,3rem)}
+.brand-hero .wrap{padding-block:72px 80px}
+.phead .hero{padding-block:56px 64px}
+.phead .hero.solo{padding-block:52px 60px}
+.page h2{font-size:clamp(1.3rem,2vw,1.6rem)}
+@media (min-width:1181px){
+  html{font-size:18px}
+  .hero h1,.phead .hero.solo h1{font-size:2.8rem}
+  .brand-hero h1{font-size:3.1rem}
+  .row h2{font-size:1.9rem}
+  .phead .hero{padding-block:72px 80px}
+  .phead .hero.solo{padding-block:64px 72px}
+  .brand-hero .wrap{padding-block:88px 96px}
+  section{padding-block:80px}
+}
+.phead .hero figure{width:100%;max-width:480px;justify-self:end}
+.phead .hero figure.cover{max-width:300px;justify-self:center}
+.brand-hero .book{width:min(330px,100%)}
+@media (max-width:900px){.phead .hero figure{justify-self:center}}

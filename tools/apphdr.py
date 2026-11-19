@@ -37,8 +37,8 @@ def header(cur):
             '<script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script>') % nav
 
 PAGES = {
- 'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:820px!important}}'),
- 'free-classroom-practice/index.html': ('/free-classroom-practice/', ''),
+ 'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:820px!important}}'),
+ 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}'),
  'shop/index.html': ('/shop/', ''),
  'workbooks/digital-math-workbooks/index.html': ('', ''),
  'exam-packs/exam-preparation-packs/index.html': ('', 'body{min-height:calc(100vh - 72px)!important}@media (max-width:1180px){body{min-height:calc(100vh - 64px)!important}}'),
@@ -51,10 +51,12 @@ for f, (cur, extra) in PAGES.items():
     s = re.sub(r'<div id="kehome".*?</span></div>', '', s, count=1, flags=re.S)       # old slim bar
     s = re.sub(r'<style id="kehdr-css">.*?</style>', '', s, flags=re.S)
     s = re.sub(r'<div id="kehdr">.*?</script>', '', s, count=1, flags=re.S)
-    s = s.replace('</head>', CSS.replace("%EXTRA%", extra) + '</head>', 1)
+    css = CSS.replace("%EXTRA%", extra)
+    hd = header(cur) if '</head>' in s else css + header(cur)
+    s = s.replace('</head>', css + '</head>', 1)
     m = re.search(r'<body[^>]*>', s, flags=re.I)
-    if m: s = s[:m.end()] + header(cur) + s[m.end():]
-    else: s = s.replace('<div id="app">', header(cur) + '<div id="app">', 1)
+    if m: s = s[:m.end()] + hd + s[m.end():]
+    else: s = s.replace('<div id="app">', hd + '<div id="app">', 1)
     if f.startswith('shop'):
         s = s.replace('<header>\n    <a class="b"', '<header style="display:none">\n    <a class="b"', 1)
     if f.startswith('free-classroom'):
