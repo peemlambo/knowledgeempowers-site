@@ -631,7 +631,7 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
     <div><b>Tutors are checked</b><span class="mut">Every tutor is vetted, with police clearance and reference checks, before they work with a child.</span></div>
   </div>
 </div></section>
-<section><div class="wrap" style="max-width:860px">
+<section><div class="wrap">
   <div class="sec-head"><div class="eb">Questions</div><h2>Common questions</h2></div>
   %(faq)s
   <p class="mut" style="text-align:center;margin-top:28px">Something else? <a href="https://wa.me/27615818059">Ask us on WhatsApp</a>.</p>
