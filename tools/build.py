@@ -61,7 +61,7 @@ def page(path, title, desc, body, current=None):
 <link rel="stylesheet" href="/assets/classic.css">
 %(ga)s
 </head>
-<body>
+<body%(bc)s>
 <header class="top"><div class="wrap">
   <a href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.png" alt="KnowledgeEmpowers"></a>
   <button class="menu" aria-expanded="false" aria-controls="nav">Menu</button>
@@ -82,7 +82,7 @@ def page(path, title, desc, body, current=None):
 <script>document.querySelector('.menu').addEventListener('click',function(){var n=document.getElementById('nav'),o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)});</script>
 </body>
 </html>
-''' % dict(title=html.escape(title), desc=html.escape(desc), ga=GA, nav=nav, login=LOGIN, body=body, wa=WA)
+''' % dict(title=html.escape(title), desc=html.escape(desc), ga=GA, nav=nav, login=LOGIN, body=body, wa=WA, bc=' class="home"' if path == '/' else '')
     d = path.strip('/')
     if d: os.makedirs(d, exist_ok=True)
     open((d + '/' if d else '') + 'index.html', 'w').write(out)
