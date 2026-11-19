@@ -87,8 +87,8 @@ function openPack_(code) {
         try {   // keep the site header (Home and the menu) at the top of the pack page
           var kh = document.getElementById('kehdr'), kc = document.getElementById('kehdr-css');
           if (kh && kc) {
-            var css = kc.outerHTML + '<style>html{padding-top:0!important}#kehdr{position:relative!important}</style>';
-            var js = '<scr' + 'ipt>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");if(b&&n)b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</scr' + 'ipt>';
+            var css = kc.outerHTML + '<style>html{padding-top:0!important}#kehdr{position:relative!important}body.menu #kehdr{display:none!important}body.menu .top{position:sticky!important;top:0!important;z-index:65!important}body.menu nav.side{position:fixed!important;top:0!important;padding-top:74px!important;left:0!important;right:0!important;bottom:0!important;height:auto!important;max-height:none!important;overflow:auto!important;z-index:60!important}</style>';
+            var js = '<scr' + 'ipt>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");if(b&&n)b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)});function t(){Array.prototype.forEach.call(document.querySelectorAll(".menuBtn"),function(x){if(x.textContent.trim()==="Menu")x.textContent="Topics"})}document.addEventListener("DOMContentLoaded",t);setTimeout(t,300)})();</scr' + 'ipt>';
             var hi = h.toLowerCase().indexOf('</head>'); if (hi > -1) h = h.slice(0, hi) + css + h.slice(hi);
             var bm = /<body[^>]*>/i.exec(h); if (bm) h = h.slice(0, bm.index + bm[0].length) + kh.outerHTML + js + h.slice(bm.index + bm[0].length);
           }
