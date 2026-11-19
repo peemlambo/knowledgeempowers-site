@@ -7,7 +7,7 @@ CSS = '''<style id="kehdr-css">
 html{padding-top:72px!important}
 #kehdr{position:fixed;top:0;left:0;right:0;z-index:9999;height:72px;background:rgba(251,248,244,.97);backdrop-filter:blur(6px);border-bottom:1px solid #E6DCD6;font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
 #kehdr *{box-sizing:border-box}
-#kehdr .kh-w{max-width:1240px;height:100%;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
+#kehdr .kh-w{max-width:none;padding-inline:clamp(20px,5vw,96px)!important;height:100%;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
 #kehdr .kh-logo img{height:48px;width:auto;display:block}
 #kehdr nav{display:flex;align-items:center;gap:26px;font-size:13.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
 #kehdr nav a{color:#1E1414;text-decoration:none;padding:6px 0;border-bottom:1px solid transparent;white-space:nowrap;line-height:1.4}
@@ -41,8 +41,8 @@ def header(cur):
             '<script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script>') % nav
 
 PAGES = {
- 'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:820px!important}}'),
- 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}html{font-size:clamp(16px,calc(10px + .4vw),19px)}main.wrap{max-width:1280px!important}'),
+ 'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:min(1100px,90vw)!important}}'),
+ 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}html{font-size:clamp(16px,calc(10px + .4vw),19px)}main.wrap{max-width:none!important;padding-inline:clamp(20px,5vw,96px)!important}'),
  'shop/index.html': ('/shop/', ''),
  'workbooks/digital-math-workbooks/index.html': ('', ''),
  'exam-packs/exam-preparation-packs/index.html': ('', 'body{min-height:calc(100vh - 72px)!important}@media (max-width:1180px){body{min-height:calc(100vh - 64px)!important}}'),

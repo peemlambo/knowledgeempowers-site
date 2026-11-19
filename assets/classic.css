@@ -441,3 +441,19 @@ body.home .brand-hero .wrap{min-height:calc(100vh - 118px);padding-block:var(--g
   .phead .hero figure.cover{max-width:360px;justify-self:center}
 }
 @media (max-width:900px){.phead .hero{gap:36px}}
+
+/* ===== Full screen everywhere (no narrow "book" column) ===== */
+.wrap,.top .wrap{max-width:none!important;padding-inline:clamp(20px,5vw,96px)}
+.wrap.page,.wrap.page.wide{max-width:none!important;padding-inline:clamp(20px,5vw,96px)}
+.wrap.page>p,.wrap.page>.note,.wrap.page blockquote{max-width:80ch}
+.wrap.page ul{columns:2 22rem;column-gap:56px}
+.wrap.page ul li{break-inside:avoid}
+.wrap.page .cards{grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
+.wrap.page .prices{max-width:44rem}
+.sec-head{max-width:56rem}
+.faq{max-width:none}
+section .wrap[style*="max-width:860px"]{max-width:none!important}
+.says-grid{max-width:none}
+@media (min-width:1181px){.phead .hero figure{max-width:min(40vw,640px)}.brand-hero .book,body.home .brand-hero .book{width:min(30vw,560px)}}
+.wrap.page ul{columns:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(22rem,1fr));gap:10px 56px}
+.wrap.page ul li{margin:0}
