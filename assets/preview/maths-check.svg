@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="Public Sans, Arial, sans-serif">
+  <rect width="800" height="600" fill="#F4EDE6"/>
+  <circle cx="690" cy="90" r="120" fill="none" stroke="#B08D57" stroke-opacity=".35"/>
+  <!-- report card -->
+  <g transform="translate(110 70)">
+    <rect x="10" y="16" width="560" height="470" fill="#3C140A" opacity=".10" rx="6"/>
+    <rect width="560" height="470" fill="#fff" stroke="#E6DCD6" rx="6"/>
+    <rect width="560" height="78" fill="#7A0000" rx="6"/><rect y="60" width="560" height="18" fill="#7A0000"/>
+    <text x="32" y="34" fill="#E9D3A6" font-size="13" font-weight="700" letter-spacing="2.5">FREE MATHS CHECK · REPORT</text>
+    <text x="32" y="60" fill="#fff" font-size="22" font-family="Bitter, Georgia, serif" font-weight="600">Lerato · Grade 7</text>
+    <g font-size="15" fill="#1E1414">
+      <text x="32" y="122">Whole numbers</text>
+      <rect x="230" y="108" width="250" height="16" rx="8" fill="#F1EAE4"/><rect x="230" y="108" width="235" height="16" rx="8" fill="#2E6B3F"/>
+      <text x="32" y="164">Integers</text>
+      <rect x="230" y="150" width="250" height="16" rx="8" fill="#F1EAE4"/><rect x="230" y="150" width="210" height="16" rx="8" fill="#2E6B3F"/>
+      <text x="32" y="206">Exponents</text>
+      <rect x="230" y="192" width="250" height="16" rx="8" fill="#F1EAE4"/><rect x="230" y="192" width="150" height="16" rx="8" fill="#B08D57"/>
+      <text x="32" y="248">Fractions</text>
+      <rect x="230" y="234" width="250" height="16" rx="8" fill="#F1EAE4"/><rect x="230" y="234" width="70" height="16" rx="8" fill="#7A0000"/>
+      <text x="32" y="290">Algebra</text>
+      <rect x="230" y="276" width="250" height="16" rx="8" fill="#F1EAE4"/><rect x="230" y="276" width="110" height="16" rx="8" fill="#B08D57"/>
+    </g>
+    <g font-size="12" fill="#5F5352">
+      <circle cx="40" cy="332" r="6" fill="#2E6B3F"/><text x="52" y="336">Secure</text>
+      <circle cx="122" cy="332" r="6" fill="#B08D57"/><text x="134" y="336">Needs practice</text>
+      <circle cx="252" cy="332" r="6" fill="#7A0000"/><text x="264" y="336">Gap</text>
+    </g>
+    <line x1="32" y1="362" x2="528" y2="362" stroke="#E6DCD6"/>
+    <text x="32" y="394" font-size="12" font-weight="700" letter-spacing="2" fill="#B08D57">START WITH</text>
+    <text x="32" y="428" font-size="24" font-family="Bitter, Georgia, serif" font-weight="600" fill="#7A0000">Fractions, then Algebra</text>
+    <rect x="388" y="402" width="140" height="40" fill="#7A0000"/><text x="458" y="427" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">See the plan</text>
+  </g>
+  <!-- stopwatch badge -->
+  <g transform="translate(600 420)">
+    <circle r="62" fill="#fff" stroke="#E6DCD6"/><circle r="52" fill="none" stroke="#B08D57" stroke-width="2"/>
+    <text y="-4" font-size="26" font-family="Bitter, Georgia, serif" font-weight="600" fill="#7A0000" text-anchor="middle">10–30</text>
+    <text y="20" font-size="13" fill="#5F5352" text-anchor="middle">minutes</text>
+  </g>
+</svg>

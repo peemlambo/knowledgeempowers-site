@@ -462,8 +462,8 @@ page('/grow-at-home/', 'Grow at home', 'Books for learners and parents, free mat
   <div class="cards3">
     <a class="pcard" href="/the-power-of-quiet-progress/"><img src="/assets/img/learner-edition.jpg" alt="" style="object-position:top"><h3>The Power of Quiet Progress</h3><p class="mut">Learner Edition · from R149</p><span class="go">See the book →</span></a>
     <a class="pcard" href="/the-quiet-progress-method/"><img src="/assets/img/family-edition.jpg" alt="" style="object-position:top"><h3>The Quiet Progress Method</h3><p class="mut">Family Edition · from R199</p><span class="go">See the book →</span></a>
-    <a class="pcard" href="/shop/"><div class="win"><img src="/assets/preview/diary-summary.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:top"></div><h3>My Maths Diary</h3><p class="mut">A full-year diary for Grades 4–7, 8–9 and 10–12.</p><span class="go">See the shop →</span></a>
-    <a class="pcard" href="/free-classroom-practice/"><div class="win"><img src="/assets/preview/topics.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:left top"></div><h3>Free practice</h3><p class="mut">Every answer shown step by step.</p><span class="go">Start →</span></a>
+    <a class="pcard" href="/shop/"><img src="/assets/preview/diary-covers.jpg" alt=""><h3>My Maths Diary</h3><p class="mut">A full-year diary for Grades 4–7, 8–9 and 10–12.</p><span class="go">See the shop →</span></a>
+    <a class="pcard" href="/free-classroom-practice/"><img src="/assets/preview/classroom.svg" alt=""><h3>Free practice</h3><p class="mut">Every answer shown step by step.</p><span class="go">Start →</span></a>
     <a class="pcard" href="/digital-empowerment/"><div class="win"><img src="/assets/preview/book-adding.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:top"></div><h3>Free maths tools</h3><p class="mut">Interactive tools that help your child see the maths.</p><span class="go">Open →</span></a>
     <a class="pcard" href="/motivation-faith/"><img src="/assets/img/seedling.jpg" alt=""><h3>Motivation &amp; Faith</h3><p class="mut">Prepare yourself, because life won't wait.</p><span class="go">Read →</span></a>
   </div>
@@ -528,13 +528,13 @@ HOME = '''<section class="brand-hero" style="padding:0"><div class="wrap">
   %s
 </div></section>''' % (
     btns(('/baseline-assessment/', "Find my child's gaps, free"), ('/workbooks/', 'See the workbooks')),
-    offer('/workbooks/', 'practice-hint.jpg', 'left top', 'Online workbooks', 'Every topic for a year, with a hint after one wrong try, then the full worked solution.', 'R149 a year · Grades 10–12 R199', 'See the workbooks'),
-    offer('/shop/', 'book-teach.jpg', 'center top', 'Printed workbooks', 'About 100 pages in full colour for each topic: teach, worked example, watch out.', 'R199 · members R169', 'Visit the shop'),
-    offer('/exam-packs/', 'classroom.jpg', 'left top', 'Exam packs', 'Revision, mock papers with full memos, a formula sheet and a progress tracker.', 'From R100', 'See the exam packs'),
+    offer('/workbooks/', 'practice-hint.jpg', 'left top', 'Online workbooks', 'Every topic for a year, with a hint after one wrong try, then the full worked solution.', 'From R149 a year', 'See the workbooks'),
+    offer('/shop/', 'book-cover.jpg', 'center top', 'Printed workbooks', 'About 100 pages in full colour for each topic: teach, worked example, watch out.', 'From R169', 'Visit the shop'),
+    offer('/exam-packs/', 'exam-menu.jpg', 'left top', 'Exam packs', 'Revision, mock papers with full memos, a formula sheet and a progress tracker.', 'From R100', 'See the exam packs'),
     TRY2,
-    offer('/baseline-assessment/', 'check-phone.jpg', 'center top', 'Free maths check', 'Find the gaps in 10 to 30 minutes, with a report straight away.', 'Free · Grades 4–12', 'Start the check'),
-    offer('/free-classroom-practice/', 'topics.jpg', 'left top', 'Free classroom and practice', 'Show a lesson on the classroom screen, or practise at home.', 'Free · no sign-up', 'Start practising'),
-    offer('/shop/', 'diary-summary.jpg', 'center top', 'My Maths Diary', 'A full-year diary: weekly summaries, a mistake bank and a marks tracker.', 'From R79', 'See the diaries'),
+    offer('/baseline-assessment/', 'maths-check.svg', 'center', 'Free maths check', 'Find the gaps in 10 to 30 minutes, with a report straight away.', 'Free · Grades 4–12', 'Start the check'),
+    offer('/free-classroom-practice/', 'classroom.svg', 'center', 'Free classroom and practice', 'Show a lesson on the classroom screen, or practise at home.', 'Free · no sign-up', 'Start practising'),
+    offer('/shop/', 'diary-covers.jpg', 'center', 'My Maths Diary', 'A full-year diary: weekly summaries, a mistake bank and a marks tracker.', 'From R79', 'See the diaries'),
     btns(('/baseline-assessment/', 'Take the free maths check')).replace('class="btn"', 'class="btn" style="background:#fff;color:var(--m);border-color:#fff;margin-top:10px"'))
 page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
 print('home v3 built')
