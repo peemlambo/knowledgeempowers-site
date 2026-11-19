@@ -167,11 +167,16 @@ textarea{width:100%;min-height:84px;font:inherit;font-size:1rem;border:1px solid
 .min-hero{padding-block:56px 8px}
 .min-hero h1{font-size:clamp(2.1rem,4.6vw,3.1rem);max-width:none}
 .min-hero p{margin:.7rem 0 0;color:var(--soft);font-size:1.08rem}
-a.today{display:block;margin:34px 0 8px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
-a.today .eyebrow{display:block;margin-bottom:6px}
-a.today .q{font-size:1.25rem}
-a.today .go{display:inline-block;margin-top:8px;color:var(--maroon);font-weight:600}
-.tshare{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:0 0 8px;font-size:.92rem;color:var(--soft)}
+a.today{display:grid;gap:10px;margin:36px 0 0;padding:30px 32px 28px;background:var(--maroon);color:#fff;text-decoration:none;border-radius:4px;box-shadow:0 24px 48px -28px rgba(60,10,10,.6);position:relative;overflow:hidden;transition:transform .15s ease}
+a.today:hover{transform:translateY(-2px)}
+a.today::after{content:"";position:absolute;right:-90px;top:-90px;width:240px;height:240px;border-radius:50%;border:1px solid rgba(233,211,166,.3)}
+a.today .eyebrow{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;color:#E9D3A6;margin:0}
+a.today .eyebrow .badge{background:#E9D3A6;color:#5C0000;border-radius:999px;padding:3px 10px;letter-spacing:.08em}
+a.today .q{font-family:var(--display);font-size:clamp(1.6rem,3.2vw,2.3rem);line-height:1.3;color:#fff;position:relative;z-index:1}
+a.today .q .frac,a.today .q *{color:#fff}
+a.today .go{justify-self:start;margin-top:8px;background:#fff;color:var(--maroon);font-weight:700;padding:12px 22px;border-radius:2px;position:relative;z-index:1}
+a.today br{display:none}
+.tshare{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:14px 0 8px;font-size:.92rem;color:var(--soft)}
 .tshare a{font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .list{border-top:1px solid var(--line);margin-bottom:56px}
 .trow{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
@@ -196,9 +201,9 @@ input.ans{width:100%;font:inherit;font-size:1.05rem;border:1px solid var(--line)
 @media (min-width:1100px){
   .wrap{max-width:1320px;padding-left:40px;padding-right:40px}
   /* topic list: heading and today's question side by side, topics as cards */
-  main.wrap:has(>.min-hero){display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:56px;align-items:end}
+  main.wrap:has(>.min-hero){display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:56px;align-items:center}
   main.wrap:has(>.min-hero)>.min-hero{grid-column:1;grid-row:1/3;padding-block:64px 24px}
-  main.wrap:has(>.min-hero)>a.today{grid-column:2;grid-row:1;margin:64px 0 10px;padding:22px 26px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+  main.wrap:has(>.min-hero)>a.today{grid-column:2;grid-row:1;margin:56px 0 0;align-self:end;padding:32px 34px 30px;border:0;border-radius:4px;background:var(--maroon)}
   main.wrap:has(>.min-hero)>.tshare{grid-column:2;grid-row:2;margin:0 0 24px}
   main.wrap:has(>.min-hero)>.filters,main.wrap:has(>.min-hero)>.list{grid-column:1/-1}
   .list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;border-top:0}
@@ -527,7 +532,7 @@ function library(){
   var x=qod(),qt=x[0],qq=qt.qs[x[1]];
   app.innerHTML=header()+
   '<main class="wrap"><section class="min-hero"><h1>Maths, one question at a time.</h1><p>Free for Grades 4 to 12. Show it on the classroom screen, or practise at home.</p></section>'+
-  '<a class="today" href="#practice-'+qt.slug+'@'+x[1]+'"><span class="eyebrow">Today’s question · '+esc(qt.title)+'</span><span class="q">'+M(qq[1])+'</span><br><span class="go">Try it →</span></a>'+
+  '<a class="today" href="#practice-'+qt.slug+'@'+x[1]+'"><span class="eyebrow"><span class="badge">Today’s question</span>'+esc(qt.title)+' · new every day</span><span class="q">'+M(qq[1])+'</span><br><span class="go">Answer it now →</span></a>'+
   '<div class="tshare"><span>Share today’s question:</span><a target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent('Today’s maths question: '+plain(qq[1])+' Try it free: '+link(qt.slug,'practice',x[1]))+'">WhatsApp</a><button class="textlink" type="button" id="qCopy">Copy link</button></div>'+
   '<div class="filters" role="group" aria-label="Filter by grade">'+bands.map(function(b){return '<button class="chip" data-band="'+b[0]+'" aria-pressed="'+(band===b[0])+'">'+b[1]+'</button>'}).join('')+'</div>'+
   '<div class="list" id="grid"></div></main>'+footer();

@@ -421,3 +421,10 @@ body.home .brand-hero .wrap{min-height:calc(100vh - 118px);padding-block:var(--g
 @media (max-width:900px){:root{--gap-l:36px;--sec:56px}.phead .hero,.phead .hero.solo{padding-block:44px 52px}.page.after{padding-top:40px}}
 @media (min-width:1181px){html,html:has(body.home){font-size:clamp(18px,calc(12px + .42vw),21px)}}
 @media (min-width:1600px){.wrap,.top .wrap{max-width:min(1440px,88vw)}.wrap.page{max-width:860px}.wrap.page.wide{max-width:1120px}}
+/* Today's question link in the home hero */
+.today-link{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:6px;padding:12px 18px;border:1px solid rgba(233,211,166,.55);border-radius:2px;color:#fff;text-decoration:none;font-size:.95rem;max-width:34rem}
+.today-link span{background:#E9D3A6;color:#5C0000;border-radius:999px;padding:3px 10px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.today-link:hover{background:rgba(255,255,255,.08)}
+/* price lists as a clean card */
+.prices{background:#fff;border:1px solid var(--line);padding:6px 24px;margin:12px 0 20px}
+.prices div:last-child{border-bottom:0}

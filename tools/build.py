@@ -574,7 +574,8 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
       <select id="pk" name="grade">%(grades)s</select>
       <button type="submit">Find the gaps, free</button>
     </form>
-    <p class="picker-note">10 to 30 minutes, with a report straight away. Or <a href="/workbooks/">see the workbooks</a>.</p>
+    <p class="picker-note">10 to 30 minutes, with a report straight away.</p>
+    <a class="today-link" href="/free-classroom-practice/"><span>Today’s question</span>A new free maths question every day. Try it →</a>
   </div>
   <figure><div class="book"><img src="/assets/preview/book-cover.jpg" alt="The Fractions workbook cover, with nine steps from Diagnose to Master"></div>
   <div class="tag"><b>Diagnose to Master</b>Nine steps in every topic</div></figure>
