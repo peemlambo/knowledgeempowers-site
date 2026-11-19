@@ -25,29 +25,25 @@ def page(path, title, desc, body, current=None):
 <meta property="og:image" content="/assets/img/logo.png">
 <link rel="icon" href="/assets/img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Public+Sans:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,500;0,600;0,700;1,500&family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/assets/classic.css">
 %(ga)s
 </head>
 <body>
 <header class="top"><div class="wrap">
   <a href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.png" alt="KnowledgeEmpowers"></a>
   <button class="menu" aria-expanded="false" aria-controls="nav">Menu</button>
-  <nav class="nav" id="nav">%(nav)s<a class="btn" href="%(login)s">Log in</a></nav>
+  <nav class="nav" id="nav">%(nav)s<a class="login" href="%(login)s">Log in</a></nav>
 </div></header>
 <main>
 %(body)s
 </main>
 <footer><div class="wrap">
-  <img src="/assets/img/logo-white.png" alt="KnowledgeEmpowers">
-  <p>Don't give up! Grow through what you go through.</p>
-  <div class="row">
-    <a href="%(wa)s">WhatsApp 061 581 8059</a>
-    <a href="mailto:knowledgeempowers08@gmail.com">knowledgeempowers08@gmail.com</a>
-    <a href="/grow-at-home/">Grow at home</a>
-    <a href="/about/contact/">Contact</a>
-    <a href="/about/privacy-policy/">Privacy</a>
-    <a href="/about/terms-and-conditions/">Terms</a>
+  <div class="cols">
+    <div style="display:grid;gap:14px;align-content:start"><img src="/assets/img/logo-white.png" alt="KnowledgeEmpowers"><p>One topic, in depth. Works alongside any curriculum.</p><p style="opacity:.75">Don't give up! Grow through what you go through.</p></div>
+    <div><h4>Learn</h4><a href="/baseline-assessment/">Free maths check</a><a href="/free-classroom-practice/">Free practice</a><a href="/workbooks/">Workbooks</a><a href="/exam-packs/">Exam packs</a><a href="/digital-empowerment/">Free maths tools</a></div>
+    <div><h4>More</h4><a href="/shop/">Shop</a><a href="/tutoring/">Tutoring</a><a href="/grow-at-home/">Grow at home</a><a href="/mathematics/">Mathematics</a><a href="/about/">About</a></div>
+    <div><h4>Contact</h4><a href="%(wa)s">WhatsApp 061 581 8059</a><a href="mailto:knowledgeempowers08@gmail.com">Email us</a><a href="/about/contact/">Contact</a><a href="/about/privacy-policy/">Privacy</a><a href="/about/terms-and-conditions/">Terms</a></div>
   </div>
   <small>© KnowledgeEmpowers. Licensed to the subscriber for use with their own learners. Not for resale.</small>
 </div></footer>
@@ -320,3 +316,174 @@ page('/about/terms-and-conditions/', 'Terms and conditions', 'The terms for usin
              ul(['Orders are placed on WhatsApp. We send payment details when you order.', 'Digital packs and personal codes are sent once payment is received.', 'Printed packs are delivered for a separate fee.', 'Each code is for one learner and works on up to 2 devices. Workbook codes last 12 months from the day you pay. Exam pack codes work for one school term.', 'Refunds are handled on a case-by-case basis, depending on the nature of the product.', 'Free resources are offered for personal use only and may not be resold.']),
              ul(["We strive for accuracy, but we cannot guarantee that all content is error-free.", 'KnowledgeEmpowers is not liable for damages arising from the use or misuse of site content.', 'Users are responsible for applying information appropriately in their own contexts.']), WA), '/about/')
 print('built')
+
+# =====================================================================
+# Classic design with previews of the real content (these replace the
+# simpler versions above). Photos of printed books come later.
+# =====================================================================
+def F(a, b): return '<span class="f"><span>%s</span><span>%s</span></span>' % (a, b)
+def win(src, alt, cap=''):
+    return '<figure><div class="win"><img src="/assets/preview/%s" alt="%s" loading="lazy"></div>%s</figure>' % (src, alt, '<figcaption>%s</figcaption>' % cap if cap else '')
+def stack(a, b, cap=''):
+    return '<figure><div class="pages"><img src="/assets/preview/%s" alt="" loading="lazy"><img src="/assets/preview/%s" alt="" loading="lazy"></div>%s</figure>' % (a, b, '<figcaption>%s</figcaption>' % cap if cap else '')
+def row(fig, eb, h, p, price, link, text, flip=False):
+    return '<div class="row%s">%s<div class="txt"><div class="eb">%s</div><h2>%s</h2><p class="mut">%s</p>%s<a class="link" href="%s">%s</a></div></div>' % (
+        ' flip' if flip else '', fig, eb, h, p, '<p class="price">%s</p>' % price if price else '', link, text)
+
+TRY = '''<section class="band"><div class="wrap">
+  <div class="sec-head"><div class="eb">Try it now</div><h2>See how a question works</h2><p class="mut">Get it wrong on purpose. You'll see a hint first, then every step, the way it works in our workbooks.</p></div>
+  <div class="try" id="try">
+    <div class="eb" style="color:var(--m)">Fractions · Grades 5–6</div>
+    <div class="q">Simplify %s fully.</div>
+    <form id="tryF"><input id="tryA" inputmode="text" autocomplete="off" placeholder="Your answer, e.g. 3/4" aria-label="Your answer"><button class="btn" type="submit">Check</button></form>
+    <div class="fb" id="tryFb"></div>
+    <div class="steps-sol" id="trySteps"><b>Step by step</b><ol>
+      <li><span class="r">Rule:</span> divide the top and the bottom by the same number, the highest common factor (HCF).</li>
+      <li>Factors of 12: 1, 2, 3, 4, 6, 12. Factors of 18: 1, 2, 3, 6, 9, 18. The HCF is 6.</li>
+      <li>%s = %s</li>
+      <li>2 and 3 have no common factor except 1, so %s is in simplest form.</li></ol></div>
+    <p class="mut" style="font-size:.9rem">Want more? <a href="/free-classroom-practice/?t=fractions&amp;m=practice">Practise 15 fraction questions free →</a></p>
+  </div>
+</div></section>
+<script>
+(function(){var f=document.getElementById('tryF'),a=document.getElementById('tryA'),fb=document.getElementById('tryFb'),st=document.getElementById('trySteps'),tries=0;
+function val(t){t=t.replace(/\\s+/g,'');var m=t.match(/^(-?\\d+)\\/(\\d+)$/);if(m)return [+m[1],+m[2]];if(/^-?\\d+(\\.\\d+)?$/.test(t))return [parseFloat(t),1];return null}
+f.addEventListener('submit',function(e){e.preventDefault();var v=val(a.value);if(!v){fb.className='fb hint show';fb.innerHTML='Type a fraction, like 3/4.';return}
+ if(v[0]===2&&v[1]===3){fb.className='fb ok show';fb.innerHTML='<b>Correct.</b> 12 ÷ 6 = 2 and 18 ÷ 6 = 3.';st.classList.add('show');return}
+ tries++;var same=Math.abs(v[0]/v[1]-2/3)<1e-9;
+ if(same){fb.className='fb hint show';fb.innerHTML='<b>Right value.</b> Now simplify your fraction fully.';return}
+ if(tries===1){fb.className='fb hint show';fb.innerHTML='<b>Not quite. Here is a hint:</b> divide the top and the bottom by the same number. Which number divides into both 12 and 18?'}
+ else{fb.className='fb hint show';fb.innerHTML='<b>Not yet.</b> Follow the steps below.';st.classList.add('show')}});})();
+</script>''' % (F(12, 18), F('12 ÷ 6', '18 ÷ 6'), F(2, 3), F(2, 3))
+
+HOME = '''<div class="wrap hero">
+  <div class="txt">
+    <div class="eb">Maths for Grades 4 to 12</div>
+    <h1>One topic, in depth.</h1>
+    <hr class="rule">
+    <p class="lead">Workbooks, exam packs and free practice for learners in South African public, IEB and Cambridge schools. Every answer shown step by step.</p>
+    %s
+  </div>
+  <figure class="duo"><div class="win"><img src="/assets/preview/classroom.jpg" alt="A worked solution on the classroom screen"></div><div class="phone"><img src="/assets/preview/practice-phone.jpg" alt="A practice question on a phone"></div></figure>
+</div>
+<section class="band"><div class="wrap">
+  <div class="sec-head"><div class="eb">How it works</div><h2>Start where your child really is</h2></div>
+  <div class="steps">
+    <div><span class="n">i</span><h3>Take the free maths check</h3><p class="mut">Short questions that show which topics are secure and which need work.</p></div>
+    <div><span class="n">ii</span><h3>Choose what fits</h3><p class="mut">A workbook or exam pack for exactly the gaps the check found.</p></div>
+    <div><span class="n">iii</span><h3>Start the same day</h3><p class="mut">Your access code arrives on WhatsApp, or a printed book is delivered.</p></div>
+  </div>
+</div></section>
+<section><div class="wrap">
+  %s
+  %s
+  %s
+  %s
+</div></section>
+%s
+<section class="quote"><img src="/assets/img/seedling.jpg" alt=""><div class="wrap">
+  <div class="eb">Our promise</div><h2>“Don't give up. Grow through what you go through.”</h2>
+</div></section>
+<section><div class="wrap">
+  <div class="sec-head"><div class="eb">Free for everyone</div><h2>Start today, no sign-up</h2></div>
+  <div class="cards3">
+    <a class="pcard" href="/baseline-assessment/"><div class="win"><img src="/assets/preview/check-phone.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:top"></div><h3>Free maths check</h3><p class="mut">Find the gaps in 10 to 30 minutes, with a report straight away.</p><span class="go">Start the check →</span></a>
+    <a class="pcard" href="/free-classroom-practice/"><div class="win"><img src="/assets/preview/topics.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:left top"></div><h3>Free classroom and practice</h3><p class="mut">Show a lesson on the classroom screen, or practise at home.</p><span class="go">Start practising →</span></a>
+    <a class="pcard" href="/digital-empowerment/"><div class="win"><img src="/assets/preview/book-adding.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:top"></div><h3>Free maths tools</h3><p class="mut">Interactive tools that help your child see the maths.</p><span class="go">Open the tools →</span></a>
+  </div>
+</div></section>''' % (btns(('/baseline-assessment/', "Find my child's gaps, free"), ('/shop/', 'Visit the shop')),
+   row(win('practice-hint.jpg', 'A practice question showing a hint', 'A wrong answer brings a hint first, then the full steps.'), 'Online workbooks', 'Every topic, from the rule to the answer',
+       'One maths topic in depth. Learners can work on their own: a hint after one wrong try, then the full worked solution, rule first.', 'R149 a year for Grades 4–9 · R199 for Grades 10–12', '/workbooks/', 'See the workbooks'),
+   row(stack('book-cover.jpg', 'book-teach.jpg', 'Inside the Fractions workbook: teach, worked example, watch out.'), 'Printed workbooks', 'One book, from the first concept to the last',
+       'About 100 pages in full colour for each topic, from Diagnose to Master. Also in two parts: Building blocks and Taking it further.', 'R199 · members R169', '/shop/', 'See the shop', True),
+   row(win('classroom.jpg', 'A worked solution on the classroom screen'), 'Exam packs', 'Ready for the end-of-year exam',
+       "Revision for every topic with worked examples, mock exam papers with full memos, a formula sheet and a progress tracker for your child's grade.", 'From R100', '/exam-packs/', 'See the exam packs'),
+   row(stack('diary-summary.jpg', 'diary-reference.jpg', 'Inside My Maths Diary: the weekly summary, and formulas with the reasoning behind them.'), 'My Maths Diary', 'Small steps, written down, every week',
+       'A full-year diary for Grades 4–7, 8–9 and 10–12: weekly summaries, a mistake bank, a marks tracker and a maths reference.', 'From R79', '/shop/', 'See the diaries', True),
+   TRY)
+page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
+
+# ---------------- Workbooks (visual)
+STEPS9 = ['Diagnose', 'Build', 'Teach', 'Guide', 'Practise', 'Apply', 'Assess', 'Remediate', 'Master']
+page('/workbooks/', 'Workbooks', 'One maths topic at a time, Grades 4 to 12, online and printed.', '''<div class="wrap hero">
+  <div class="txt"><div class="eb">Workbooks</div><h1>One topic at a time, Grades 4 to 12</h1><hr class="rule">
+  <p class="lead">Each workbook takes one maths topic in depth, and works alongside any curriculum.</p>%s</div>
+  %s
+</div>
+<section class="band"><div class="wrap">
+  <div class="sec-head"><div class="eb">How every topic is built</div><h2>Nine steps, from Diagnose to Master</h2><p class="mut">Learners start where they really are, not where their grade says.</p></div>
+  <div class="steps" style="grid-template-columns:repeat(3,minmax(0,1fr))">%s</div>
+</div></section>
+<section><div class="wrap">
+  %s
+  %s
+</div></section>
+<section class="band"><div class="wrap page" style="padding-block:0;margin:0 auto">
+  <h2>Prices</h2>
+  <h3>All topics online</h3>%s
+  <h3>Printed workbook</h3>%s
+  <p class="mut">Delivery of printed workbooks is charged separately.</p>
+  <div class="note"><b>How to order:</b> message us on WhatsApp with your child's grade. Pay using the details we send you, then receive your personal code. Each code is for one learner, lasts 12 months from the day you pay, and works on up to 2 devices.</div>
+  %s
+</div></section>''' % (btns((wa("Hi, I'd like to order a workbook. Topic and grade: "), 'Order on WhatsApp'), (LOGIN, 'I already have a code')),
+   stack('book-cover.jpg', 'book-teach.jpg'),
+   ''.join('<div><span class="n">%d</span><h3>%s</h3></div>' % (i + 1, t) for i, t in enumerate(STEPS9)),
+   row(win('practice-hint.jpg', 'A hint after a wrong answer'), 'Online', 'A hint first, then every step', 'A wrong answer brings a hint first. A second try shows the full worked solution, starting with the rule, so learners can work on their own and parents do not need to know every answer.', '', '/free-classroom-practice/?t=fractions&m=practice', 'Try a free practice set'),
+   row(stack('book-teach.jpg', 'book-adding.jpg'), 'Printed', 'Teach, worked example, watch out', 'Every concept explains the rule, works an example step by step, and warns about the mistake learners usually make. In full colour and bound.', '', '/shop/', 'See printed workbooks', True),
+   prices([('Grades 4–9', 'R149 a year'), ('Grades 10–12', 'R199 a year')]), prices([('One topic', 'R199 (members R169)'), ('Part 1 or Part 2', 'R109 (members R99)')]),
+   btns((wa("Hi, I'd like to order a workbook. Topic and grade: "), 'Order on WhatsApp'), ('/baseline-assessment/', 'Not sure? Take the free maths check'))), '/workbooks/')
+
+# ---------------- Exam packs (visual)
+page('/exam-packs/', 'Exam packs', 'End-of-year maths exam preparation, Grades 4 to 12.', '''<div class="wrap hero">
+  <div class="txt"><div class="eb">Exam packs</div><h1>Ready for the end-of-year exam</h1><hr class="rule">
+  <p class="lead">One pack for your child's grade, Grades 4 to 12, for South African (public and IEB) and Cambridge learners.</p>
+  <p>Inside: revision for every topic with worked examples, mock exam papers with full memos, a formula sheet and a progress tracker.</p>%s</div>
+  %s
+</div>
+<section class="band"><div class="wrap page" style="padding-block:0;margin:0 auto">
+  <h2>Prices</h2>
+  <h3>Grades 4 to 9</h3>%s
+  <h3>Grades 10 to 12</h3>%s
+  <p class="mut">Delivery of printed packs is charged separately.</p>
+  <div class="note"><b>How to order:</b> message us on WhatsApp with your child's grade and the pack you want. Pay using the details we send you. Then receive your pack and personal code. Each code is for one learner and works for one school term on up to 2 devices.</div>
+  %s
+</div></section>''' % (btns((wa("Hi, I'd like to order an Exam Pack. Grade: "), 'Order on WhatsApp'), ('/exam-packs/exam-preparation-packs/', 'I already have a code')),
+   win('classroom.jpg', 'A worked solution, step by step', 'Every memo is worked step by step, rule first.'),
+   prices([('Online', 'R149'), ('PDF', 'R100'), ('Printed', 'R199')]), prices([('Online', 'R199'), ('PDF', 'R149'), ('Printed', 'R250')]),
+   btns((wa("Hi, I'd like to order an Exam Pack. Grade: "), 'Order on WhatsApp'))), '/exam-packs/')
+
+# ---------------- Grow at home (visual)
+page('/grow-at-home/', 'Grow at home', 'Books for learners and parents, free maths tools and guides on faith.', '''<div class="wrap hero">
+  <div class="txt"><div class="eb">Beyond the classroom</div><h1>Calm habits, strong minds, real skills.</h1><hr class="rule">
+  <p class="lead">Books for learners and parents, plus free maths tools and guides on faith. Small steps at home that help your child grow.</p></div>
+  <figure><img src="/assets/img/seedling.jpg" alt="A young plant growing" style="width:100%%;aspect-ratio:4/3.2;object-fit:cover"></figure>
+</div>
+<section style="padding-top:0"><div class="wrap">
+  <div class="cards3">
+    <a class="pcard" href="/the-power-of-quiet-progress/"><img src="/assets/img/learner-edition.jpg" alt="" style="object-position:top"><h3>The Power of Quiet Progress</h3><p class="mut">Learner Edition · from R149</p><span class="go">See the book →</span></a>
+    <a class="pcard" href="/the-quiet-progress-method/"><img src="/assets/img/family-edition.jpg" alt="" style="object-position:top"><h3>The Quiet Progress Method</h3><p class="mut">Family Edition · from R199</p><span class="go">See the book →</span></a>
+    <a class="pcard" href="/shop/"><div class="win"><img src="/assets/preview/diary-summary.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:top"></div><h3>My Maths Diary</h3><p class="mut">A full-year diary for Grades 4–7, 8–9 and 10–12.</p><span class="go">See the shop →</span></a>
+    <a class="pcard" href="/free-classroom-practice/"><div class="win"><img src="/assets/preview/topics.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:left top"></div><h3>Free practice</h3><p class="mut">Every answer shown step by step.</p><span class="go">Start →</span></a>
+    <a class="pcard" href="/digital-empowerment/"><div class="win"><img src="/assets/preview/book-adding.jpg" alt="" style="aspect-ratio:1/1.05;object-fit:cover;object-position:top"></div><h3>Free maths tools</h3><p class="mut">Interactive tools that help your child see the maths.</p><span class="go">Open →</span></a>
+    <a class="pcard" href="/motivation-faith/"><img src="/assets/img/seedling.jpg" alt=""><h3>Motivation &amp; Faith</h3><p class="mut">Prepare yourself, because life won't wait.</p><span class="go">Read →</span></a>
+  </div>
+</div></section>''')
+
+# ---------------- Tutoring (visual hero)
+page('/tutoring/', 'Tutoring', 'One-to-one online maths and English lessons for Grades 4 to 10.', '''<div class="wrap hero">
+  <div class="txt"><div class="eb">Tutoring</div><h1>One-to-one online lessons, Grades 4 to 10</h1><hr class="rule">
+  <p class="lead">We start where your child is, and stay with a topic until it makes sense. Each lesson is tailored to the learner's needs, schoolwork and goals, with clear explanations and guided practice.</p>%s</div>
+  %s
+</div>
+<section class="band"><div class="wrap page" style="padding-block:0;margin:0 auto">
+  <h2>Lesson prices</h2>%s
+  <p>Message us on WhatsApp to discuss your child's grade, learning goals and available lesson times.</p>
+  <div class="cards">
+   <div class="card"><h3>Mathematics tutoring</h3><p class="mut">Clear explanations, step-by-step guidance and personal support.</p>%s<a class="link" href="/tutoring/mathematics-tutoring-grades-5-10/">Learn more</a></div>
+   <div class="card"><h3>English HL/FAL tutoring</h3><p class="mut">Reading, writing, grammar, comprehension and exam performance.</p>%s<a class="link" href="/tutoring/english-hl-or-fal-tutoring-grades-4-10/">Learn more</a></div>
+  </div>
+</div></section>''' % (btns(('https://wa.me/message/XAFTSZAMNG6IO1', 'Enquire about lessons')), win('classroom.jpg', 'A step-by-step solution on screen', 'Lessons on Google Meet, working through each step together.'),
+   prices([('Single 60-minute lesson', 'R250'), ('4 online lessons', 'R900')]),
+   ul(['One-on-one online lessons', 'Group classes available', 'Exam preparation and revision', 'Homework support', 'Problem-solving and confidence']),
+   ul(['Group classes', 'Essay and creative writing support', 'Comprehension strategies', 'Speaking and listening skills'])), '/tutoring/')
+print('visual pages built')
