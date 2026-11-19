@@ -11,7 +11,39 @@ LOGIN = '/workbooks/digital-math-workbooks/'
 NAV = [('/', 'Home'), ('/baseline-assessment/', 'Free maths check'), ('/free-classroom-practice/', 'Free practice'), ('/workbooks/', 'Workbooks'),
        ('/exam-packs/', 'Exam packs'), ('/shop/', 'Shop'), ('/tutoring/', 'Tutoring'), ('/about/', 'About')]
 
+
+import re as _re
+# A picture for the top of each inner page that has none of its own
+PICS = {
+ '/tutoring/mathematics-tutoring-grades-5-10/': '<figure><div class="win"><img src="/assets/preview/practice-check.jpg" alt="A worked answer, step by step"></div></figure>',
+ '/digital-empowerment/': '<figure><div class="win"><img src="/assets/preview/tools.jpg" alt="The free Times Table Explorer"></div></figure>',
+ '/motivation-faith/': '<figure class="pic"><img src="/assets/img/seedling.jpg" alt="A young plant growing from the soil"></figure>',
+ '/mathematics/': '<figure class="pic"><img src="/assets/img/shelf.jpg" alt="Workbooks for Whole numbers, Integers, Fractions and Algebraic expressions"></figure>',
+ '/about/': '<figure class="pic"><img src="/assets/img/workbook.jpg" alt="An open Fractions workbook"></figure>',
+}
+def _div_end(s, start):
+    depth, i = 0, start
+    for m in _re.finditer(r'<(/?)div\b', s[start:]):
+        depth += -1 if m.group(1) else 1
+        if depth == 0:
+            return start + m.start() + s[start + m.start():].find('>') + 1
+    return len(s)
+def brand_head(path, body):
+    if path == '/' or 'class="phead"' in body: return body
+    b = body.lstrip()
+    if b.startswith('<div class="wrap hero">'):
+        e = _div_end(b, 0)
+        return '<section class="phead">' + b[:e] + '</section>' + b[e:]
+    m = _re.match(r'<div class="wrap page([^"]*)">\s*<div class="eb">(.*?)</div>\s*<h1>(.*?)</h1>\s*(<p class="lead">.*?</p>)?', b, _re.S)
+    if m:
+        pic = PICS.get(path, '')
+        head = '<section class="phead"><div class="wrap hero%s"><div class="txt"><div class="eb">%s</div><h1>%s</h1><hr class="rule">%s</div>%s</div></section>' % (
+            '' if pic else ' solo', m.group(2), m.group(3), m.group(4) or '', pic)
+        return head + '<div class="wrap page after%s">' % m.group(1) + b[m.end():]
+    return body
+
 def page(path, title, desc, body, current=None):
+    body = brand_head(path, body)
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if current == h else '', t) for h, t in NAV)
     out = '''<!doctype html>
 <html lang="en">
@@ -195,13 +227,13 @@ page('/motivation-faith/', 'Motivation & Faith', "Prepare yourself, because life
 
 # ---------------- Quiet Progress books
 def book(path, title, eb, h, lead, img, ed, edtxt, pdf, printed, printword, who_intro, who, inside, extra, other, othertxt):
-    page(path, title, lead, '''<div class="wrap page wide">
-<div class="split"><div style="display:grid;gap:22px">
-  <div class="eb">%s</div><h1>%s</h1><p class="lead">%s</p>
-  <h2>%s</h2><p>%s</p>
+    page(path, title, lead, '''<section class="phead"><div class="wrap hero"><div class="txt">
+  <div class="eb">%s</div><h1>%s</h1><hr class="rule"><p class="lead">%s</p>
+  <h2 style="color:#fff;font-size:1.5rem">%s</h2><p class="lead" style="font-size:1rem">%s</p>
   <p><b>PDF download: R%d · %s: R%d plus delivery</b></p>
   %s
-</div><img src="/assets/img/%s" alt="%s cover"></div>
+</div><figure class="pic cover"><img src="/assets/img/%s" alt="%s cover"></figure></div></section>
+<div class="wrap page wide after">
 <div class="cards">
  <div class="card"><h3>Who it is for</h3><p class="mut">%s</p>%s</div>
  <div class="card"><h3>What is inside</h3>%s%s</div>

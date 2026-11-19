@@ -235,7 +235,32 @@ input.ans{width:100%;font:inherit;font-size:1.05rem;border:1px solid var(--line)
 
 </style>
 
-<div id="kehome" style="background:#7A0000;padding:8px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:12px;font:600 13px/1.2 'Public Sans',system-ui,sans-serif;letter-spacing:.06em"><a href="/" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px"><img src="/assets/img/logo-white.png" alt="KnowledgeEmpowers" style="height:22px;width:auto;display:block"><span>‹ HOME</span></a><span style="display:flex;gap:16px"><a href="/workbooks/" style="color:#E9D3A6;text-decoration:none">WORKBOOKS</a><a href="/shop/" style="color:#E9D3A6;text-decoration:none">SHOP</a></span></div><div id="app"></div>
+<style id="kehdr-css">
+html{padding-top:72px!important}
+#kehdr{position:fixed;top:0;left:0;right:0;z-index:9999;height:72px;background:rgba(251,248,244,.97);backdrop-filter:blur(6px);border-bottom:1px solid #E6DCD6;font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+#kehdr *{box-sizing:border-box}
+#kehdr .kh-w{max-width:1240px;height:100%;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
+#kehdr .kh-logo img{height:40px;width:auto;display:block}
+#kehdr nav{display:flex;align-items:center;gap:26px;font-size:13.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+#kehdr nav a{color:#1E1414;text-decoration:none;padding:6px 0;border-bottom:1px solid transparent;white-space:nowrap;line-height:1.4}
+#kehdr nav a:hover,#kehdr nav a[aria-current]{color:#7A0000;border-color:#7A0000}
+#kehdr nav .kh-login{background:#7A0000;color:#fff;padding:10px 18px;border:0}
+#kehdr nav .kh-login:hover{background:#5C0000;color:#fff}
+#kehdr .kh-menu{width:auto;min-height:0;margin:0;display:none;align-items:center;gap:10px;background:#7A0000;color:#fff;border:0;border-radius:2px;padding:11px 16px;font:600 13px "Public Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+#kehdr .kh-menu::before{content:"";width:16px;height:10px;border-top:2px solid #fff;border-bottom:2px solid #fff;background:linear-gradient(#fff,#fff) center/100% 2px no-repeat}
+@media (max-width:1180px){
+ html{padding-top:64px!important}
+ #kehdr{height:64px}
+ #kehdr .kh-logo img{height:34px}
+ #kehdr .kh-menu{display:inline-flex}
+ #kehdr nav{display:none;position:absolute;left:0;right:0;top:100%;background:#FBF8F4;border-bottom:1px solid #E6DCD6;flex-direction:column;align-items:stretch;gap:0;padding:6px max(20px,env(safe-area-inset-left,0px)) 18px;box-shadow:0 20px 30px -20px rgba(0,0,0,.2);font-size:15px}
+ #kehdr nav.open{display:flex}
+ #kehdr nav a{padding:14px 0;border-bottom:1px solid #E6DCD6}
+ #kehdr nav .kh-login{margin-top:14px;text-align:center}
+}
+@media print{#kehdr{display:none}html{padding-top:0!important}}
+
+</style><div id="kehdr"><div class="kh-w"><a class="kh-logo" href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.png" alt="KnowledgeEmpowers"></a><button class="kh-menu" type="button" aria-expanded="false">Menu</button><nav aria-label="Main"><a href="/">Home</a><a href="/baseline-assessment/">Free maths check</a><a href="/free-classroom-practice/" aria-current="page">Free practice</a><a href="/workbooks/">Workbooks</a><a href="/exam-packs/">Exam packs</a><a href="/shop/">Shop</a><a href="/tutoring/">Tutoring</a><a href="/about/">About</a><a class="kh-login" href="/workbooks/digital-math-workbooks/">Log in</a></nav></div></div><script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script><div id="app"></div>
 
 <script>
 /* KnowledgeEmpowers · Classroom & Practice question bank.
@@ -469,7 +494,7 @@ window.addEventListener('hashchange',route);
 /* on the website the site's own menu is enough, so the app's top line is hidden there */
 var EMBED=(function(){try{var d=0,w=window;while(w!==w.top&&d<10){w=w.parent;d++}return d>2}catch(e){return false}})();
 function header(){
-  if(EMBED)return '';
+  return '';
   return '<header class="top"><div class="wrap"><a class="brand" href="#topics"><b>KnowledgeEmpowers</b></a>'+
   '<nav class="nav" aria-label="Main">'+(APP?'<a href="'+APP+'" target="_top">Workbook login</a>':'<a href="'+WB+'" target="_blank" rel="noopener">Workbooks</a>')+'</nav></div></header>';
 }
