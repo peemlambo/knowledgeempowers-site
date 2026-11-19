@@ -648,3 +648,10 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
     qb=btns(('/baseline-assessment/', 'Take the free maths check')).replace('class="btn"', 'class="btn" style="background:#fff;color:var(--m);border-color:#fff;margin-top:10px"'))
 page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
 print('home v4 built')
+
+# Not-found page (Cloudflare serves 404.html for addresses that don't exist)
+import shutil as _sh
+page('/not-found/', 'Page not found', 'This page could not be found.', """<section class="phead"><div class="wrap hero solo"><div class="txt"><div class="eb">Page not found</div><h1>We couldn't find that page.</h1><hr class="rule"><p class="lead">It may have moved when we updated the website.</p>%s</div></div></section>
+<div class="wrap page after"><p>Try one of these:</p><ul><li><a href="/">Home</a></li><li><a href="/baseline-assessment/">Free maths check</a></li><li><a href="/workbooks/">Workbooks</a></li><li><a href="/shop/">Shop</a></li></ul></div>""" % btns(('/', 'Go to the home page'), ('https://wa.me/27615818059', 'Ask us on WhatsApp')))
+_sh.copy('not-found/index.html', '404.html'); _sh.rmtree('not-found')
+print('404 built')
