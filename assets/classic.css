@@ -333,3 +333,5 @@ footer img{height:44px;width:auto}
 .wa-float:hover{background:#18653F}
 @media (max-width:600px){.wa-float span{display:none}.wa-float{padding:13px}}
 @media print{.wa-float,.launch{display:none}}
+.founder{margin:22px 0 0;padding:0;font-family:"Bitter",Georgia,serif;font-style:italic;font-weight:500;font-size:1.15rem;line-height:1.55;color:var(--ink)}
+.founder cite{display:block;margin-top:12px;font:600 .78rem "Public Sans",sans-serif;font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}

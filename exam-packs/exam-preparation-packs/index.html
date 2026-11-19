@@ -84,6 +84,15 @@ function openPack_(code) {
         try { localStorage.setItem('ke-code', code); } catch (e) {}
         var h = String(res.html), fm = document.getElementById('fsmod'), k = h.toLowerCase().lastIndexOf('</body>');
         if (fm && k > -1) h = h.slice(0, k) + fm.innerHTML + h.slice(k);   // full screen button on the pack page too
+        try {   // keep the site header (Home and the menu) at the top of the pack page
+          var kh = document.getElementById('kehdr'), kc = document.getElementById('kehdr-css');
+          if (kh && kc) {
+            var css = kc.outerHTML + '<style>html{padding-top:0!important}#kehdr{position:relative!important}</style>';
+            var js = '<scr' + 'ipt>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");if(b&&n)b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</scr' + 'ipt>';
+            var hi = h.toLowerCase().indexOf('</head>'); if (hi > -1) h = h.slice(0, hi) + css + h.slice(hi);
+            var bm = /<body[^>]*>/i.exec(h); if (bm) h = h.slice(0, bm.index + bm[0].length) + kh.outerHTML + js + h.slice(bm.index + bm[0].length);
+          }
+        } catch (e) {}
         document.open(); document.write(h); document.close();
       } else { btn.disabled = false; msg.style.color = '#a11d1d'; msg.textContent = (res && res.msg) || 'Something went wrong. Please try again.'; }
     })

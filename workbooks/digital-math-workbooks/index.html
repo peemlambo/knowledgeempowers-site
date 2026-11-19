@@ -53,6 +53,10 @@
 
   .free{display:inline-block;margin:.4rem 0 1.4rem;color:#7A0000;font-size:.95rem;text-decoration:none;border-bottom:1px solid #E6DEDE}
   .free:hover{border-color:#7A0000}
+.gpick{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:1.6rem 0 .4rem}
+.gpick span{font-weight:700;font-size:.9rem;margin-right:6px;color:#1E1414}
+.gpick button{font:inherit;font-size:.88rem;border:1px solid #E6DCD6;background:#fff;color:#1E1414;padding:8px 14px;border-radius:999px;cursor:pointer;min-height:40px}
+.gpick button.on{background:#7A0000;border-color:#7A0000;color:#fff}
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script><style id="kehdr-css">
 html{padding-top:72px!important}
@@ -154,8 +158,18 @@ html{padding-top:72px!important}
             (ME.ends ? ', access until ' + esc(ME.ends) : '') + '</div><a href="#" id="signout" class="small">Sign out</a></div>' +
             '<h1 style="margin-top:2.4rem">Your topics</h1>' +
             '<p class="sub">In the order schools usually teach them through the year.</p>';
+    // Grade chooser: show only the topics for the learner's grade (or all of them).
+    function span(t) { var m = String(t.grades || '').match(/(\d+)\D+(\d+)/) || String(t.grades || '').match(/(\d+)/); return m ? [+m[1], +(m[2] || m[1])] : [0, 99]; }
+    var mine = ME.topics.filter(function (t) { return t.allowed; }), gs = [];
+    mine.forEach(function (t) { var r = span(t); for (var g = Math.max(4, r[0]); g <= Math.min(12, r[1]); g++) if (gs.indexOf(g) < 0) gs.push(g); });
+    gs.sort(function (a, b) { return a - b; });
+    var pick = +(store.get('ke-grade-' + ME.code) || 0); if (gs.indexOf(pick) < 0) pick = 0;
+    if (gs.length > 1) h += '<div class="gpick" role="group" aria-label="Choose your grade"><span>My grade</span>' +
+      '<button data-g="0"' + (pick ? '' : ' class="on"') + '>All</button>' +
+      gs.map(function (g) { return '<button data-g="' + g + '"' + (pick === g ? ' class="on"' : '') + '>Grade ' + g + '</button>'; }).join('') + '</div>';
+    function fits(t) { if (!pick) return true; var r = span(t); return r[0] <= pick && pick <= r[1]; }
     [1, 2, 3, 4, 5].forEach(function (term) {
-      var list = ME.topics.filter(function (t) { return t.term === term; });
+      var list = ME.topics.filter(function (t) { return t.term === term && fits(t); });
       if (!list.length) return;
       // Show the Grades 10–12 shelf only to codes that open at least one of those books (and the Grades 5–9 terms only to codes that open one of those).
       var band = ME.topics.filter(function (t) { return (t.term === 5) === (term === 5); });
@@ -175,6 +189,7 @@ html{padding-top:72px!important}
     h += '<p class="small" style="margin-top:2.4rem">To add a topic to your code, contact KnowledgeEmpowers on www.knowledgeempowers.online.</p>';
     shell.innerHTML = h; shell.hidden = false; window.scrollTo(0, 0);
     Array.prototype.forEach.call(shell.querySelectorAll('[data-key]'), function (b) { b.onclick = function () { openTopic(b.getAttribute('data-key')); }; });
+    Array.prototype.forEach.call(shell.querySelectorAll('.gpick [data-g]'), function (b) { b.onclick = function () { store.set('ke-grade-' + ME.code, b.getAttribute('data-g')); showShelf(); }; });
     document.getElementById('signout').onclick = function (e) { e.preventDefault(); store.del('ke-code'); ME = null; showCode(''); };
   }
 

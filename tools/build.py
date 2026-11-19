@@ -600,6 +600,7 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
 </div></section>
 <section class="band"><div class="wrap who">
   <div><div class="eb">Who is behind it</div><h2>A registered South African company</h2><hr class="rule" style="margin-top:18px">
+  <blockquote class="founder">“I started KnowledgeEmpowers after seeing too many learners fall behind in maths, not because they couldn't do it, but because one small gap was never filled. So every workbook starts where the learner really is, and shows every step.”<cite>Founder, KnowledgeEmpowers</cite></blockquote>
   <p class="mut" style="margin-top:18px">KnowledgeEmpowers and GROW are run by Pelocus Org (Pty) Ltd (Reg. No. 2020/864381/07). One small team writes the workbooks, the exam packs and the free practice, and teaches the tutoring lessons. When you message us, you speak to the people who made it.</p></div>
   <div class="who-facts">
     <div><b>Real people on WhatsApp</b><span class="mut">We usually reply within 2 to 4 hours. <a href="https://wa.me/27615818059">061 581 8059</a></span></div>
