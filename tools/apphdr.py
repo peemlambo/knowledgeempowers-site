@@ -39,14 +39,7 @@ def header(cur):
 PAGES = {
  'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:820px!important}}'),
  'free-classroom-practice/index.html': ('/free-classroom-practice/', ''),
- 'shop/index.html': ('/shop/', 'body{padding-top:0!important;overflow-x:hidden}'
-   '.wrap>section.hero{position:relative;z-index:0;padding:64px 0 72px;color:#fff;isolation:isolate}'
-   '.wrap>section.hero::before{content:"";position:absolute;top:0;bottom:0;left:-100vw;right:-100vw;background:#7A0000;z-index:-1}'
-   '.wrap>section.hero::after{content:"";position:absolute;right:-220px;top:-200px;width:520px;height:520px;border-radius:50%;border:1px solid rgba(233,211,166,.25);z-index:-1}'
-   '.wrap>section.hero .eyebrow{color:#E9D3A6!important}.wrap>section.hero h1{color:#fff!important}'
-   '.wrap>section.hero .lead,.wrap>section.hero .promises li{color:rgba(255,255,255,.88)!important}'
-   '.wrap>section.hero .promises li::before{color:#E9D3A6!important;border-color:#E9D3A6!important}'
-   '@media (min-width:1181px){.wrap{max-width:1080px!important}.wrap>section.hero{padding:88px 0 96px}.wrap>section.hero h1{font-size:3.6rem!important}}'),
+ 'shop/index.html': ('/shop/', ''),
  'workbooks/digital-math-workbooks/index.html': ('', ''),
  'exam-packs/exam-preparation-packs/index.html': ('', 'body{min-height:calc(100vh - 72px)!important}@media (max-width:1180px){body{min-height:calc(100vh - 64px)!important}}'),
  'digital-empowerment/visual-times-table-explorer/index.html': ('', ''),
