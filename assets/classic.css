@@ -457,3 +457,12 @@ section .wrap[style*="max-width:860px"]{max-width:none!important}
 @media (min-width:1181px){.phead .hero figure{max-width:min(40vw,640px)}.brand-hero .book,body.home .brand-hero .book{width:min(30vw,560px)}}
 .wrap.page ul{columns:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(22rem,1fr));gap:10px 56px}
 .wrap.page ul li{margin:0}
+
+/* ===== Room to breathe: smaller cards with space between, bullets one under another ===== */
+.phead + section,.phead + section[style]{padding-top:var(--sec)!important}
+.cards3,.offer,.samples,.says-grid,.wrap.page .cards,.cards{grid-template-columns:repeat(auto-fit,minmax(15rem,20rem))!important;justify-content:center;gap:clamp(28px,3.4vw,56px)!important}
+.paths{grid-template-columns:repeat(auto-fit,minmax(18rem,28rem))!important;justify-content:center;gap:clamp(28px,3.4vw,56px)!important}
+.pcard img{aspect-ratio:4/3}
+.wrap.page ul{display:grid;grid-template-columns:1fr!important;gap:8px;max-width:80ch}
+.wrap.page ul li{margin:0}
+@media (max-width:700px){.cards3,.offer,.samples,.says-grid,.cards,.paths,.wrap.page .cards{grid-template-columns:1fr!important}}

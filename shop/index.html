@@ -123,6 +123,12 @@ h1 em{font-style:italic;font-weight:500;color:#E9D3A6}
 .band .shopfig img{width:100%;display:block;filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}
 @media (min-width:1181px){.band .in{min-height:calc(82vh - 100px);align-content:center;padding-block:72px 80px!important}}
 @media (max-width:900px){.band .in{grid-template-columns:1fr}.band .shopfig{grid-column:1;grid-row:auto;justify-self:center;max-width:360px}}
+
+/* room to breathe */
+.grid{grid-template-columns:repeat(auto-fit,minmax(15rem,20rem))!important;justify-content:center;gap:clamp(28px,3.4vw,56px)!important}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(15rem,24rem))!important}
+.feat{max-width:60rem;margin-inline:auto;width:100%}
+@media (max-width:720px){.grid,.grid.two{grid-template-columns:1fr!important}}
 </style><script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script><style id="kehdr-css">
 html{padding-top:72px!important}
 #kehdr{position:fixed;top:0;left:0;right:0;z-index:9999;height:72px;background:rgba(251,248,244,.97);backdrop-filter:blur(6px);border-bottom:1px solid #E6DCD6;font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
