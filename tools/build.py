@@ -28,7 +28,17 @@ def _div_end(s, start):
         if depth == 0:
             return start + m.start() + s[start + m.start():].find('>') + 1
     return len(s)
+def _accent(html):
+    # "First part, second part" -> "First part, <em>second part</em>" (the gold italic accent used on the home page)
+    def f(m):
+        t = m.group(1)
+        if '<' in t or ',' not in t: return m.group(0)
+        i = t.rfind(', ')
+        return '<h1>%s, <em>%s</em></h1>' % (t[:i], t[i+2:]) if i > 0 else m.group(0)
+    return _re.sub(r'<h1>(.*?)</h1>', f, html, count=1, flags=_re.S)
 def brand_head(path, body):
+    return _accent(_brand_head(path, body)) if path != '/' else body
+def _brand_head(path, body):
     if path == '/' or 'class="phead"' in body: return body
     b = body.lstrip()
     if b.startswith('<div class="wrap hero">'):

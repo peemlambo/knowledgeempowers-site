@@ -428,3 +428,16 @@ body.home .brand-hero .wrap{min-height:calc(100vh - 118px);padding-block:var(--g
 /* price lists as a clean card */
 .prices{background:#fff;border:1px solid var(--line);padding:6px 24px;margin:12px 0 20px}
 .prices div:last-child{border-bottom:0}
+
+/* ===== Every page opens like the home page ===== */
+.phead h1,.phead .hero h1,.phead .hero.solo h1{font-size:clamp(2.4rem,5vw,4.2rem)!important;line-height:1.08;letter-spacing:-.01em}
+.phead h1 em{font-style:italic;font-weight:500;color:#E9D3A6}
+.phead .lead{font-size:1.15rem;line-height:1.65;max-width:36rem}
+.phead .hero .txt{gap:26px}
+@media (min-width:1181px){
+  .phead .hero{min-height:calc(82vh - 100px);padding-block:72px 80px;align-content:center;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:64px}
+  .phead .hero.solo{min-height:0;padding-block:88px 96px}
+  .phead .hero figure{max-width:520px;justify-self:end}
+  .phead .hero figure.cover{max-width:360px;justify-self:center}
+}
+@media (max-width:900px){.phead .hero{gap:36px}}
