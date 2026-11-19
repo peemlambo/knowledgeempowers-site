@@ -1,0 +1,322 @@
+# Builds the simple content pages of the KnowledgeEmpowers website from one shared header and footer.
+# Run: python3 tools/build.py   (from the repository folder)
+import os, re, html
+from urllib.parse import quote
+
+GA = '''<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script>'''
+WA = 'https://wa.me/27615818059'
+def wa(text): return WA + '?text=' + quote(text)
+LOGIN = '/workbooks/digital-math-workbooks/'
+NAV = [('/baseline-assessment/', 'Free maths check'), ('/free-classroom-practice/', 'Free practice'), ('/workbooks/', 'Workbooks'),
+       ('/exam-packs/', 'Exam packs'), ('/shop/', 'Shop'), ('/tutoring/', 'Tutoring'), ('/about/', 'About')]
+
+def page(path, title, desc, body, current=None):
+    nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if current == h else '', t) for h, t in NAV)
+    out = '''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>%(title)s · KnowledgeEmpowers</title>
+<meta name="description" content="%(desc)s">
+<meta property="og:title" content="%(title)s · KnowledgeEmpowers">
+<meta property="og:description" content="%(desc)s">
+<meta property="og:image" content="/assets/img/logo.png">
+<link rel="icon" href="/assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700;800&family=Public+Sans:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+%(ga)s
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.png" alt="KnowledgeEmpowers"></a>
+  <button class="menu" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav">%(nav)s<a class="btn" href="%(login)s">Log in</a></nav>
+</div></header>
+<main>
+%(body)s
+</main>
+<footer><div class="wrap">
+  <img src="/assets/img/logo-white.png" alt="KnowledgeEmpowers">
+  <p>Don't give up! Grow through what you go through.</p>
+  <div class="row">
+    <a href="%(wa)s">WhatsApp 061 581 8059</a>
+    <a href="mailto:knowledgeempowers08@gmail.com">knowledgeempowers08@gmail.com</a>
+    <a href="/grow-at-home/">Grow at home</a>
+    <a href="/about/contact/">Contact</a>
+    <a href="/about/privacy-policy/">Privacy</a>
+    <a href="/about/terms-and-conditions/">Terms</a>
+  </div>
+  <small>© KnowledgeEmpowers. Licensed to the subscriber for use with their own learners. Not for resale.</small>
+</div></footer>
+<script>document.querySelector('.menu').addEventListener('click',function(){var n=document.getElementById('nav'),o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)});</script>
+</body>
+</html>
+''' % dict(title=html.escape(title), desc=html.escape(desc), ga=GA, nav=nav, login=LOGIN, body=body, wa=WA)
+    d = path.strip('/')
+    if d: os.makedirs(d, exist_ok=True)
+    open((d + '/' if d else '') + 'index.html', 'w').write(out)
+
+def prices(rows): return '<div class="prices">' + ''.join('<div><span>%s</span><b>%s</b></div>' % r for r in rows) + '</div>'
+def ul(items): return '<ul>' + ''.join('<li>%s</li>' % i for i in items) + '</ul>'
+def btns(*b): return '<div class="btns">' + ''.join('<a class="btn%s" href="%s">%s</a>' % (' ghost' if i else '', h, t) for i, (h, t) in enumerate(b)) + '</div>'
+MORE = '<p><a href="/grow-at-home/">More to grow at home →</a></p>'
+
+# ---------------- Home
+HOME = '''<div class="wrap hero">
+  <div class="eb">Maths for Grades 4 to 12</div>
+  <h1>One topic, in depth.</h1>
+  <p class="lead">Workbooks, exam packs and free practice for learners in South African public, IEB and Cambridge schools. Every answer shown step by step. Works alongside any curriculum.</p>
+  %s
+</div>
+<section class="soft"><div class="wrap">
+  <h2>How it works</h2>
+  <div class="steps">
+    <div><h3>Take the free maths check</h3><p class="mut">See which topics are secure and which need work.</p></div>
+    <div><h3>Choose what fits</h3><p class="mut">A workbook or exam pack for the gaps the check found.</p></div>
+    <div><h3>Start the same day</h3><p class="mut">Get your access code on WhatsApp, or a printed book delivered.</p></div>
+  </div>
+</div></section>
+<section><div class="wrap">
+  <h2>How we can help</h2>
+  <div class="tiles">
+    <a class="tile" href="/free-classroom-practice/"><h3>Free classroom and practice</h3><p class="mut">Show a lesson on the classroom screen, or practise at home. No sign-up.</p><span class="go">Start practising →</span></a>
+    <a class="tile" href="/workbooks/"><h3>Online workbooks</h3><p class="mut">Every topic for a year: R149 for Grades 4–9, R199 for Grades 10–12.</p><span class="go">See workbooks →</span></a>
+    <a class="tile" href="/shop/"><h3>Printed books and diaries</h3><p class="mut">Topic workbooks in full colour, and a maths diary for every age.</p><span class="go">See the shop →</span></a>
+    <a class="tile" href="/exam-packs/"><h3>Exam packs</h3><p class="mut">End-of-year exam preparation for your child's grade, in print and online.</p><span class="go">See exam packs →</span></a>
+    <a class="tile" href="/tutoring/"><h3>Tutoring</h3><p class="mut">One-to-one online maths and English lessons, Grades 4 to 10.</p><span class="go">Find out more →</span></a>
+    <a class="tile" href="/grow-at-home/"><h3>Grow at home</h3><p class="mut">Quiet Progress books, free maths tools and motivation.</p><span class="go">Explore →</span></a>
+  </div>
+</div></section>''' % btns(('/baseline-assessment/', "Find my child's gaps (free)"), ('/shop/', 'Shop'))
+page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
+
+# ---------------- Workbooks
+page('/workbooks/', 'Workbooks', 'One maths topic at a time, Grades 4 to 12, online and printed.', '''<div class="wrap page wide">
+<div class="split"><div style="display:grid;gap:22px">
+  <div class="eb">Workbooks</div><h1>One topic at a time, Grades 4 to 12</h1>
+  <p class="lead">Each workbook takes one maths topic in depth, and works alongside any curriculum. Online, a wrong answer brings a hint first, then the full steps, so learners can work alone.</p>
+</div><img src="/assets/img/workbook.jpg" alt="A KnowledgeEmpowers topic workbook"></div>
+<h2>All topics online</h2>%s
+<h2>Printed workbook</h2>%s
+<p class="mut">Delivery of printed workbooks is charged separately.</p>
+<div class="note"><b>How to order:</b> message us on WhatsApp with your child's grade. Pay using the details we send you, then receive your personal code. Each code is for one learner, lasts 12 months from the day you pay, and works on up to 2 devices.</div>
+%s
+</div>''' % (prices([('Grades 4–9', 'R149 a year'), ('Grades 10–12', 'R199 a year')]),
+             prices([('One topic', 'R199 (members R169)'), ('Part 1 or Part 2', 'R109 (members R99)')]),
+             btns((wa("Hi, I'd like to order a workbook. Topic and grade: "), 'Order on WhatsApp'), (LOGIN, 'I already have a code'), ('/baseline-assessment/', 'Not sure? Take the free maths check'))), '/workbooks/')
+
+# ---------------- Exam packs
+page('/exam-packs/', 'Exam packs', 'End-of-year maths exam preparation, Grades 4 to 12.', '''<div class="wrap page wide">
+<div class="split"><div style="display:grid;gap:22px">
+  <div class="eb">Exam packs</div><h1>End-of-year maths exam preparation, Grades 4 to 12</h1>
+  <p class="lead">One pack for your child's grade, for South African (public and IEB) and Cambridge learners.</p>
+  <p>Inside: revision for every topic with worked examples, mock exam papers with full memos, a formula sheet and a progress tracker.</p>
+</div><img src="/assets/img/parts.jpg" alt="KnowledgeEmpowers printed books"></div>
+<h2>Grades 4 to 9</h2>%s
+<h2>Grades 10 to 12</h2>%s
+<p class="mut">Delivery of printed packs is charged separately.</p>
+<div class="note"><b>How to order:</b> message us on WhatsApp with your child's grade and the pack you want. Pay using the details we send you. Then receive your pack and personal code. Each code is for one learner and works for one school term on up to 2 devices.</div>
+%s
+</div>''' % (prices([('Online', 'R149'), ('PDF', 'R100'), ('Printed', 'R199')]), prices([('Online', 'R199'), ('PDF', 'R149'), ('Printed', 'R250')]),
+             btns((wa("Hi, I'd like to order an Exam Pack. Grade: "), 'Order on WhatsApp'), ('/exam-packs/exam-preparation-packs/', 'I already have a code'))), '/exam-packs/')
+
+# ---------------- Tutoring
+page('/tutoring/', 'Tutoring', 'One-to-one online maths and English lessons for Grades 4 to 10.', '''<div class="wrap page wide">
+<div class="eb">Tutoring</div><h1>One-to-one online lessons, Grades 4 to 10</h1>
+<p class="lead">We start where your child is, and stay with a topic until it makes sense. Each lesson is tailored to the learner's needs, schoolwork and goals, with clear explanations and guided practice.</p>
+%s
+<p>Message us on WhatsApp to discuss your child's grade, learning goals and available lesson times.</p>
+%s
+<div class="cards">
+ <div class="card"><h3>Mathematics tutoring</h3><p class="mut">Clear explanations, step-by-step guidance and personal support.</p>%s<a href="/tutoring/mathematics-tutoring-grades-5-10/">Learn more →</a></div>
+ <div class="card"><h3>English HL/FAL tutoring</h3><p class="mut">Reading, writing, grammar, comprehension and exam performance.</p>%s<a href="/tutoring/english-hl-or-fal-tutoring-grades-4-10/">Learn more →</a></div>
+</div></div>''' % (prices([('Single 60-minute lesson', 'R250'), ('4 online lessons', 'R900')]), btns(('https://wa.me/message/XAFTSZAMNG6IO1', 'Enquire about online lessons')),
+                   ul(['One-on-one online lessons', 'Group classes available', 'Exam preparation and revision', 'Homework support', 'Problem-solving and confidence']),
+                   ul(['Group classes', 'Essay and creative writing support', 'Comprehension strategies', 'Speaking and listening skills'])), '/tutoring/')
+page('/tutoring/mathematics-tutoring-grades-5-10/', 'Mathematics tutoring', 'Online mathematics tutoring, Grades 4 to 10.', '''<div class="wrap page">
+<div class="eb">Tutoring</div><h1>Mathematics tutoring</h1>
+<p class="lead">Online mathematics tutoring designed to help learners strengthen understanding, improve problem-solving skills, and build academic confidence. Lessons are personalised to each learner's pace, learning style and needs. The focus is on understanding concepts clearly rather than relying only on memorisation.</p>
+<h2>Common challenges learners face</h2>%s
+<h2>Topics covered</h2>%s
+<h2>Teaching approach</h2><p>Lessons are conducted in a calm and supportive environment where learners are encouraged to ask questions, think independently, and strengthen foundational understanding step by step. The goal is to help learners improve confidence, clarity and academic growth over time.</p>
+<h2>Online lesson information</h2>%s
+%s</div>''' % (ul(['Difficulty understanding mathematical concepts', 'Fear of making mistakes', 'Weak foundational knowledge', 'Struggles with algebra and problem-solving', 'Exam anxiety and lack of confidence', 'Difficulty applying formulas correctly']),
+               ul(['Number operations', 'Fractions and decimals', 'Percentages', 'Algebra', 'Geometry', 'Trigonometry', 'Statistics and probability', 'Functions and graphs', 'Measurement and finance', 'Data handling and patterns']),
+               ul(['One-on-one online tutoring', 'Lessons via Google Meet', 'Flexible scheduling', 'Homework and revision support', 'Exam preparation assistance']),
+               btns(('https://wa.me/message/XAFTSZAMNG6IO1', 'Enquire on WhatsApp'))), '/tutoring/')
+page('/tutoring/english-hl-or-fal-tutoring-grades-4-10/', 'English HL/FAL tutoring', 'Online English tutoring, Grades 4 to 10.', '''<div class="wrap page">
+<div class="eb">Tutoring</div><h1>English HL/FAL tutoring</h1>
+<p class="lead">English language tutoring focused on improving communication, comprehension, writing, grammar and confidence in using English effectively. Lessons support learners at different levels by strengthening both foundational language skills and academic performance.</p>
+<h2>Areas of support</h2>%s
+<h2>Common challenges learners face</h2>%s
+<h2>Online lesson information</h2>%s
+%s</div>''' % (ul(['Grammar and sentence structure', 'Reading comprehension', 'Vocabulary development', 'Essay and paragraph writing', 'Pronunciation and speaking confidence', 'English for academic purposes']),
+               ul(['Difficulty expressing ideas clearly', 'Limited vocabulary', 'Lack of confidence when speaking English', 'Grammar mistakes in writing', 'Difficulty understanding comprehension passages', 'Fear of participating in class discussions']),
+               ul(['Online lessons via Google Meet', 'One-on-one support', 'Flexible lesson scheduling', 'Homework and assignment assistance', 'Academic writing support']),
+               btns(('https://wa.me/message/XAFTSZAMNG6IO1', 'Enquire on WhatsApp'))), '/tutoring/')
+
+# ---------------- Grow at home
+page('/grow-at-home/', 'Grow at home', 'Books for learners and parents, free maths tools and guides on faith.', '''<div class="wrap page wide">
+<div class="eb">Beyond the classroom</div><h1>Calm habits, strong minds, real skills.</h1>
+<p class="lead">Books for learners and parents, plus free maths tools and guides on faith. Small steps at home that help your child grow.</p>
+<div class="tiles" style="margin-top:0">
+ <a class="tile" href="/free-classroom-practice/"><h3>Free practice</h3><p class="mut">Practise any topic, with every answer shown step by step.</p><span class="go">Start →</span></a>
+ <a class="tile" href="/digital-empowerment/"><h3>Free maths tools</h3><p class="mut">Interactive tools that help your child see the maths.</p><span class="go">Open →</span></a>
+ <a class="tile" href="/motivation-faith/"><h3>Motivation &amp; Faith</h3><p class="mut">Prepare yourself, because life won't wait.</p><span class="go">Read →</span></a>
+ <a class="tile" href="/the-power-of-quiet-progress/"><h3>The Power of Quiet Progress</h3><p class="mut">Learner Edition · from R149</p><span class="go">See the book →</span></a>
+ <a class="tile" href="/the-quiet-progress-method/"><h3>The Quiet Progress Method</h3><p class="mut">Family Edition · from R199</p><span class="go">See the book →</span></a>
+ <a class="tile" href="/shop/"><h3>My Maths Diary</h3><p class="mut">A full-year diary for Grades 4–7, 8–9 and 10–12.</p><span class="go">See the shop →</span></a>
+</div>
+<p class="mut">Empowering minds. Uplifting hearts. Transforming lives.</p>
+</div>''')
+
+# ---------------- Free maths tools
+page('/digital-empowerment/', 'Free maths tools', 'Three free tools that help your child see the maths, not just memorise it.', '''<div class="wrap page">
+<div class="eb">Free maths tools</div><h1>See the maths, not just memorise it</h1>
+<p class="lead">Three free tools for Grades 4 to 9.</p>
+<div class="cards">
+ <div class="card"><h3>Fraction, Decimal and Percentage Builder</h3><p class="mut">Shade a shape and watch the fraction, decimal and percentage change together. Grades 4 to 7.</p><a href="interactive-fraction-decimal-and-percentage-builder/">Open tool →</a></div>
+ <div class="card"><h3>Ratio Mixer</h3><p class="mut">Mix parts and see how ratio and proportion scale up and down. Grades 6 to 9.</p><a href="interactive-ratio-and-proportion/">Open tool →</a></div>
+ <div class="card"><h3>Times Table Explorer</h3><p class="mut">See each times table as rows and columns, then test yourself with short quizzes. Grades 4 to 6.</p><a href="visual-times-table-explorer/">Open tool →</a></div>
+ <div class="card"><h3>Want the whole topic?</h3><p class="mut">Every topic, step by step, in the online workbooks.</p><a href="/workbooks/">See workbooks →</a></div>
+</div>%s</div>''' % MORE)
+
+# ---------------- Motivation & Faith
+MF = [("Know yourself before you chase success", "Before you chase degrees, jobs or relationships, ask: who am I becoming? Your values, your faith and your emotional clarity are your compass. Build your identity on truth, not trends.", "Journal your strengths, fears and goals. Speak affirmations daily. Your voice matters."),
+      ("Master the basics. They're your foundation.", "Learn how to budget, cook, clean and manage your time. These aren't chores or checkboxes. They're tools for freedom, confidence and long-term success. Education is your launchpad, not just a requirement. Small steps build strong habits.", "Create a weekly routine. Learn one new life skill each month. Stay curious: read, ask questions, and seek tutoring when needed."),
+      ("Build emotional resilience", "You'll face rejection, confusion and pressure. That's normal. What matters is how you respond. Practise self-awareness. Learn to pause before reacting. Forgive yourself quickly.", "When overwhelmed, breathe, pray and reflect. Growth often hides in discomfort."),
+      ("Invest in relationships that build you", "Choose friends who challenge you to grow, not just chill. Seek mentors. Be teachable. Your circle shapes your mindset, so choose wisely.", "Ask: “Does this relationship help me rise?” If not, reset your boundaries."),
+      ("Pursue purpose, not just paychecks", "Your career matters, but your calling matters more. Align your work with your gifts. It's okay to pivot. It's okay to start small. Just don't settle for a life that doesn't speak to your soul.", "Volunteer, shadow professionals, or start a side project. Explore before you commit."),
+      ("Stay rooted in faith and focus", "Life will test your focus. Distractions will come. Stay anchored in what's eternal. Faith isn't weakness, it's your fuel. Focus isn't pressure, it's your power.", "Declaration: “I am growing through what I go through. I am equipped, empowered, and evolving.”")]
+page('/motivation-faith/', 'Motivation & Faith', "Prepare yourself, because life won't wait.", '''<div class="wrap page">
+<div class="eb">Motivation &amp; Faith</div><h1>Prepare yourself, because life won't wait</h1>
+<p class="lead">Don't give up, grow through what you go through. Life doesn't come with a manual, but it does come with moments. Moments that shape you, stretch you, and call you to rise. If you're a young adult standing at the edge of independence, here's how you could prepare yourself, not just to survive but to thrive.</p>
+%s
+<h2>You're not behind, you're becoming</h2><p>You don't need to have it all figured out. You just need to start. Prepare yourself with intention, and life will meet you with opportunity. You are not alone. You are not late. You are not lost. You are learning. You are rising. You are ready.</p>
+%s</div>''' % (''.join('<h2>%s</h2><p>%s</p><p class="note"><b>Tip:</b> %s</p>' % (h, p, t) if not t.startswith('Declaration') else '<h2>%s</h2><p>%s</p><p class="note">%s</p>' % (h, p, t) for h, p, t in MF), MORE))
+
+# ---------------- Quiet Progress books
+def book(path, title, eb, h, lead, img, ed, edtxt, pdf, printed, printword, who_intro, who, inside, extra, other, othertxt):
+    page(path, title, lead, '''<div class="wrap page wide">
+<div class="split"><div style="display:grid;gap:22px">
+  <div class="eb">%s</div><h1>%s</h1><p class="lead">%s</p>
+  <h2>%s</h2><p>%s</p>
+  <p><b>PDF download: R%d · %s: R%d plus delivery</b></p>
+  %s
+</div><img src="/assets/img/%s" alt="%s cover"></div>
+<div class="cards">
+ <div class="card"><h3>Who it is for</h3><p class="mut">%s</p>%s</div>
+ <div class="card"><h3>What is inside</h3>%s%s</div>
+</div>
+<div class="note"><b>How to order:</b> message us on WhatsApp and we'll send you payment details. Once paid, we send the PDF straight away, or print and deliver your copy. Delivery is charged separately.</div>
+<h2>Better together</h2><p>%s Get both books for R299 as PDFs, or R499 printed.</p>
+%s
+%s</div>''' % (eb, h, lead, ed, edtxt, pdf, printword, printed,
+               btns((wa("Hi, I'd like to order %s as a PDF, R%d." % (title, pdf)), 'Order the PDF'), (wa("Hi, I'd like to order a printed copy of %s, R%d plus delivery." % (title, printed)), 'Order a printed copy')),
+               img, title, who_intro, ul(who), ul(inside), extra, othertxt,
+               btns((wa("Hi, I'd like to order both Quiet Progress books as PDFs, R299."), 'Order both as PDFs, R299'), (wa("Hi, I'd like to order printed copies of both Quiet Progress books, R499 plus delivery."), 'Order both printed, R499')), MORE))
+book('/the-power-of-quiet-progress/', 'The Power of Quiet Progress (Learner Edition)', 'The Power of Quiet Progress', 'Not every learner improves loudly.',
+     'Some learners improve quietly: step by step, mistake by mistake, until one day it starts making sense.', 'learner-edition.jpg', 'Learner Edition',
+     'A practical guide for learners who work hard but feel behind, rushed or discouraged. It shows how to learn from mistakes, build study habits that fit a real school week, and notice the progress that marks do not always show.',
+     149, 249, 'Printed copy', 'Learners in upper primary and high school who:',
+     ['feel behind or slower than their classmates', 'work hard but do not see it in their marks', 'are not sure how to study on their own', 'lose heart after mistakes or feedback'],
+     ['10 short chapters, each with a relatable school story', 'Practical steps for Maths and English in every chapter', 'Reflection pages to plan, try and check what works', 'A 14-day Quiet Progress plan', 'A study-tool quick reference and a guide on when to ask for help'], '',
+     '/the-quiet-progress-method/', 'Pair it with <a href="/the-quiet-progress-method/">The Quiet Progress Method</a>, our family edition that helps parents support homework calmly at home.')
+book('/the-quiet-progress-method/', 'The Quiet Progress Method (Family Edition)', 'The Quiet Progress Method', 'Calmer homework, together.',
+     'You do not need to know every answer to help your child learn. A calm start, a few good questions and a plan you can keep make a real difference.', 'family-edition.jpg', 'Family Edition',
+     "A hands-on homework workbook for parents and children. Twelve short lessons help you turn tense homework evenings into calm, steady progress, using your child's real homework.",
+     199, 329, 'Printed, spiral-bound copy', 'Parents and caregivers who:',
+     ['dread the daily homework battle', 'are not sure how to help without doing the work for their child', 'want homework to start with less resistance', 'want simple tools for Maths, reading and writing at home'],
+     ['12 lessons, each with a parent guide and words to try', '12 activities to do together, using real homework', '12 printable tools and weekly check-ins', 'Conversation scripts and a reset plan for hard evenings', 'Reusable maths models, reading cards and writing prompts'],
+     '<p class="mut">The printed copy is spiral-bound so it lies flat for writing. With the PDF, print the pages as often as you need for your own household.</p>',
+     '/the-power-of-quiet-progress/', 'Pair it with <a href="/the-power-of-quiet-progress/">The Power of Quiet Progress</a>, the learner edition your child can work through on their own.')
+
+# ---------------- Mathematics (topic overview)
+TOP = [('Number operations', 'Master the basics that power all of mathematics.', ['Addition strategies (mental maths, regrouping)', 'Subtraction techniques (borrowing, inverse operations)', 'Multiplication (tables, long multiplication, area models)', 'Division (short division, long division, remainders)', 'Order of operations (BODMAS)', 'Word problems and real-life applications']),
+       ('Fractions', 'From parts to wholes: understand the language of sharing.', ['Proper, improper and mixed fractions', 'Equivalent fractions', 'Comparing and ordering fractions', 'Adding and subtracting fractions', 'Multiplying and dividing fractions', 'Converting between fractions and decimals']),
+       ('Decimals', 'Precision and place value made simple.', ['Place value and rounding', 'Adding, subtracting, multiplying, dividing decimals', 'Converting between decimals and fractions', 'Comparing and ordering decimals', 'Real-world applications (money, measurements)']),
+       ('Percentages', 'Unlock the power of proportions.', ['Understanding percentages', 'Converting between fractions, decimals and percentages', 'Percentage of a quantity', 'Percentage increase and decrease', 'Discounts, interest and profit calculations']),
+       ('Time', 'Master the rhythm of life, one tick at a time.', ['Reading analogue and digital clocks', 'Converting between units (seconds, minutes, hours, days)', 'Calculating elapsed time and duration', 'Time zones and calendars', 'Real-life applications: schedules, travel, planning']),
+       ('Measurement', 'Measure your world with confidence.', ['Units of length, mass, volume and time', 'Metric and imperial conversions', 'Perimeter, area and volume', 'Temperature and time calculations', 'Estimation and accuracy']),
+       ('Finance', 'Smart money skills for everyday life.', ['Budgeting and saving', 'Income and expenses', 'Simple and compound interest', 'Currency conversions', 'Financial decision-making']),
+       ('Data handling', 'Make sense of numbers and trends.', ['Collecting and organising data', 'Bar graphs, pie charts, line graphs', 'Mean, median, mode and range', 'Interpreting tables and diagrams', 'Surveys and data analysis']),
+       ('Patterns and sequences', 'Spot the rhythm in numbers.', ['Number patterns and rules', 'Arithmetic and geometric sequences', 'Function machines', 'Predicting terms in a sequence']),
+       ('Geometry', 'Shapes, space and structure.', ['Types of angles and their properties', 'Triangles, quadrilaterals, polygons', 'Symmetry, transformations and tessellations', '2D vs 3D shapes', 'Nets and surface area']),
+       ('Algebra', 'From unknowns to understanding.', ['Expressions and equations', 'Solving for variables', 'Simplifying and expanding', 'Linear equations and inequalities', 'Substitution and formulae']),
+       ('Trigonometry', 'From angles to action.', ['Understanding sine, cosine and tangent', 'Right-angled triangle ratios', 'Using SOH-CAH-TOA to solve problems', 'Angle of elevation and depression', 'Real-world applications: architecture, navigation, physics']),
+       ('Statistics', 'Turn data into decisions.', ['Types of data (categorical, numerical)', 'Frequency tables and histograms', 'Measures of central tendency', 'Interpreting statistical results', 'Real-world data analysis']),
+       ('Probability', 'Predict the possible.', ['Likelihood and chance', 'Experimental vs theoretical probability', 'Probability scales', 'Tree diagrams and outcomes', 'Real-life applications (games, risk)'])]
+page('/mathematics/', 'Mathematics', 'Maths for learners from Grade 4 to Grade 12, and adults revisiting the basics.', '''<div class="wrap page wide">
+<div class="eb">Mathematics</div><h1>The building blocks of confidence</h1>
+<p class="lead">Whether you're a learner struggling with the basics or someone sharpening your skills, these topics unlock the core of mathematics. They aren't just operations: they're the building blocks of confidence, logic and lifelong learning.</p>
+<div class="cards">
+ <div class="card"><h3>Who is it for?</h3>%s</div>
+ <div class="card"><h3>Why learn with us?</h3>%s</div>
+</div>
+<h2>Browse the topics</h2>
+<div class="topics">%s</div>
+%s</div>''' % (ul(['Learners from Grade 4 to Grade 12', 'Adults revisiting foundational maths', 'Anyone who wants to turn fear into fluency']),
+               ul(['Tutoring that meets you where you are', 'Faith-rooted motivation to uplift your mindset as you learn', 'Creative methods that make maths feel natural, not stressful', 'Live support from a tutor who believes in your growth']),
+               ''.join('<div><h3>%s</h3><p class="mut">%s</p>%s</div>' % (t, d, ul(i)) for t, d, i in TOP),
+               btns(('/workbooks/', 'See the workbooks'), ('/tutoring/', 'Tutoring'))))
+
+# ---------------- About
+page('/about/', 'About', 'KnowledgeEmpowers is home to GROW: maths workbooks and tutoring for real understanding.', '''<div class="wrap page">
+<div class="eb">About</div><h1>Who we are</h1>
+<p class="lead">KnowledgeEmpowers is home to GROW. Our maths workbooks and tutoring help learners catch up, keep up and get ahead with real understanding, not just a completed page. One topic, in depth. Works alongside any curriculum.</p>
+<h2>Who's behind GROW</h2>
+<p>GROW is run by Pelocus Org (Pty) Ltd, a registered South African company, not a one-person side project. That matters for a few concrete reasons:</p>
+%s
+<h2>What we do</h2>%s
+<h2>Our values</h2>%s
+<h2>Find us</h2><p>You can also find KnowledgeEmpowers on Google: <a href="https://share.google/AsMWbROCykluLpB91">our business listing</a>.</p>
+<p class="note">Our mission is to help every learner understand maths, one topic at a time, and to grow through what they go through.</p>
+</div>''' % (ul(['<b>Every tutor is vetted before they work with a child.</b> Our vetting includes police clearance checks and reference checks: the same standard we\'d want for our own children.',
+                 '<b>One team, one standard.</b> The workbooks, the tutoring and the support you get when you email us all come from the same small team, so nothing falls through the cracks.',
+                 '<b>Your purchase is handled properly.</b> When you buy through KnowledgeEmpowers, you\'re buying directly from Pelocus Org (Pty) Ltd (Reg. No. 2020/864381/07), trading as GROW: an accountable company, not an anonymous storefront.']),
+             ul(['<b>Tutoring and academic support:</b> personal help in English and Mathematics', '<b>Workbooks and exam packs:</b> maths for Grades 4 to 12, one topic at a time', '<b>Faith and motivation:</b> daily declarations and encouragement to keep you focused and resilient', '<b>Free maths tools:</b> <a href="/digital-empowerment/">interactive tools that help your child see the maths</a>']),
+             ul(['<b>Integrity:</b> every word and resource is crafted with honesty and originality.', '<b>Clarity:</b> we simplify complexity so you can focus on what matters.', '<b>Faith:</b> we believe transformation begins when you refuse to give up.', '<b>Empowerment:</b> every service is designed to strengthen your mind, heart and spirit.'])), '/about/')
+page('/about/contact/', 'Contact', "Questions about workbooks, exam packs or tutoring? We'd love to hear from you.", '''<div class="wrap page">
+<div class="eb">Contact</div><h1>We'd love to hear from you</h1>
+<p class="lead">Whether you have questions about workbooks, exam packs, tutoring, motivational resources or collaborations, we're here to connect. Reach out today and let's grow through what we go through.</p>
+%s
+<p><b>Email:</b> <a href="mailto:knowledgeempowers08@gmail.com">knowledgeempowers08@gmail.com</a><br><b>WhatsApp:</b> <a href="%s">+27 61 581 8059</a></p>
+<p><b>TikTok:</b> <a href="https://www.tiktok.com/@knowledgeempowers2">@knowledgeempowers2</a> (spoken word and motivational content)<br><b>Facebook:</b> KnowledgeEmpowers (updates and inspiration)</p>
+<div class="note"><b>Response time:</b> we aim to reply within 2–4 hours. For urgent questions, WhatsApp is the fastest way to reach us. All communication is handled with respect, integrity and confidentiality.</div>
+</div>''' % (btns((WA, 'Chat on WhatsApp'), ('mailto:knowledgeempowers08@gmail.com', 'Send an email')), WA), '/about/')
+page('/about/privacy-policy/', 'Privacy Policy', 'How KnowledgeEmpowers collects, uses and protects your personal information.', '''<div class="wrap page">
+<div class="eb">About</div><h1>Privacy Policy</h1>
+<p class="lead">At KnowledgeEmpowers, we value your privacy. This policy explains how we collect, use and protect your personal information when you visit our site, purchase digital products, or interact with affiliate links.</p>
+<h2>1. Child safety</h2>
+<p>Every tutor in the KnowledgeEmpowers network completes a Police Clearance Certificate and signs a child safeguarding declaration before they are ever matched with a learner. You're not just choosing a tutor: you're choosing someone who will spend time with your child, and we treat that responsibility accordingly. If you ever have a question or concern about a tutor's conduct, you're welcome to reach out to us directly at any time.</p>
+<p>Every tutor is police-cleared before working with learners. Every tutor signs a child safeguarding declaration. Your information is handled securely and confidentially, in line with South Africa's POPIA.</p>
+<h2>2. Information we collect</h2><p>We may collect:</p>%s
+<h2>3. How we use your information</h2><p>We use your data to:</p>%s
+<h2>4. Affiliate disclosure</h2><p>Some links on this site are affiliate links. If you purchase through them, we may earn a small commission, at no extra cost to you. We only promote tools and platforms we believe in.</p>
+<h2>5. Data protection</h2><p>We take reasonable steps to protect your data:</p>%s
+<h2>6. Your rights</h2><p>You can:</p>%s
+<h2>7. Cookies</h2><p>We use cookies to enhance your experience. You can disable cookies in your browser settings.</p>
+<h2>8. Changes to this policy</h2><p>We may update this policy. Changes will be posted on this page with a revised date.</p>
+<h2>9. Contact us</h2><p>If you have questions, email us at <a href="mailto:knowledgeempowers08@gmail.com">knowledgeempowers08@gmail.com</a>.</p>
+</div>''' % (ul(['Name and email address (when you contact us or make a purchase)', 'Payment details (processed securely via third-party platforms)', 'Usage data (via cookies and analytics tools)']),
+             ul(['Process orders and deliver downloads', 'Respond to inquiries and provide support', 'Improve site performance and user experience', 'Share relevant affiliate offers (only those we trust)']),
+             ul(['Secure payment gateways', 'No selling or renting of personal information', 'Limited access to user data']),
+             ul(['Request access to your data', 'Ask for corrections or deletion', 'Opt out of marketing communications'])), '/about/')
+page('/about/terms-and-conditions/', 'Terms and conditions', 'The terms for using KnowledgeEmpowers.online and buying our products.', '''<div class="wrap page">
+<div class="eb">About</div><h1>Terms and conditions</h1>
+<p class="lead">By accessing and using KnowledgeEmpowers.online, you agree to comply with these Terms and Conditions. If you do not agree, please discontinue use of the site.</p>
+<h2>1. Use of content</h2>%s
+<h2>2. User responsibilities</h2>%s
+<h2>3. Purchases and downloads</h2>%s
+<h2>4. Affiliate disclosure</h2><p>Some links may be affiliate links. If you purchase through them, KnowledgeEmpowers may earn a small commission, at no extra cost to you. We only promote tools and platforms we trust.</p>
+<h2>5. Limitation of liability</h2>%s
+<h2>6. Privacy and data protection</h2><p>Your privacy is important. Please review our <a href="/about/privacy-policy/">Privacy Policy</a> for details on how we collect and protect your information.</p>
+<h2>7. Changes to terms</h2><p>We may update these Terms and Conditions at any time. Changes will be posted on this page with a revised date.</p>
+<h2>8. Contact us</h2><p>Email <a href="mailto:knowledgeempowers08@gmail.com">knowledgeempowers08@gmail.com</a> or WhatsApp <a href="%s">+27 61 581 8059</a>.</p>
+</div>''' % (ul(['All content on this site, including text, graphics and resources, is original and protected.', 'You may not copy, reproduce or distribute materials without prior written consent.', 'Content is provided for educational, motivational and informational purposes only.']),
+             ul(['Visitors must use the site lawfully and respectfully.', 'You agree not to misuse the site for harmful, illegal or disruptive activities.', 'Any comments, submissions or interactions must remain constructive and free of offensive language.']),
+             ul(['Orders are placed on WhatsApp. We send payment details when you order.', 'Digital packs and personal codes are sent once payment is received.', 'Printed packs are delivered for a separate fee.', 'Each code is for one learner and works for one school term on up to 2 devices.', 'Refunds are handled on a case-by-case basis, depending on the nature of the product.', 'Free resources are offered for personal use only and may not be resold.']),
+             ul(["We strive for accuracy, but we cannot guarantee that all content is error-free.", 'KnowledgeEmpowers is not liable for damages arising from the use or misuse of site content.', 'Users are responsible for applying information appropriately in their own contexts.']), WA), '/about/')
+print('built')

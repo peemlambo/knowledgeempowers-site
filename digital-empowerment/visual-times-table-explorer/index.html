@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times Table Explorer & Practice</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 12px;
+            background-color: transparent;
+            color: #2d3748;
+            line-height: 1.5;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .explorer-card {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-top: 5px solid #800020;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #800020;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .header p {
+            color: #666666;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Mode Selector Tabs */
+        .mode-tabs {
+            display: flex;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 4px;
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+        .mode-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #718096;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 44px;
+        }
+        .mode-btn.active {
+            background-color: #800020;
+            color: #ffffff;
+        }
+
+        /* Target Table Selector Ribbon */
+        .ribbon-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #718096;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .table-ribbon {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+        }
+        .table-ribbon::-webkit-scrollbar {
+            height: 4px;
+        }
+        .table-ribbon::-webkit-scrollbar-thumb {
+            background-color: #cbd5e0;
+            border-radius: 2px;
+        }
+        .ribbon-btn {
+            flex: 0 0 calc(16.66% - 5px);
+            min-width: 46px;
+            min-height: 44px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .ribbon-btn:hover {
+            border-color: #718096;
+        }
+        .ribbon-btn.active {
+            background-color: #718096;
+            color: #ffffff;
+            border-color: #718096;
+        }
+
+        /* Interactive Grid Layout */
+        .panel-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        @media (min-width: 640px) {
+            .panel-container {
+                grid-template-columns: 1.1fr 1fr;
+                align-items: start;
+            }
+        }
+
+        /* Left Display Area */
+        .display-zone {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 340px;
+        }
+
+        /* 12x12 Array Grid */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 3px;
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+        }
+        .grid-block {
+            background-color: #edf2f7;
+            border-radius: 2px;
+            transition: background-color 0.15s ease;
+        }
+        .grid-block.active {
+            background-color: #800020;
+        }
+
+        /* Dynamic Giant Equation Output Bar */
+        .equation-focus {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 12px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        .equation-focus span.highlight {
+            color: #800020;
+        }
+
+        /* Controls / Options Right Side Area */
+        .interaction-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .view-panel {
+            display: none;
+        }
+        .view-panel.active {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Slider Cards */
+        .control-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .control-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #718096;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .control-readout {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #800020;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            margin: 8px 0;
+            height: 8px;
+            accent-color: #800020;
+        }
+
+        /* Conceptual Skip Counting Box */
+        .concept-card {
+            background-color: #f7fafc;
+            border-left: 4px solid #718096;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.95rem;
+        }
+        .concept-card h4 {
+            margin: 0 0 6px 0;
+            color: #2d3748;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .skip-track {
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.05rem;
+            color: #800020;
+            word-break: break-all;
+        }
+
+        /* Practice Quiz Layout Elements */
+        .quiz-score-bar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #2d3748;
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .quiz-score-bar span.num {
+            color: #cbd5e0;
+        }
+        .quiz-options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 50px;
+        }
+        .option-btn:hover {
+            border-color: #718096;
+            background-color: #f8fafc;
+        }
+        
+        /* Direct Feedback Status Modifiers */
+        .option-btn.correct {
+            background-color: #c6f6d5 !important;
+            border-color: #38a169 !important;
+            color: #22543d !important;
+        }
+        .option-btn.wrong {
+            background-color: #fed7d7 !important;
+            border-color: #e53e3e !important;
+            color: #742a2a !important;
+        }
+
+        /* Mobile Viewport Adaptations */
+        @media (max-width: 480px) {
+            .explorer-card { padding: 16px; }
+            .header h1 { font-size: 1.25rem; }
+            .mode-tabs { flex-direction: column; gap: 2px; }
+            .mode-btn { min-height: 38px; padding: 6px; font-size: 0.85rem; }
+            .ribbon-btn { flex: 0 0 calc(25% - 5px); }
+            .equation-focus { font-size: 1.8rem; }
+            .display-zone { min-height: 280px; padding: 12px; }
+            .matrix-grid { max-width: 220px; gap: 2px; }
+        }
+    </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script></head>
+<body><div style="background:#fff;border-bottom:1px solid #E8DEDB;font:600 15px system-ui,sans-serif;padding:10px 16px"><a href="/digital-empowerment/" style="color:#7A0000;text-decoration:none" class="toolbar">← Free maths tools</a></div>
+
+<div class="explorer-card">
+    <div class="header">
+        <h1>Times Table Explorer</h1>
+        <p>Visualize the area of equations or challenge your quick recall skills</p>
+    </div>
+
+    <!-- Mode Control Switching Header -->
+    <div class="mode-tabs">
+        <button id="mode-explore-btn" class="mode-btn active" onclick="switchMode('explore')">🔍 Explore Array Mode</button>
+        <button id="mode-practice-btn" class="mode-btn" onclick="switchMode('practice')">⚡ Quick Practice Quiz</button>
+    </div>
+
+    <!-- Universal Table Index Target Ribbon -->
+    <div class="ribbon-label">Select Target Times Table:</div>
+    <div class="table-ribbon" id="table-select-ribbon">
+        <!-- Generated inside JavaScript runtime loops -->
+    </div>
+
+    <div class="panel-container">
+        <!-- Structural Display Column -->
+        <div class="display-zone">
+            <div class="equation-focus" id="math-output-text">
+                3 × 4 = <span class="highlight">12</span>
+            </div>
+            
+            <!-- Matrix Box Array Window -->
+            <div class="matrix-grid" id="visual-matrix">
+                <!-- 144 boxes injected dynamically -->
+            </div>
+        </div>
+
+        <!-- System Controls Interaction Column -->
+        <div class="interaction-zone">
+            
+            <!-- VIEW BLOCK 1: EXPLORE PANEL MODULE -->
+            <div id="panel-explore" class="view-panel active">
+                <div class="control-card">
+                    <div class="control-meta">
+                        <span>Multiplier (Factor B)</span>
+                        <span id="readout-factor-b" class="control-readout">4</span>
+                    </div>
+                    <input type="range" id="slider-factor-b" min="1" max="12" value="4" oninput="updateExploreCalculation()">
+                </div>
+
+                <div class="concept-card">
+                    <h4>Skip-Counting Visualized:</h4>
+                    <div class="skip-track" id="skip-count-text">4, 8, 12</div>
+                </div>
+            </div>
+
+            <!-- VIEW BLOCK 2: PRACTICE PANEL MODULE -->
+            <div id="panel-practice" class="view-panel">
+                <div class="quiz-score-bar">
+                    <span>Target Recall Board</span>
+                    <span>Score: <span id="score-correct" class="num">0</span> / <span id="score-total" class="num">0</span></span>
+                </div>
+
+                <div class="quiz-options-container" id="quiz-options-box">
+                    <!-- Multiple choice button options built dynamically -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // System Architecture Global Context States
+    let activeMode = 'explore';
+    let selectedFactorA = 3;
+    let selectedFactorB = 4;
+    
+    // Quiz State Matrix Tracking
+    let quizCurrentFactorB = 1;
+    let quizTotalCount = 0;
+    let quizCorrectCount = 0;
+    let lockSelectionInput = false;
+
+    // Embedded Minimal low-latency Synthesizer Context Engine
+    let audioContextInstance = null;
+    function emitFeedbackTone(frequencyHz, waveshape = 'sine', timeframe = 0.04) {
+        try {
+            if (!audioContextInstance) {
+                audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const toneOscillator = audioContextInstance.createOscillator();
+            const gainNodeEnvelope = audioContextInstance.createGain();
+            
+            toneOscillator.connect(gainNodeEnvelope);
+            gainNodeEnvelope.connect(audioContextInstance.destination);
+            
+            toneOscillator.type = waveshape;
+            toneOscillator.frequency.setValueAtTime(frequencyHz, audioContextInstance.currentTime);
+            
+            gainNodeEnvelope.gain.setValueAtTime(0.04, audioContextInstance.currentTime);
+            gainNodeEnvelope.gain.exponentialRampToValueAtTime(0.00001, audioContextInstance.currentTime + timeframe);
+            
+            toneOscillator.start();
+            toneOscillator.stop(audioContextInstance.currentTime + timeframe);
+        } catch(errorState) {}
+    }
+
+    // Initialize Structural Component Blueprints
+    function bootstrapApplicationComponents() {
+        const ribbonContainer = document.getElementById("table-select-ribbon");
+        ribbonContainer.innerHTML = "";
+        for (let i = 1; i <= 12; i++) {
+            ribbonContainer.innerHTML += `<button id="ribbon-item-${i}" class="ribbon-btn ${i === selectedFactorA ? 'active' : ''}" onclick="selectTargetTable(${i})">×${i}</button>`;
+        }
+
+        const matrixContainer = document.getElementById("visual-matrix");
+        matrixContainer.innerHTML = "";
+        for (let rowIdx = 1; rowIdx <= 12; rowIdx++) {
+            for (let colIdx = 1; colIdx <= 12; colIdx++) {
+                matrixContainer.innerHTML += `<div id="block-r${rowIdx}-c${colIdx}" class="grid-block"></div>`;
+            }
+        }
+        
+        updateExploreCalculation();
+    }
+
+    // Toggle Active Operating Interface Mode Template
+    function switchMode(targetModeString) {
+        activeMode = targetModeString;
+        document.getElementById("mode-explore-btn").classList.toggle("active", targetModeString === 'explore');
+        document.getElementById("mode-practice-btn").classList.toggle("active", targetModeString === 'practice');
+        
+        document.getElementById("panel-explore").classList.toggle("active", targetModeString === 'explore');
+        document.getElementById("panel-practice").classList.toggle("active", targetModeString === 'practice');
+
+        emitFeedbackTone(480, 'sine', 0.05);
+
+        if (targetModeString === 'explore') {
+            updateExploreCalculation();
+        } else {
+            resetPracticeTrackingScorecard();
+            generatePracticeQuestionCycle();
+        }
+    }
+
+    // Select Target Multiplication Base Row Focus Index
+    function selectTargetTable(factorValue) {
+        selectedFactorA = parseInt(factorValue);
+        
+        // Synchronize Active Ribbon Indicator Elements
+        for (let i = 1; i <= 12; i++) {
+            document.getElementById(`ribbon-item-${i}`).classList.toggle("active", i === selectedFactorA);
+        }
+
+        emitFeedbackTone(560, 'sine', 0.04);
+
+        if (activeMode === 'explore') {
+            updateExploreCalculation();
+        } else {
+            generatePracticeQuestionCycle();
+        }
+    }
+
+    // Core Matrix Rasterization Redraw Engine Loop
+    function redrawVisualMatrix(limitRows, limitCols) {
+        for (let r = 1; r <= 12; r++) {
+            for (let c = 1; c <= 12; c++) {
+                const structuralTargetEl = document.getElementById(`block-r${r}-c${c}`);
+                if (structuralTargetEl) {
+                    if (r <= limitRows && c <= limitCols) {
+                        structuralTargetEl.classList.add("active");
+                    } else {
+                        structuralTargetEl.classList.remove("active");
+                    }
+                }
+            }
+        }
+    }
+
+    // Execution Logic Cycle: Explore Layout Rendering Engine Context
+    function updateExploreCalculation() {
+        selectedFactorB = parseInt(document.getElementById("slider-factor-b").value);
+        document.getElementById("readout-factor-b").textContent = selectedFactorB;
+
+        const totalProduct = selectedFactorA * selectedFactorB;
+        document.getElementById("math-output-text").innerHTML = `${selectedFactorA} × ${selectedFactorB} = <span class="highlight">${totalProduct}</span>`;
+
+        // Render Dynamic Mathematical Area Matrix
+        redrawVisualMatrix(selectedFactorA, selectedFactorB);
+
+        // Compute Linear Progress Sequence Tracks
+        let sequenceArray = [];
+        for (let step = 1; step <= selectedFactorB; step++) {
+            sequenceArray.push(selectedFactorA * step);
+        }
+        document.getElementById("skip-count-text").textContent = sequenceArray.join(", ");
+    }
+
+    // Reset Metrics Variables Tracking Scorecards System State
+    function resetPracticeTrackingScorecard() {
+        quizCorrectCount = 0;
+        quizTotalCount = 0;
+        document.getElementById("score-correct").textContent = "0";
+        document.getElementById("score-total").textContent = "0";
+    }
+
+    // Practice Module Pipeline: Question Options Generator Sequence Loop
+    function generatePracticeQuestionCycle() {
+        if (activeMode !== 'practice') return;
+        lockSelectionInput = false;
+
+        // Generate dynamic puzzle query bounds properties
+        quizCurrentFactorB = Math.floor(Math.random() * 12) + 1;
+        const preciseTrueProduct = selectedFactorA * quizCurrentFactorB;
+
+        document.getElementById("math-output-text").innerHTML = `${selectedFactorA} × ${quizCurrentFactorB} = <span class="highlight">?</span>`;
+        
+        // Zero out visible grid matrices to establish clean testing frames
+        redrawVisualMatrix(0, 0);
+
+        // Build Multi-Choice Distractor Array Sets Pools
+        let answersPool = new Set([preciseTrueProduct]);
+        
+        while (answersPool.size < 4) {
+            let offsetOption = Math.floor(Math.random() * 3) - 1; // Generates proximity offsets
+            let randomFactorScale = Math.floor(Math.random() * 12) + 1;
+            let alternateDistractorValue = selectedFactorA * randomFactorScale + (offsetOption * selectedFactorA);
+            
+            if (alternateDistractorValue > 0 && alternateDistractorValue <= 144) {
+                answersPool.add(alternateDistractorValue);
+            } else {
+                answersPool.add(Math.floor(Math.random() * 100) + 1);
+            }
+        }
+
+        // Convert structured set collections to randomized array queues
+        let randomizedOptionsList = Array.from(answersPool).sort(() => Math.random() - 0.5);
+
+        // Render Answer Option Target Buttons Layout Elements
+        const targetOptionsContainerBox = document.getElementById("quiz-options-box");
+        targetOptionsContainerBox.innerHTML = "";
+
+        randomizedOptionsList.forEach((numericValueOption) => {
+            targetOptionsContainerBox.innerHTML += `
+                <button class="option-btn" onclick="evaluateUserQuizAnswerSelection(this, ${numericValueOption}, ${preciseTrueProduct})">
+                    ${numericValueOption}
+                </button>
+            `;
+        });
+    }
+
+    // Evaluate Interactive User Assessment Answer Arrays Checks
+    function evaluateUserQuizAnswerSelection(elementReferenceButton, checkedInputAnswerValue, actualTrueTargetProductValue) {
+        if (lockSelectionInput) return;
+        lockSelectionInput = true;
+
+        quizTotalCount++;
+        document.getElementById("score-total").textContent = quizTotalCount;
+
+        const allAvailableOptionButtonsList = document.querySelectorAll("#quiz-options-box .option-btn");
+
+        if (checkedInputAnswerValue === actualTrueTargetProductValue) {
+            // Correct Selection Sequence Execution Branches
+            quizCorrectCount++;
+            document.getElementById("score-correct").textContent = quizCorrectCount;
+            elementReferenceButton.classList.add("correct");
+            
+            emitFeedbackTone(880, 'sine', 0.08);
+            setTimeout(() => emitFeedbackTone(1100, 'sine', 0.12), 60);
+
+            // Light up matrix configuration array tracking boundaries
+            redrawVisualMatrix(selectedFactorA, quizCurrentFactorB);
+            document.getElementById("math-output-text").innerHTML = `${selectedFactorA} × ${quizCurrentFactorB} = <span class="highlight">${actualTrueTargetProductValue}</span>`;
+        } else {
+            // Failure Branch Selection Track execution Conditions
+            elementReferenceButton.classList.add("wrong");
+            emitFeedbackTone(220, 'triangle', 0.22);
+
+            // Highlight Correct Answer Destination Element Object Block frames directly
+            allAvailableOptionButtonsList.forEach((btn) => {
+                if (parseInt(btn.textContent.trim()) === actualTrueTargetProductValue) {
+                    btn.classList.add("correct");
+                }
+            });
+        }
+
+        // Automatically cycle interface elements forward to step into next pipeline puzzle
+        setTimeout(() => {
+            generatePracticeQuestionCycle();
+        }, 1400);
+    }
+
+    // Trigger Core Initial Setup Runtime Threads Loop Context Launches
+    bootstrapApplicationComponents();
+</script>
+
+</body>
+</html>

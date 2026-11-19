@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratio Lab Challenges (Mobile Optimized)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 12px;
+            background-color: transparent;
+            color: #2d3748;
+            line-height: 1.5;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .explorer-card {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-top: 5px solid #800020;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #800020;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .header p {
+            color: #666666;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Scenario Navigation Tabs */
+        .scenario-tabs {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 4px;
+            margin-bottom: 20px;
+            gap: 4px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #718096;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 44px;
+        }
+        .tab-btn.active {
+            background-color: #800020;
+            color: #ffffff;
+        }
+
+        /* Target Challenge Board */
+        .challenge-board {
+            background-color: #f7fafc;
+            border-left: 4px solid #718096;
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .challenge-board strong {
+            color: #800020;
+        }
+
+        /* Layout Grid */
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        @media (min-width: 640px) {
+            .interactive-grid {
+                grid-template-columns: 1fr 1.2fr;
+                align-items: flex-start;
+            }
+        }
+
+        /* Visual Display Panel (Vertical Space Savings for Mobile) */
+        .visual-display {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 260px; /* Reduced to sit comfortably on small viewports */
+            position: sticky;
+            top: 12px;
+        }
+        svg#ratio-mixer {
+            width: 100%;
+            max-width: 200px; /* Slimmed down side profile */
+            height: auto;
+        }
+        
+        /* Visual Counters Display */
+        .part-blocks-container {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            min-height: 24px;
+        }
+        .part-block {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+        }
+        .part-block.a { background-color: #800020; }
+        .part-block.b { background-color: #a0aec0; }
+
+        /* Dynamic Text Output Bar */
+        .formula-bar {
+            background-color: #2d3748;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .formula-bar span.maroon-txt { color: #ffb6c1; }
+        .formula-bar span.gray-txt { color: #cbd5e0; }
+
+        /* Controls Section */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .slider-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .slider-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #718096;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .slider-readout {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .slider-readout.a { color: #800020; }
+        .slider-readout.b { color: #4a5568; }
+        .slider-readout.total { color: #2d3748; }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            margin: 8px 0;
+            height: 8px;
+        }
+        input[type="range"].range-a { accent-color: #800020; }
+        input[type="range"].range-b { accent-color: #718096; }
+        input[type="range"].range-total { accent-color: #2d3748; }
+
+        /* Step-by-Step Math Breakdown Card */
+        .math-breakdown-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+        }
+        .math-breakdown-card h3 {
+            color: #800020;
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 6px;
+        }
+        .math-step {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+        .math-step:last-child {
+            margin-bottom: 0;
+        }
+        .math-step span.step-num {
+            background-color: #2d3748;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-right: 6px;
+        }
+        .math-step code {
+            font-family: monospace;
+            background-color: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #1a202c;
+            font-size: 0.95rem;
+        }
+
+        /* Success Alert Box */
+        .success-box {
+            background-color: #e6fffa;
+            border: 2px solid #319795;
+            color: #234e52;
+            padding: 14px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 700;
+            margin-top: 4px;
+            display: none;
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Mobile Viewport Optimizations */
+        @media (max-width: 480px) {
+            .explorer-card { padding: 16px; }
+            .header h1 { font-size: 1.25rem; }
+            .scenario-tabs { flex-direction: column; gap: 2px; }
+            .tab-btn { min-height: 38px; padding: 6px; font-size: 0.8rem; }
+            .formula-bar { font-size: 0.95rem; padding: 10px; }
+            .slider-card { padding: 12px; }
+            .math-breakdown-card { padding: 12px; }
+            .math-step { font-size: 0.85rem; }
+        }
+    </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script></head>
+<body><div style="background:#fff;border-bottom:1px solid #E8DEDB;font:600 15px system-ui,sans-serif;padding:10px 16px"><a href="/digital-empowerment/" style="color:#7A0000;text-decoration:none" class="toolbar">← Free maths tools</a></div>
+
+<div class="explorer-card">
+    <div class="header">
+        <h1>Ratio Lab Challenges</h1>
+        <p>Switch examples, adjust the sliders, and master real-world proportions</p>
+    </div>
+
+    <!-- Active Example Selector Switchboard -->
+    <div class="scenario-tabs">
+        <button id="tab-0" class="tab-btn active" onclick="switchScenario(0)">🍓 1. Berry Smoothie</button>
+        <button id="tab-1" class="tab-btn" onclick="switchScenario(1)">🎨 2. Custom Paint Mix</button>
+        <button id="tab-2" class="tab-btn" onclick="switchScenario(2)">🧪 3. Eco-Sanitizer</button>
+    </div>
+
+    <!-- Live Challenge Prompt Indicator Box -->
+    <div class="challenge-board" id="challenge-prompt">
+        Loading challenge data...
+    </div>
+
+    <!-- Live Mathematical Tracker Bar -->
+    <div class="formula-bar" id="live-readout">
+        Ratio A:B = 1 : 1 | Total Volume = 100 ml
+    </div>
+
+    <div class="interactive-grid">
+        <!-- Visual Column (Shorter Cylinder Setup) -->
+        <div class="visual-display">
+            <!-- Part Block Visual Counters -->
+            <div class="part-blocks-container" id="blocks-mesh"></div>
+            
+            <svg id="ratio-mixer" viewBox="0 0 120 120">
+                <!-- Shortened Beaker Frame Base -->
+                <path d="M 30,15 L 30,105 Q 30,110 35,110 L 85,110 Q 90,110 90,105 L 90,15 Z" fill="none" stroke="#2d3748" stroke-width="3" stroke-linecap="round"/>
+                
+                <!-- Fluid Elements -->
+                <rect id="liquid-b" x="32" y="50" width="56" height="30" fill="#a0aec0" opacity="0.85" />
+                <rect id="liquid-a" x="32" y="80" width="56" height="28" fill="#800020" opacity="0.9" />
+
+                <!-- Separation Line Marker -->
+                <line id="liquid-split" x1="32" y1="80" x2="88" y2="80" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="2,2" />
+
+                <!-- Graduation Scales (Recalibrated for new scale dimensions) -->
+                <line x1="83" y1="28" x2="88" y2="28" stroke="#2d3748" stroke-width="1"/>
+                <line x1="83" y1="48" x2="88" y2="48" stroke="#2d3748" stroke-width="1"/>
+                <line x1="83" y1="68" x2="88" y2="68" stroke="#2d3748" stroke-width="1"/>
+                <line x1="83" y1="88" x2="88" y2="88" stroke="#2d3748" stroke-width="1"/>
+                
+                <text x="80" y="31" font-size="6" font-weight="bold" fill="#718096" text-anchor="end">1000ml</text>
+                <text x="80" y="71" font-size="6" font-weight="bold" fill="#718096" text-anchor="end">500ml</text>
+            </svg>
+        </div>
+
+        <!-- Controls Column -->
+        <div class="control-panel">
+            <!-- Component A Slider Card -->
+            <div class="slider-card">
+                <div class="slider-meta">
+                    <span id="name-a">Ingredient A</span>
+                    <span id="label-a" class="slider-readout a">1 Part</span>
+                </div>
+                <input type="range" id="input-a" class="range-a" min="1" max="10" step="1" value="1" oninput="calculateProportions()">
+            </div>
+
+            <!-- Component B Slider Card -->
+            <div class="slider-card">
+                <div class="slider-meta">
+                    <span id="name-b">Ingredient B</span>
+                    <span id="label-b" class="slider-readout b">1 Part</span>
+                </div>
+                <input type="range" id="input-b" class="range-b" min="1" max="10" step="1" value="1" oninput="calculateProportions()">
+            </div>
+
+            <!-- Total Scaled Volume Card -->
+            <div class="slider-card">
+                <div class="slider-meta">
+                    <span>Total Desired Mix Volume</span>
+                    <span id="label-total" class="slider-readout total">400 ml</span>
+                </div>
+                <input type="range" id="input-total" class="range-total" min="100" max="1000" step="50" value="400" oninput="calculateProportions()">
+            </div>
+
+            <!-- Dynamic Mathematical Calculation Steps Panel -->
+            <div class="math-breakdown-card">
+                <h3>How It's Worked Out</h3>
+                <div id="math-step-1" class="math-step">
+                    <span class="step-num">1</span> Find Total Parts: <br><code>1 + 1 = 2 parts</code>
+                </div>
+                <div id="math-step-2" class="math-step">
+                    <span class="step-num">2</span> Find Value of 1 Part: <br><code>400ml ÷ 2 = 200ml per part</code>
+                </div>
+                <div id="math-step-3" class="math-step">
+                    <span class="step-num">3</span> Multiply for Each Share: <br>
+                    <span style="color:#800020; font-weight:bold;">A:</span> <code>1 × 200ml = 200ml</code><br>
+                    <span style="color:#4a5568; font-weight:bold;">B:</span> <code>1 × 200ml = 200ml</code>
+                </div>
+            </div>
+
+            <!-- Context Success Box -->
+            <div id="victory-box" class="success-box">
+                Target matched successfully!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Laboratory Database Challenges Definition
+    const challenges = [
+        {
+            title: "Chef's Challenge: Perfect Berry Smoothie Mix",
+            ingredientA: "Berry Puree",
+            ingredientB: "Oat Milk Base",
+            targetRatioA: 2,
+            targetRatioB: 3,
+            targetVolume: 500,
+            successMessage: "🍓 Delicious! A 2:3 ratio across 500 ml breaks down perfectly into 200 ml puree and 300 ml milk base."
+        },
+        {
+            title: "Designer's Challenge: Custom Maroon Studio Paint",
+            ingredientA: "Crimson Pigment",
+            ingredientB: "White Tint Base",
+            targetRatioA: 4,
+            targetRatioB: 1,
+            targetVolume: 750,
+            successMessage: "🎨 Perfect Hue! A 4:1 intense pigment ratio across 750 ml scales to 600 ml crimson and 150 ml base tint."
+        },
+        {
+            title: "Eco-Lab Challenge: Specialized Cleaning Sanitizer",
+            ingredientA: "Active Concentrate",
+            ingredientB: "Distilled Water",
+            targetRatioA: 1,
+            targetRatioB: 4,
+            targetVolume: 600,
+            successMessage: "🧪 Safe & Pure! A 1:4 dilution ratio across 600 ml means exactly 120 ml concentrate mixed with 480 ml water."
+        }
+    ];
+
+    let activeScenarioIdx = 0;
+    let lastFeedbackKey = "";
+
+    // Web Audio Synthesizer Feedback Engine
+    let synthCtx = null;
+    function playAudioTone(freq, type = 'sine', duration = 0.03) {
+        try {
+            if (!synthCtx) synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = synthCtx.createOscillator();
+            const amp = synthCtx.createGain();
+            osc.connect(amp);
+            amp.connect(synthCtx.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, synthCtx.currentTime);
+            amp.gain.setValueAtTime(0.04, synthCtx.currentTime);
+            amp.gain.exponentialRampToValueAtTime(0.00001, synthCtx.currentTime + duration);
+            osc.start();
+            osc.stop(synthCtx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    // Switch Selected Challenge Scenario
+    function switchScenario(index) {
+        activeScenarioIdx = index;
+        
+        for (let i = 0; i < challenges.length; i++) {
+            document.getElementById(`tab-${i}`).classList.toggle("active", i === index);
+        }
+
+        const data = challenges[index];
+        
+        // Redraw slider tags to fit custom example names
+        document.getElementById("name-a").textContent = data.ingredientA + " (ml)";
+        document.getElementById("name-b").textContent = data.ingredientB + " (ml)";
+        
+        // Build clear visual target rules
+        document.getElementById("challenge-prompt").innerHTML = 
+            `<strong>Goal:</strong> Mix a total volume of <b>${data.targetVolume} ml</b> using a perfect target ratio of <b>${data.targetRatioA} : ${data.targetRatioB}</b>.`;
+
+        // Reset sliders to baseline coordinates to initiate fresh manipulation
+        document.getElementById("input-a").value = 1;
+        document.getElementById("input-b").value = 1;
+        document.getElementById("input-total").value = 300;
+
+        playAudioTone(520, 'sine', 0.06);
+        calculateProportions();
+    }
+
+    // Primary Proportional Calculations Engine
+    function calculateProportions() {
+        const currentData = challenges[activeScenarioIdx];
+        
+        const partA = parseInt(document.getElementById("input-a").value);
+        const partB = parseInt(document.getElementById("input-b").value);
+        const totalVolume = parseInt(document.getElementById("input-total").value);
+        
+        const sumParts = partA + partB;
+        
+        // Distribute fractional portions in metric scale units
+        const calculatedMlA = Math.round((partA / sumParts) * totalVolume);
+        const calculatedMlB = totalVolume - calculatedMlA;
+
+        // Calculate single part value for explanation panel
+        const rawSinglePart = totalVolume / sumParts;
+        const displaySinglePart = Number.isInteger(rawSinglePart) ? rawSinglePart : rawSinglePart.toFixed(1);
+
+        // Sound trigger validation tracker
+        const currentKey = `${partA}-${partB}-${totalVolume}`;
+        if (currentKey !== lastFeedbackKey) {
+            playAudioTone(650, 'sine', 0.012);
+            lastFeedbackKey = currentKey;
+        }
+
+        // Update control row display text indicators
+        document.getElementById("label-a").textContent = `${partA} Part${partA > 1 ? 's' : ''} (${calculatedMlA} ml)`;
+        document.getElementById("label-b").textContent = `${partB} Part${partB > 1 ? 's' : ''} (${calculatedMlB} ml)`;
+        document.getElementById("label-total").textContent = `${totalVolume} ml`;
+
+        // Update equation status bar output details
+        document.getElementById("live-readout").innerHTML = 
+            `Current Ratio = <span class="maroon-txt">${partA}</span> : <span class="gray-txt">${partB}</span> ` +
+            `| Calculated Mix Volume = ${totalVolume} ml`;
+
+        // Update Dynamic Mathematical Step Breakdown Board
+        document.getElementById("math-step-1").innerHTML = 
+            `<span class="step-num">1</span> Find Total Parts: <br><code>${partA} + ${partB} = ${sumParts} parts</code>`;
+        
+        document.getElementById("math-step-2").innerHTML = 
+            `<span class="step-num">2</span> Find Value of 1 Part: <br><code>${totalVolume}ml ÷ ${sumParts} = ${displaySinglePart}ml per part</code>`;
+        
+        document.getElementById("math-step-3").innerHTML = 
+            `<span class="step-num">3</span> Multiply for Each Share: <br>` +
+            `<span style="color:#800020; font-weight:bold;">${currentData.ingredientA}:</span> <code>${partA} × ${displaySinglePart}ml = ${calculatedMlA}ml</code><br>` +
+            `<span style="color:#4a5568; font-weight:bold;">${currentData.ingredientB}:</span> <code>${partB} × ${displaySinglePart}ml = ${calculatedMlB}ml</code>`;
+
+        // Render graphical anchoring block arrays
+        const meshBox = document.getElementById("blocks-mesh");
+        meshBox.innerHTML = "";
+        for (let i = 0; i < partA; i++) meshBox.innerHTML += '<div class="part-block a"></div>';
+        for (let i = 0; i < partB; i++) meshBox.innerHTML += '<div class="part-block b"></div>';
+
+        // Calculate Beaker SVG heights accurately based on new shorter profile
+        const graphicMaxHeightBound = 80; 
+        const totalLiquidGraphicHeight = (totalVolume / 1000) * graphicMaxHeightBound;
+        
+        const preciseHeightGraphicA = (calculatedMlA / totalVolume) * totalLiquidGraphicHeight;
+        const preciseHeightGraphicB = (calculatedMlB / totalVolume) * totalLiquidGraphicHeight;
+
+        const fillElA = document.getElementById("liquid-a");
+        const fillElB = document.getElementById("liquid-b");
+        const splitDashLine = document.getElementById("liquid-split");
+
+        const structuralBaseY = 108; // Adjusted down for y=120 view limits
+        const targetYPositionA = structuralBaseY - preciseHeightGraphicA;
+        fillElA.setAttribute("y", targetYPositionA);
+        fillElA.setAttribute("height", preciseHeightGraphicA);
+
+        const targetYPositionB = targetYPositionA - preciseHeightGraphicB;
+        fillElB.setAttribute("y", targetYPositionB);
+        fillElB.setAttribute("height", preciseHeightGraphicB);
+
+        splitDashLine.setAttribute("y1", targetYPositionA);
+        splitDashLine.setAttribute("y2", targetYPositionA);
+
+        // Evaluate Victory Matrix Condition Criteria
+        const matchesRatio = (partA * currentData.targetRatioB === partB * currentData.targetRatioA);
+        const matchesVolume = (totalVolume === currentData.targetVolume);
+        const victoryBox = document.getElementById("victory-box");
+
+        if (matchesRatio && matchesVolume) {
+            victoryBox.textContent = currentData.successMessage;
+            if (victoryBox.style.display !== "block") {
+                victoryBox.style.display = "block";
+                playAudioTone(880, 'sine', 0.1);
+                setTimeout(() => playAudioTone(1100, 'sine', 0.15), 80);
+            }
+        } else {
+            victoryBox.style.display = "none";
+        }
+    }
+
+    // Execute first configuration launch context loop
+    switchScenario(0);
+</script>
+
+</body>
+</html>

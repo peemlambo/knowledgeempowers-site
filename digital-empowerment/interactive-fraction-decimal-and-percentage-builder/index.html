@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraction Builder Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        maroon: {
+                            50: '#fdf2f2',
+                            100: '#fde8e8',
+                            200: '#fbd5d5',
+                            600: '#c81e1e',
+                            700: '#9b1c1c',
+                            800: '#800000',
+                            900: '#600000',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom smooth transition scrollbar and subtle glowing indicators */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 999px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .fraction-bounce {
+            animation: bounce 0.5s ease-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script></head>
+<body class="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 transition-colors duration-200"><div style="background:#fff;border-bottom:1px solid #E8DEDB;font:600 15px system-ui,sans-serif;padding:10px 16px"><a href="/digital-empowerment/" style="color:#7A0000;text-decoration:none" class="toolbar">← Free maths tools</a></div>
+
+    <div class="min-h-screen flex flex-col justify-between p-4 max-w-6xl mx-auto">
+        <!-- Header HUD Area -->
+        <header class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 border-b border-slate-200 dark:border-zinc-800 pb-4">
+            <div>
+                <h1 class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-maroon-800 to-amber-600 bg-clip-text text-transparent flex items-center gap-2">
+                    <span class="material-icons text-maroon-800 dark:text-maroon-600">pie_chart</span>
+                    Fraction Builder Studio
+                </h1>
+                <p class="text-xs text-slate-500 dark:text-zinc-400 mt-1">Explore, visualize, and conquer fractions interactively.</p>
+            </div>
+            
+            <!-- Quick Stats & Game HUD -->
+            <div id="gameHud" class="flex items-center gap-3 bg-white dark:bg-zinc-900 p-2 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800">
+                <div class="px-3 py-1 border-r border-slate-100 dark:border-zinc-800">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Activity</span>
+                    <span id="hudMode" class="text-xs font-bold text-maroon-800 dark:text-maroon-400">Explore</span>
+                </div>
+                <div id="scoreWrapper" class="px-3 py-1 hidden">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Challenges Won</span>
+                    <span id="hudScore" class="text-sm font-extrabold text-emerald-600">0</span>
+                </div>
+                <div class="px-3 py-1">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Sound</span>
+                    <button id="audioToggle" onclick="toggleAudio()" class="text-xs font-semibold flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:text-maroon-800">
+                        <span id="audioIcon" class="material-icons text-sm">volume_up</span>
+                        On
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch grow">
+            <!-- Left Side Control Panel (4 Columns) -->
+            <section class="lg:col-span-4 flex flex-col gap-4">
+                <!-- Activity Selector & Configuration -->
+                <div class="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-zinc-800 flex flex-col gap-4">
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Select Activity</label>
+                        <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-zinc-800 rounded-xl">
+                            <button id="modeExplore" onclick="setMode('Explore')" class="py-2 text-xs font-bold rounded-lg transition-all shadow-sm bg-white dark:bg-zinc-700 text-maroon-800 dark:text-white">
+                                Explore Mode
+                            </button>
+                            <button id="modeChallenge" onclick="setMode('Challenge')" class="py-2 text-xs font-bold rounded-lg transition-all text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                                Challenge Mode
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Fraction Presets (Explore Mode Only) -->
+                    <div id="explorePresets" class="transition-opacity duration-300">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Shading Presets</label>
+                        <div class="grid grid-cols-4 gap-1.5">
+                            <button onclick="applyPreset(1, 2)" class="py-1 px-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-maroon-100 dark:bg-zinc-800 dark:hover:bg-maroon-900 text-slate-700 dark:text-zinc-300 transition-colors">1/2</button>
+                            <button onclick="applyPreset(2, 3)" class="py-1 px-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-maroon-100 dark:bg-zinc-800 dark:hover:bg-maroon-900 text-slate-700 dark:text-zinc-300 transition-colors">2/3</button>
+                            <button onclick="applyPreset(3, 4)" class="py-1 px-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-maroon-100 dark:bg-zinc-800 dark:hover:bg-maroon-900 text-slate-700 dark:text-zinc-300 transition-colors">3/4</button>
+                            <button onclick="applyPreset(5, 8)" class="py-1 px-2 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-maroon-100 dark:bg-zinc-800 dark:hover:bg-maroon-900 text-slate-700 dark:text-zinc-300 transition-colors">5/8</button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Denominator Button Selector -->
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Total Slices (Denominator)</label>
+                        <div class="flex flex-wrap gap-1.5" id="denomBtnGrid">
+                            <!-- Populated Dynamically with up to 12 pieces -->
+                        </div>
+                    </div>
+
+                    <!-- Quick Sliders for alternative adjustments -->
+                    <div class="flex flex-col gap-3 pt-2 border-t border-slate-100 dark:border-zinc-800">
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span class="text-slate-500">Shaded Slices</span>
+                                <span id="numSliderVal" class="text-maroon-700 font-bold">0</span>
+                            </div>
+                            <input type="range" id="numSlider" min="0" max="4" value="0" step="1" oninput="handleSliderNumerator(this.value)" class="w-full accent-maroon-800 h-1 bg-slate-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Mathematical Notation Box -->
+                <div class="bg-white dark:bg-zinc-900 p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-zinc-800 flex flex-col items-center justify-center grow min-h-[160px] relative overflow-hidden">
+                    <!-- Background Watermark -->
+                    <span class="material-icons absolute -right-6 -bottom-6 text-9xl text-slate-50 dark:text-zinc-800/40 pointer-events-none select-none">calculate</span>
+
+                    <div class="z-10 flex items-center gap-6">
+                        <!-- Standard Fraction Stack -->
+                        <div id="fractionStack" class="flex flex-col items-center select-none font-extrabold text-5xl">
+                            <span id="numeratorText" class="text-maroon-800 dark:text-maroon-500 leading-none transition-all duration-200 pb-1">0</span>
+                            <div class="w-14 h-[4px] bg-slate-800 dark:bg-zinc-200 rounded-full my-1.5"></div>
+                            <span id="denominatorText" class="text-slate-800 dark:text-zinc-200 leading-none transition-all duration-200 pt-1">4</span>
+                        </div>
+
+                        <!-- Decimal & Percent Equivalent Displays -->
+                        <div class="flex flex-col gap-2 border-l border-slate-100 dark:border-zinc-800 pl-6">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Decimal Equivalent</span>
+                                <span id="decimalValue" class="text-base font-bold text-slate-700 dark:text-zinc-300">0.00</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Percentage</span>
+                                <span id="percentValue" class="text-base font-bold text-slate-700 dark:text-zinc-300">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="lg:col-span-8 flex flex-col gap-4">
+                <!-- Visualizer Control Bar -->
+                <div class="bg-white dark:bg-zinc-900 p-3 rounded-2xl shadow-sm border border-slate-200/80 dark:border-zinc-800 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-zinc-800 rounded-xl">
+                        <button id="vizBar" onclick="setVizType('Bar')" class="py-1.5 px-3 text-xs font-bold rounded-lg transition-all flex items-center gap-1 shadow-sm bg-white dark:bg-zinc-700 text-maroon-800 dark:text-white">
+                            <span class="material-icons text-sm">view_week</span>
+                            Linear Bar
+                        </button>
+                        <button id="vizCircle" onclick="setVizType('Circle')" class="py-1.5 px-3 text-xs font-bold rounded-lg transition-all flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                            <span class="material-icons text-sm">radio_button_checked</span>
+                            Circular Pie
+                        </button>
+                    </div>
+
+                    <!-- Preset Reset/Action Button -->
+                    <button onclick="resetSlices()" class="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-maroon-800 dark:text-zinc-400 dark:hover:text-maroon-500 transition-colors py-1.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800">
+                        <span class="material-icons text-sm">refresh</span>
+                        Reset Shading
+                    </button>
+                </div>
+
+                <!-- Canvas Wrapper Container -->
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200/80 dark:border-zinc-800 p-6 flex flex-col gap-4 grow relative min-h-[360px]">
+                    <!-- Challenge Overlay Card -->
+                    <div id="challengeBox" class="hidden animate-fade-in bg-gradient-to-r from-amber-50 to-orange-50 dark:from-zinc-800/80 dark:to-orange-950/20 border border-amber-200/60 dark:border-orange-900/40 p-4 rounded-xl flex items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="material-icons text-amber-600 mt-0.5">emoji_events</span>
+                            <div>
+                                <span class="text-xs font-bold text-amber-800 dark:text-amber-400 block">Your Current Challenge</span>
+                                <h3 class="text-base font-bold text-slate-800 dark:text-zinc-100">
+                                    Shade any fraction equivalent to: 
+                                    <span id="targetFractionDisplay" class="font-extrabold text-maroon-800 dark:text-amber-500 text-lg ml-1">1/2</span>
+                                </h3>
+                            </div>
+                        </div>
+                        <button id="skipBtn" onclick="nextChallenge()" class="text-xs font-bold py-1.5 px-3 bg-white dark:bg-zinc-700 shadow-sm border border-slate-200 dark:border-zinc-600 rounded-lg hover:bg-amber-100/40 transition-colors">
+                            Next Target
+                        </button>
+                    </div>
+
+                    <!-- Interactive Canvas Area -->
+                    <div class="grow relative min-h-[250px] w-full flex items-center justify-center">
+                        <canvas id="fractionCanvas" class="absolute inset-0 w-full h-full cursor-pointer select-none rounded-xl"></canvas>
+                    </div>
+
+                    <!-- Instruction Guide -->
+                    <div class="text-center text-xs text-slate-400 dark:text-zinc-500 font-medium select-none flex items-center justify-center gap-1">
+                        <span class="material-icons text-sm text-maroon-800/60 dark:text-maroon-600/60 animate-pulse">touch_app</span>
+                        Tap/click individual slices directly on the layout to cycle shading.
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Status Toast Alert -->
+        <footer class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 dark:text-zinc-500 border-t border-slate-100 dark:border-zinc-900 pt-4">
+            <span id="statusBar" class="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-zinc-400">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Exploring fractions is fun! Color slices to begin.
+            </span>
+            <span>Fraction Builder Studio &copy; 2026</span>
+        </footer>
+    </div>
+
+    <script>
+        // Setup state variables
+        const state = {
+            mode: 'Explore', // 'Explore' or 'Challenge'
+            vizType: 'Bar', // 'Bar' or 'Circle'
+            denominator: 4,
+            numerator: 0,
+            shadedSlices: [false, false, false, false],
+            targetNum: 1,
+            targetDen: 2,
+            score: 0,
+            soundOn: true,
+            audioCtx: null
+        };
+
+        // UI Controls & States initialization
+        function toggleAudio() {
+            state.soundOn = !state.soundOn;
+            const btnText = state.soundOn ? 'On' : 'Off';
+            const icon = state.soundOn ? 'volume_up' : 'volume_off';
+            document.getElementById('audioIcon').innerText = icon;
+            document.getElementById('audioToggle').innerHTML = `<span id="audioIcon" class="material-icons text-sm">${icon}</span> ${btnText}`;
+            playSynthesizedSound(440, 'sine', 0.05); // test beep
+        }
+
+        // Native digital audio synthesizer using browser AudioContext
+        function playSynthesizedSound(frequency, type = 'sine', duration = 0.08, sweepEndFreq = null) {
+            if (!state.soundOn) return;
+            try {
+                if (!state.audioCtx) {
+                    state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (state.audioCtx.state === 'suspended') {
+                    state.audioCtx.resume();
+                }
+
+                const osc = state.audioCtx.createOscillator();
+                const gainNode = state.audioCtx.createGain();
+
+                osc.connect(gainNode);
+                gainNode.connect(state.audioCtx.destination);
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(frequency, state.audioCtx.currentTime); 
+                
+                if (sweepEndFreq) {
+                    osc.frequency.exponentialRampToValueAtTime(sweepEndFreq, state.audioCtx.currentTime + duration);
+                }
+
+                // Smooth snappy volume envelope 
+                gainNode.gain.setValueAtTime(0.15, state.audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, state.audioCtx.currentTime + duration);
+
+                osc.start();
+                osc.stop(state.audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Synthesizer bypassed or restricted.");
+            }
+        }
+
+        function playSuccessMelody() {
+            if (!state.soundOn) return;
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // Sweet C major arpeggio
+            notes.forEach((freq, idx) => {
+                setTimeout(() => {
+                    playSynthesizedSound(freq, 'triangle', 0.25);
+                }, idx * 100);
+            });
+        }
+    </script>
+
+    <script>
+        // Setup Dynamic Denominator button grid 
+        const denoms = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const denomGrid = document.getElementById('denomBtnGrid');
+        
+        function drawDenomButtons() {
+            denomGrid.innerHTML = '';
+            denoms.forEach(d => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `denom-btn-${d}`;
+                btn.onclick = () => setDenominator(d);
+                btn.innerText = d;
+                
+                // Style configurations
+                btn.className = `w-10 h-10 flex items-center justify-center font-bold rounded-xl border text-sm transition-all shadow-sm ${
+                    state.denominator === d 
+                    ? 'bg-maroon-800 border-maroon-800 text-white shadow-maroon-100 dark:shadow-none' 
+                    : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-700 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-700'
+                }`;
+                denomGrid.appendChild(btn);
+            });
+        }
+
+        // Change denominator logic
+        function setDenominator(newDenom) {
+            state.denominator = newDenom;
+            playSynthesizedSound(220 + (newDenom * 20), 'sine', 0.08, 350);
+            
+            // Adjust shaded array size seamlessly
+            const oldArray = [...state.shadedSlices];
+            state.shadedSlices = Array(newDenom).fill(false);
+            for(let i = 0; i < Math.min(newDenom, oldArray.length); i++) {
+                state.shadedSlices[i] = oldArray[i];
+            }
+
+            // Sync Slider limits
+            const slider = document.getElementById('numSlider');
+            slider.max = newDenom;
+            
+            recalculateNumerator();
+            drawDenomButtons();
+            checkAnswers();
+        }
+
+        // Change numerator slider logic
+        function handleSliderNumerator(val) {
+            const num = parseInt(val);
+            state.numerator = num;
+            // Shading left to right
+            for(let i = 0; i < state.denominator; i++) {
+                state.shadedSlices[i] = (i < num);
+            }
+            playSynthesizedSound(300 + (num * 30), 'sine', 0.06);
+            updateHUDAndLabels();
+            checkAnswers();
+        }
+
+        // Set visualizer layout style
+        function setVizType(type) {
+            state.vizType = type;
+            playSynthesizedSound(400, 'triangle', 0.05);
+
+            // Toggle visual active state
+            const barBtn = document.getElementById('vizBar');
+            const circleBtn = document.getElementById('vizCircle');
+            if (type === 'Bar') {
+                barBtn.className = 'py-1.5 px-3 text-xs font-bold rounded-lg transition-all flex items-center gap-1 shadow-sm bg-white dark:bg-zinc-700 text-maroon-800 dark:text-white';
+                circleBtn.className = 'py-1.5 px-3 text-xs font-bold rounded-lg transition-all flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800';
+            } else {
+                circleBtn.className = 'py-1.5 px-3 text-xs font-bold rounded-lg transition-all flex items-center gap-1 shadow-sm bg-white dark:bg-zinc-700 text-maroon-800 dark:text-white';
+                barBtn.className = 'py-1.5 px-3 text-xs font-bold rounded-lg transition-all flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800';
+            }
+        }
+
+        // Apply visual presets easily
+        function applyPreset(num, den) {
+            setDenominator(den);
+            handleSliderNumerator(num);
+            document.getElementById('numSlider').value = num;
+            showStatusMessage(`Preset loaded: ${num}/${den}`, 'slate');
+        }
+
+        // Reset shading completely
+        function resetSlices() {
+            state.shadedSlices.fill(false);
+            state.numerator = 0;
+            document.getElementById('numSlider').value = 0;
+            playSynthesizedSound(180, 'sine', 0.12);
+            updateHUDAndLabels();
+            showStatusMessage('Shading cleared. Ready to build!', 'slate');
+        }
+
+        // Recalculate numerator state automatically based on slice array
+        function recalculateNumerator() {
+            state.numerator = state.shadedSlices.filter(Boolean).length;
+            document.getElementById('numSlider').value = state.numerator;
+            updateHUDAndLabels();
+        }
+
+        // Status bar notifier
+        function showStatusMessage(message, style = 'slate') {
+            const bar = document.getElementById('statusBar');
+            let colorClass = 'bg-slate-500';
+            if (style === 'success') colorClass = 'bg-emerald-500';
+            if (style === 'warning') colorClass = 'bg-amber-500';
+            if (style === 'error') colorClass = 'bg-rose-500';
+            
+            bar.innerHTML = `<span class="w-2 h-2 rounded-full ${colorClass} animate-pulse"></span> ${message}`;
+        }
+    </script>
+
+    <script>
+        // Challenge Engine
+        const challenges = [
+            { num: 1, den: 2 },
+            { num: 2, den: 3 },
+            { num: 3, den: 4 },
+            { num: 2, den: 5 },
+            { num: 3, den: 5 },
+            { num: 4, den: 5 },
+            { num: 5, den: 6 },
+            { num: 3, den: 8 },
+            { num: 5, den: 8 },
+            { num: 7, den: 8 },
+            { num: 7, den: 10 },
+            { num: 9, den: 12 }
+        ];
+
+        function setMode(mode) {
+            state.mode = mode;
+            playSynthesizedSound(500, 'triangle', 0.1);
+
+            const expBtn = document.getElementById('modeExplore');
+            const chalBtn = document.getElementById('modeChallenge');
+            const presets = document.getElementById('explorePresets');
+            const challengeBox = document.getElementById('challengeBox');
+            const scoreWrapper = document.getElementById('scoreWrapper');
+            const hudMode = document.getElementById('hudMode');
+
+            if (mode === 'Explore') {
+                expBtn.className = 'py-2 text-xs font-bold rounded-lg transition-all shadow-sm bg-white dark:bg-zinc-700 text-maroon-800 dark:text-white';
+                chalBtn.className = 'py-2 text-xs font-bold rounded-lg transition-all text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800';
+                presets.classList.remove('opacity-0', 'pointer-events-none');
+                challengeBox.classList.add('hidden');
+                scoreWrapper.classList.add('hidden');
+                hudMode.innerText = 'Explore';
+                showStatusMessage('Shading sandbox loaded. Adjust denominators at will!', 'slate');
+            } else {
+                chalBtn.className = 'py-2 text-xs font-bold rounded-lg transition-all shadow-sm bg-white dark:bg-zinc-700 text-maroon-800 dark:text-white';
+                expBtn.className = 'py-2 text-xs font-bold rounded-lg transition-all text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-800';
+                presets.classList.add('opacity-0', 'pointer-events-none');
+                challengeBox.classList.remove('hidden');
+                scoreWrapper.classList.remove('hidden');
+                hudMode.innerText = 'Challenge';
+                nextChallenge();
+            }
+        }
+
+        // Generate next challenge logic
+        function nextChallenge() {
+            let next;
+            do {
+                next = challenges[Math.floor(Math.random() * challenges.length)];
+            } while (next.num === state.targetNum && next.den === state.targetDen);
+
+            state.targetNum = next.num;
+            state.targetDen = next.den;
+
+            document.getElementById('targetFractionDisplay').innerText = `${next.num}/${next.den}`;
+            showStatusMessage(`New target set! Shade equivalent of ${next.num}/${next.den}`, 'warning');
+            
+            // Subtle pop sound
+            playSynthesizedSound(600, 'sine', 0.15, 800);
+            checkAnswers();
+        }
+
+        // Equivalent Fraction Validator
+        function checkAnswers() {
+            if (state.mode !== 'Challenge') return;
+
+            // Compute current ratio
+            const currentRatio = state.numerator / state.denominator;
+            const targetRatio = state.targetNum / state.targetDen;
+
+            // Strict tolerance for JavaScript floats
+            if (Math.abs(currentRatio - targetRatio) < 0.0001) {
+                // Yay! Correct Answer Found
+                state.score++;
+                document.getElementById('hudScore').innerText = state.score;
+                
+                // Triggers arpeggio 
+                playSuccessMelody();
+                showStatusMessage(`Amazing! ${state.numerator}/${state.denominator} is equivalent to ${state.targetNum}/${state.targetDen}! 🎉`, 'success');
+                
+                // Add quick animations
+                document.getElementById('fractionStack').classList.add('fraction-bounce');
+                setTimeout(() => {
+                    document.getElementById('fractionStack').classList.remove('fraction-bounce');
+                }, 500);
+
+                // Load next target after delay
+                setTimeout(() => {
+                    if (state.mode === 'Challenge') nextChallenge();
+                }, 2200);
+            }
+        }
+    </script>
+
+    <script>
+        function updateHUDAndLabels() {
+            document.getElementById('numeratorText').innerText = state.numerator;
+            document.getElementById('denominatorText').innerText = state.denominator;
+            document.getElementById('numSliderVal').innerText = state.numerator;
+
+            // Compute Decimal & Percentage equivalents
+            const ratio = state.numerator / state.denominator;
+            document.getElementById('decimalValue').innerText = ratio.toFixed(2);
+            document.getElementById('percentValue').innerText = `${Math.round(ratio * 100)}%`;
+        }
+    </script>
+
+    <script>
+        const canvas = document.getElementById('fractionCanvas');
+        const ctx = canvas.getContext('2d');
+        let hoverIndex = -1;
+
+        // Interactive mouse click mapping inside Canvas 
+        const pointer = { x: 0, y: 0, clicked: false };
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            // Map actual pixel coordinates inside scaled retina canvas
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        // Setup mouse tracking events
+        canvas.addEventListener('mousemove', (e) => {
+            const pos = getMousePos(e);
+            pointer.x = pos.x;
+            pointer.y = pos.y;
+            calculateHoverIndex();
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            hoverIndex = -1;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            const pos = getMousePos(e);
+            pointer.x = pos.x;
+            pointer.y = pos.y;
+            pointer.clicked = true;
+            
+            // Fallback user audio activation hook
+            if (!state.audioCtx) {
+                state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            handleCanvasClick();
+            pointer.clicked = false;
+        });
+
+        // Resize handler supporting crystal clear Retina display mapping
+        function resizeCanvas() {
+            const rect = canvas.parentNode.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            canvas.style.width = `${rect.width}px`;
+            canvas.style.height = `${rect.height}px`;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        // Core geometric mapping of slices to check cursor hover locations
+        function calculateHoverIndex() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const denom = state.denominator;
+
+            if (state.vizType === 'Bar') {
+                const barWidth = Math.min(w * 0.85, 800);
+                const barHeight = Math.min(h * 0.45, 140);
+                const startX = (w - barWidth) / 2;
+                const startY = (h - barHeight) / 2;
+                const sliceW = barWidth / denom;
+
+                if (pointer.x >= startX && pointer.x <= startX + barWidth &&
+                    pointer.y >= startY && pointer.y <= startY + barHeight) {
+                    hoverIndex = Math.floor((pointer.x - startX) / sliceW);
+                } else {
+                    hoverIndex = -1;
+                }
+            } else {
+                const radius = Math.min(w, h) * 0.35;
+                const dx = pointer.x - cx;
+                const dy = pointer.y - cy;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist <= radius) {
+                    // Convert rectangular delta into polar angles
+                    let angle = Math.atan2(dy, dx);
+                    // Standardize orientation angle starting at the top (negative-Y axis)
+                    angle += Math.PI / 2;
+                    if (angle < 0) angle += 2 * Math.PI;
+
+                    const sliceAngle = (2 * Math.PI) / denom;
+                    hoverIndex = Math.floor(angle / sliceAngle) % denom;
+                } else {
+                    hoverIndex = -1;
+                }
+            }
+        }
+
+        // Click execution on calculated segment
+        function handleCanvasClick() {
+            calculateHoverIndex();
+            if (hoverIndex !== -1) {
+                state.shadedSlices[hoverIndex] = !state.shadedSlices[hoverIndex];
+                playSynthesizedSound(440 + (hoverIndex * 40), 'sine', 0.08, 600);
+                recalculateNumerator();
+                checkAnswers();
+            }
+        }
+
+        // Main Drawing Frame Loop
+        function drawVisualizer() {
+            // Keep Canvas responsive to live resize actions
+            if (canvas.width === 0 || canvas.height === 0) {
+                resizeCanvas();
+            }
+
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const denom = state.denominator;
+
+            // Read theme adaptive hex styling direct from browser runtime
+            const isDark = document.documentElement.classList.contains('dark');
+            const colorUnshaded = isDark ? '#1e293b' : '#f1f5f9'; // Slate 200/800
+            const colorBorder = isDark ? '#475569' : '#cbd5e1'; // Slate 300/600
+            const colorShaded = '#800000'; // Deep Maroon accent
+            const colorShadedHover = '#a01a1a'; // Glowing Maroon accent
+            const colorUnshadedHover = isDark ? '#334155' : '#cbd5e1';
+
+            ctx.clearRect(0, 0, w, h);
+
+            // RENDER BAR TYPE VISUALIZATION
+            if (state.vizType === 'Bar') {
+                const barWidth = Math.min(w * 0.85, 800);
+                const barHeight = Math.min(h * 0.45, 140);
+                const startX = (w - barWidth) / 2;
+                const startY = (h - barHeight) / 2;
+                const sliceW = barWidth / denom;
+
+                // Draw solid background container with rounded corners
+                ctx.save();
+                ctx.beginPath();
+                if (typeof ctx.roundRect === 'function') {
+                    ctx.roundRect(startX, startY, barWidth, barHeight, 14);
+                } else {
+                    ctx.rect(startX, startY, barWidth, barHeight);
+                }
+                ctx.clip();
+
+                // Draw slices
+                for (let i = 0; i < denom; i++) {
+                    const sx = startX + i * sliceW;
+                    const isShaded = state.shadedSlices[i];
+                    const isHovered = (hoverIndex === i);
+
+                    // Choose dynamic color
+                    if (isShaded) {
+                        ctx.fillStyle = isHovered ? colorShadedHover : colorShaded;
+                    } else {
+                        ctx.fillStyle = isHovered ? colorUnshadedHover : colorUnshaded;
+                    }
+
+                    ctx.fillRect(sx, startY, sliceW, barHeight);
+
+                    // Draw nice light separator dashed divider line
+                    if (i > 0) {
+                        ctx.strokeStyle = colorBorder;
+                        ctx.lineWidth = 2;
+                        ctx.setLineDash([4, 4]);
+                        ctx.beginPath();
+                        ctx.moveTo(sx, startY);
+                        ctx.lineTo(sx, startY + barHeight);
+                        ctx.stroke();
+                        ctx.setLineDash([]); // clear dash array
+                    }
+
+                    // Draw segment indexes labels (e.g. "1/4") centered inside segments
+                    ctx.fillStyle = isShaded ? '#ffffff' : (isDark ? '#94a3b8' : '#64748b');
+                    ctx.font = `bold ${Math.min(sliceW * 0.35, 16)}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    // Don't draw label if space is extremely cramped
+                    if (sliceW > 28) {
+                        ctx.fillText(`${i + 1}`, sx + sliceW / 2, startY + barHeight / 2);
+                    }
+                }
+                ctx.restore();
+
+                // Outer border line
+                ctx.strokeStyle = isDark ? '#64748b' : '#475569';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                if (typeof ctx.roundRect === 'function') {
+                    ctx.roundRect(startX, startY, barWidth, barHeight, 14);
+                } else {
+                    ctx.rect(startX, startY, barWidth, barHeight);
+                }
+                ctx.stroke();
+            }
+
+            // RENDER CIRCLE PIE TYPE VISUALIZATION
+            else {
+                const radius = Math.min(w, h) * 0.35;
+                const sliceAngle = (2 * Math.PI) / denom;
+
+                // Draw individual pie wedges
+                for (let i = 0; i < denom; i++) {
+                    const startAngle = i * sliceAngle - Math.PI / 2;
+                    const endAngle = (i + 1) * sliceAngle - Math.PI / 2;
+                    const isShaded = state.shadedSlices[i];
+                    const isHovered = (hoverIndex === i);
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.arc(cx, cy, radius, startAngle, endAngle);
+                    ctx.closePath();
+
+                    if (isShaded) {
+                        ctx.fillStyle = isHovered ? colorShadedHover : colorShaded;
+                    } else {
+                        ctx.fillStyle = isHovered ? colorUnshadedHover : colorUnshaded;
+                    }
+                    ctx.fill();
+
+                    // Edge slice divider outline
+                    ctx.strokeStyle = colorBorder;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(cx + radius * Math.cos(startAngle), cy + radius * Math.sin(startAngle));
+                    ctx.stroke();
+
+                    // Optional Slice Labels mapping along the wedge bisector vector
+                    const middleAngle = startAngle + sliceAngle / 2;
+                    const labelRadius = radius * 0.65;
+                    const lx = cx + labelRadius * Math.cos(middleAngle);
+                    const ly = cy + labelRadius * Math.sin(middleAngle);
+
+                    ctx.fillStyle = isShaded ? '#ffffff' : (isDark ? '#94a3b8' : '#64748b');
+                    ctx.font = `bold ${Math.min(radius * 0.18, 16)}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+
+                    // Only render labels if slices are wide enough (at least 12 segments max)
+                    if (denom <= 12) {
+                        ctx.fillText(`${i + 1}`, lx, ly);
+                    }
+                }
+
+                // Smooth outer continuous boundary circular outline border
+                ctx.strokeStyle = isDark ? '#64748b' : '#475569';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(drawVisualizer);
+        }
+
+        // Initialize App Hook
+        window.onload = function() {
+            resizeCanvas();
+            drawDenomButtons();
+            updateHUDAndLabels();
+            setMode('Explore');
+            
+            // Launch drawing graphics loop 
+            requestAnimationFrame(drawVisualizer);
+        };
+    </script>
+</body>
+</html>
