@@ -377,3 +377,20 @@ footer{font-size:.95rem}
   .hero,.phead .hero{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:56px}
   .brand-hero .wrap,body.home .brand-hero .wrap{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:56px}
 }
+
+/* ===== Full-screen layout: content uses the whole screen width, first screen is the hero ===== */
+html,html:has(body.home){font-size:clamp(18px,calc(10px + .62vw),23px)}
+.wrap,.top .wrap{max-width:none;padding-inline:clamp(20px,5vw,96px)}
+.page .wrap,.wrap.page,.page{max-width:none}
+.wrap.page>*{max-width:62rem}
+@media (min-width:1181px){
+  .wrap{max-width:none}
+  body.home .brand-hero .wrap{min-height:calc(100vh - 118px);padding-block:48px;align-content:center}
+  .brand-hero .book,body.home .brand-hero .book{width:min(30vw,520px)}
+  .phead .hero,.phead .hero.solo{min-height:52vh;align-content:center}
+  .phead .hero figure{max-width:min(36vw,620px)}
+  .offer,.paths,.samples,.says-grid{gap:clamp(24px,2.4vw,44px)}
+  .says-grid{max-width:none}
+  .offer img,.offer .pic img{height:auto}
+}
+@media (min-width:1181px){.picker{max-width:34rem;flex-wrap:nowrap}.picker button{white-space:nowrap}}
