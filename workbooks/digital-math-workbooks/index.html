@@ -57,6 +57,37 @@
 .gpick span{font-weight:700;font-size:.9rem;margin-right:6px;color:#1E1414}
 .gpick button{font:inherit;font-size:.88rem;border:1px solid #E6DCD6;background:#fff;color:#1E1414;padding:8px 14px;border-radius:999px;cursor:pointer;min-height:40px}
 .gpick button.on{background:#7A0000;border-color:#7A0000;color:#fff}
+
+#shell .shelf-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.rep-btn{display:inline-flex;align-items:center;justify-content:center;font:600 .9rem 'Public Sans',sans-serif;background:#7A0000;color:#fff!important;text-decoration:none;border:0;border-radius:2px;padding:11px 18px;min-height:44px;cursor:pointer}
+.rep-btn:hover{background:#5C0000}
+.rep-link{font:600 .9rem 'Public Sans',sans-serif;background:none;border:0;color:#7A0000;cursor:pointer;padding:10px 0;text-decoration:underline;text-underline-offset:3px}
+.report{max-width:900px;margin:0 auto;padding:12px 0 48px}
+.rep-head{display:flex;gap:22px;align-items:center;padding:18px 0 26px;border-bottom:1px solid #EAE3E3}
+.rep-head img{height:52px;width:auto;display:none}
+.rep-head h1{margin:.1rem 0 .2rem;font-family:'Bitter',Georgia,serif;font-size:2rem}
+.rep-eb{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#B08D57}
+.rep-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0}
+.rep-sum div{background:#FBF8F4;border:1px solid #EAE3E3;padding:18px 20px;display:grid;gap:2px}
+.rep-sum b{font-family:'Bitter',Georgia,serif;font-size:2rem;color:#7A0000;line-height:1.1}
+.rep-sum span{font-size:.88rem;color:#5E5150}
+.rep-next{border-left:3px solid #7A0000;background:#fff;padding:14px 20px;margin:0 0 26px}
+#shell .rep-next h2{font-family:'Bitter',Georgia,serif;font-size:1.35rem;margin:.3rem 0 .35rem!important;padding:0}
+.rep-next p{margin:0;color:#5E5150}
+.rep-table{width:100%;border-collapse:collapse;font-size:.95rem}
+.rep-table th{text-align:left;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#5E5150;font-weight:700;padding:10px 8px;border-bottom:2px solid #1E1414}
+.rep-table td{padding:14px 8px;border-bottom:1px solid #EAE3E3;vertical-align:middle}
+.rep-table td[data-l]{white-space:nowrap}
+.rep-table td small{display:block;color:#5E5150;font-size:.8rem;margin-top:2px}
+.rep-table .bar{display:inline-block;width:70px;height:8px;background:#F1EAE4;border-radius:4px;overflow:hidden;margin-right:8px;vertical-align:middle}
+.rep-table .bar i{display:block;height:100%;background:#7A0000}
+.rep-note{font-size:.82rem;color:#5E5150;margin-top:18px}
+.rep-empty{padding:30px 0}
+.rep-actions{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:28px}
+@media (max-width:640px){.rep-sum{grid-template-columns:1fr}.rep-sum div{grid-template-columns:auto 1fr;align-items:baseline;gap:10px}
+ .rep-table thead{display:none}.rep-table tr{display:block;border-bottom:1px solid #EAE3E3;padding:10px 0}.rep-table td{display:flex;justify-content:space-between;border:0;padding:4px 0}
+ .rep-table td:first-child{display:block}.rep-table td[data-l]::before{content:attr(data-l);color:#5E5150;font-size:.85rem}}
+@media print{.rep-head img{display:block!important}.noprint,#kehdr,.kh-wa,.launch,.fsbtn,.inkbtn{display:none!important}html{padding-top:0!important}.report{padding:0}.rep-sum div{background:#fff}}
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script><style id="kehdr-css">
 html{padding-top:72px!important}
@@ -153,10 +184,72 @@ html{padding-top:72px!important}
       var done = Object.keys(s.q).filter(function (n) { return ['ok', 'rev', 'done'].indexOf(s.q[n].status) >= 0; }).length;
       return Math.min(1, done / (s.total || 100)); } catch (e) { return 0; }
   }
+
+  /* ---------- 3. parent report (read from this device only) ---------- */
+  function topicStats(t) {
+    var s = null; try { s = JSON.parse(store.get('ke-' + t.key + '-v1-' + ME.code) || 'null'); } catch (e) {}
+    if (!s || !s.q) return null;
+    var ids = Object.keys(s.q), answered = 0, first = 0, steps = 0, self = 0;
+    ids.forEach(function (n) { var q = s.q[n] || {};
+      if (q.status === 'ok') { answered++; if (!q.tries) first++; }
+      else if (q.status === 'rev') { answered++; steps++; }
+      else if (q.status === 'done') { answered++; self++; } });
+    if (!answered) return null;
+    var marked = answered - self;
+    return { t: t, answered: answered, total: s.total || 0, done: s.total ? Math.min(1, answered / s.total) : 0,
+             first: first, steps: steps, marked: marked, rate: marked ? first / marked : null,
+             checked: !!s.diagDone, test: !!(s.final && s.final.submitted),
+             last: store.get('ke-last-' + t.key + '-' + ME.code) || '' };
+  }
+  function pct(x) { return Math.round(x * 100) + '%'; }
+  function niceDate(d) { if (!d) return ''; var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], p = d.split('-'); return +p[2] + ' ' + m[+p[1] - 1] + ' ' + p[0]; }
+  function showReport() {
+    var rows = ME.topics.filter(function (t) { return t.allowed; }).map(topicStats).filter(Boolean);
+    rows.sort(function (a, b) { return (b.last || '').localeCompare(a.last || ''); });
+    var tot = rows.reduce(function (a, r) { a.answered += r.answered; a.first += r.first; a.marked += r.marked; a.steps += r.steps; return a; }, { answered: 0, first: 0, marked: 0, steps: 0 });
+    // what to work on next: the started topic with the lowest first-try score (at least 5 marked answers), else the least finished one
+    var weak = rows.filter(function (r) { return r.marked >= 5; }).sort(function (a, b) { return a.rate - b.rate; })[0];
+    var next = weak && weak.rate < 0.7 ? { r: weak, why: 'Most answers needed a hint or the steps. Go back over the Teach pages and the worked examples, then try again.' }
+             : (rows.filter(function (r) { return r.done < 1; }).sort(function (a, b) { return a.done - b.done; })[0] ? { r: rows.filter(function (r) { return r.done < 1; }).sort(function (a, b) { return a.done - b.done; })[0], why: 'Keep going: finish the questions in this topic before moving on.' } : null);
+    var today = niceDate(new Date().toISOString().slice(0, 10));
+    var h = '<div class="report">' +
+      '<div class="rep-top noprint"><button id="repback" class="rep-link" type="button">‹ Back to my topics</button></div>' +
+      '<div class="rep-head"><img src="/assets/img/logo.svg" alt="KnowledgeEmpowers"><div><div class="rep-eb">Progress report</div>' +
+      '<h1>' + esc(ME.name || 'Learner') + '</h1><p class="sub">' + today + (ME.ends ? ' · access until ' + esc(ME.ends) : '') + '</p></div></div>';
+    if (!rows.length) {
+      h += '<div class="rep-empty"><p><b>No work saved on this device yet.</b></p><p>Open a topic and answer a few questions. This report then shows how it is going.</p></div>';
+    } else {
+      h += '<div class="rep-sum">' +
+        '<div><b>' + rows.length + '</b><span>topic' + (rows.length === 1 ? '' : 's') + ' started</span></div>' +
+        '<div><b>' + tot.answered + '</b><span>questions answered</span></div>' +
+        '<div><b>' + (tot.marked ? pct(tot.first / tot.marked) : '–') + '</b><span>right the first time</span></div></div>';
+      if (next) h += '<div class="rep-next"><div class="rep-eb">Work on this next</div><h2>' + esc(next.r.t.title) + '</h2><p>' + next.why + '</p></div>';
+      h += '<table class="rep-table"><thead><tr><th>Topic</th><th>Done</th><th>Right first time</th><th>Needed the steps</th><th>Last opened</th></tr></thead><tbody>' +
+        rows.map(function (r) {
+          return '<tr><td><b>' + esc(r.t.title) + '</b><small>' + esc(r.t.grades || '') + (r.checked ? ' · Diagnose done' : '') + (r.test ? ' · Final test done' : '') + '</small></td>' +
+            '<td data-l="Done"><span class="bar"><i style="width:' + pct(r.done) + '"></i></span>' + pct(r.done) + '</td>' +
+            '<td data-l="Right first time">' + (r.rate == null ? '–' : pct(r.rate)) + '</td>' +
+            '<td data-l="Needed the steps">' + r.steps + '</td>' +
+            '<td data-l="Last opened">' + (niceDate(r.last) || '–') + '</td></tr>';
+        }).join('') + '</tbody></table>' +
+        '<p class="rep-note">“Right first time” counts answers that were correct before any hint. “Needed the steps” counts questions where the full worked answer was shown after two tries. This report is made from the work saved on this device.</p>';
+    }
+    h += '<div class="rep-actions noprint"><a id="repwa" class="rep-btn" target="_blank" rel="noopener">Send to my parent on WhatsApp</a><button id="repprint" class="rep-link" type="button">Save as PDF or print</button></div></div>';
+    shell.innerHTML = h; window.scrollTo(0, 0);
+    var txt = 'KnowledgeEmpowers progress report for ' + (ME.name || 'my workbooks') + ' (' + today + ')\n';
+    if (rows.length) {
+      txt += rows.length + ' topics started, ' + tot.answered + ' questions answered, ' + (tot.marked ? pct(tot.first / tot.marked) : '–') + ' right the first time.\n\n';
+      rows.forEach(function (r) { txt += '• ' + r.t.title + ': ' + pct(r.done) + ' done, ' + (r.rate == null ? '–' : pct(r.rate)) + ' right first time\n'; });
+      if (next) txt += '\nWork on next: ' + next.r.t.title;
+    } else txt += 'No work saved yet.';
+    document.getElementById('repwa').href = 'https://wa.me/?text=' + encodeURIComponent(txt);
+    document.getElementById('repprint').onclick = function () { window.print(); };
+    document.getElementById('repback').onclick = showShelf;
+  }
   function showShelf() {
     var h = '<div class="top"><img src="' + LOGO + '" alt="KnowledgeEmpowers"><div class="who"><b>' + esc(ME.name || 'Welcome') + '</b>' +
             (ME.ends ? ', access until ' + esc(ME.ends) : '') + '</div><a href="#" id="signout" class="small">Sign out</a></div>' +
-            '<h1 style="margin-top:2.4rem">Your topics</h1>' +
+            '<div class="shelf-head"><h1 style="margin-top:2.4rem">Your topics</h1><button id="rep" class="rep-btn" type="button">Report for my parent</button></div>' +
             '<p class="sub">In the order schools usually teach them through the year.</p>';
     // Grade chooser: show only the topics for the learner's grade (or all of them).
     function span(t) { var m = String(t.grades || '').match(/(\d+)\D+(\d+)/) || String(t.grades || '').match(/(\d+)/); return m ? [+m[1], +(m[2] || m[1])] : [0, 99]; }
@@ -190,6 +283,7 @@ html{padding-top:72px!important}
     shell.innerHTML = h; shell.hidden = false; window.scrollTo(0, 0);
     Array.prototype.forEach.call(shell.querySelectorAll('[data-key]'), function (b) { b.onclick = function () { openTopic(b.getAttribute('data-key')); }; });
     Array.prototype.forEach.call(shell.querySelectorAll('.gpick [data-g]'), function (b) { b.onclick = function () { store.set('ke-grade-' + ME.code, b.getAttribute('data-g')); showShelf(); }; });
+    var rb = document.getElementById('rep'); if (rb) rb.onclick = showReport;
     document.getElementById('signout').onclick = function (e) { e.preventDefault(); store.del('ke-code'); ME = null; showCode(''); };
   }
 
@@ -198,6 +292,7 @@ html{padding-top:72px!important}
     if (on && !b) { b = document.createElement('div'); b.id = 'keBusy'; b.className = 'loading'; b.textContent = 'Opening…'; shell.appendChild(b); }
     if (!on && b) b.remove(); }
   function openTopic(key) {
+    try { store.set('ke-last-' + key + '-' + ME.code, new Date().toISOString().slice(0, 10)); } catch (e) {}
     busy(true);
     google.script.run
       .withSuccessHandler(function (r) {
