@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free Maths Classroom &amp; Practice · KnowledgeEmpowers</title><meta name="description" content="Free maths lessons for the classroom projector and practice at home. Grades 4 to 12, worked step by step."><script>window.KE_APP="https://script.google.com/macros/s/AKfycbx5ehslilcnulpvrMXSjk9ec-Uy74RjMN4BPMdbtfjGalDXtpTQcSYrqzGl417OGcAO/exec";
+(function(){var p=new URLSearchParams(location.search),t=(p.get('t')||'').toLowerCase().replace(/[^a-z0-9-]/g,''),m={topic:'topic','class':'class',practice:'practice'}[p.get('m')]||'topic',q=parseInt(p.get('q'),10),s=t?m+'-'+t:'';if(t&&m==='practice'&&q>=0&&q<500)s+='@'+q;window.KE_START=s})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a calm library of topics; each topic opens a reading page, a projection stage (Classroom) or a one-question practice desk. */
+:root{
+  --maroon:#7A0000; --maroon-ink:#5C0000; --bg:#FFFFFF; --panel:#F7F3F3; --line:#E6DEDE; --ink:#1F1B1B; --soft:#6B6464;
+  --ok:#2E6B47; --okbg:#EEF5F0; --part:#8A5A00; --partbg:#FBF5E8; --no:#9A1C1C; --nobg:#FBEFEF; --chip:#F1EAEA;
+  --display:'Bitter',Georgia,'Times New Roman',serif; --text:'Public Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --maroon:#E58C8C; --maroon-ink:#F2B3B3; --bg:#161213; --panel:#211B1C; --line:#3A3133; --ink:#F3EEEE; --soft:#B5ABAB;
+  --ok:#8FD1A8; --okbg:#18281F; --part:#E7C27A; --partbg:#2B2416; --no:#F09A9A; --nobg:#2E1A1A; --chip:#2A2223; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --maroon:#E58C8C; --maroon-ink:#F2B3B3; --bg:#161213; --panel:#211B1C; --line:#3A3133; --ink:#F3EEEE; --soft:#B5ABAB;
+  --ok:#8FD1A8; --okbg:#18281F; --part:#E7C27A; --partbg:#2B2416; --no:#F09A9A; --nobg:#2E1A1A; --chip:#2A2223; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--text);font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+a{color:var(--maroon)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--maroon);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.2;text-wrap:balance;margin:0}
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--maroon)}
+.brand span{font-size:.85rem;color:var(--soft);letter-spacing:.02em}
+.nav{display:flex;gap:18px;font-size:.92rem}
+.nav a{text-decoration:none;color:var(--soft)} .nav a:hover{color:var(--maroon)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:.55rem 1.05rem;cursor:pointer;font-weight:600;font-size:.95rem;text-decoration:none;color:var(--ink);min-height:44px}
+.btn:hover{border-color:var(--maroon)}
+.btn.pri{background:var(--maroon);border-color:var(--maroon);color:var(--bg)}
+.btn.pri:hover{background:var(--maroon-ink)}
+.btn[disabled]{opacity:.45;cursor:default}
+.eyebrow{font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--maroon)}
+.muted{color:var(--soft)}
+/* math */
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .12em;line-height:1.1}
+.fr>.nu{border-bottom:.08em solid currentColor;padding:0 .18em .04em}
+.fr>.de{padding:.04em .18em 0}
+.fr .fr{font-size:.9em}
+.rt{white-space:nowrap}.rt>.rad{border-top:.07em solid currentColor;padding:0 .08em;margin-left:.02em}
+sup,sub{font-size:.68em;line-height:0}
+/* library */
+.hero{padding-block:44px 22px}
+.hero h1{font-size:clamp(2rem,4.6vw,3rem);max-width:18ch}
+.hero p{max-width:62ch;margin:.8rem 0 0;color:var(--soft);font-size:1.05rem}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:26px}
+.mode{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.mode h3{font-size:1.05rem}.mode p{margin:.35rem 0 0;color:var(--soft);font-size:.93rem}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:30px 0 14px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:.35rem .9rem;cursor:pointer;font-size:.9rem;min-height:38px}
+.chip[aria-pressed="true"]{background:var(--maroon);border-color:var(--maroon);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;padding-bottom:48px}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h2{font-size:1.35rem}
+.card p{margin:0;color:var(--soft);font-size:.95rem}
+.card .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.card .acts .btn{padding:.4rem .85rem;font-size:.88rem;min-height:40px}
+.gr{font-size:.82rem;font-weight:600;color:var(--maroon);letter-spacing:.02em}
+/* topic page */
+.crumbs{font-size:.88rem;padding-top:22px}.crumbs a{text-decoration:none}
+.tp-head{padding-block:12px 8px;display:flex;flex-direction:column;gap:10px}
+.tp-head h1{font-size:clamp(2rem,4vw,2.8rem)}
+.tp-head p{max-width:65ch;margin:0;color:var(--soft)}
+.tp-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.sec{border-top:1px solid var(--line);padding-block:26px;display:grid;grid-template-columns:220px 1fr;gap:20px}
+.sec>h2{font-size:1.2rem}
+.sec>div{min-width:0}
+.obj{margin:0;padding-left:1.2rem}.obj li{margin:.2rem 0}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.rule{background:var(--panel);border-radius:var(--r);padding:14px 16px;min-width:0}
+.rule h3{font-family:var(--text);font-size:.82rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+.rule .f{font-size:1.15rem;margin:.45rem 0 .2rem;overflow-x:auto}
+.rule p{margin:0;font-size:.9rem;color:var(--soft)}
+.ex{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.ex .q{font-size:1.1rem}
+.stepsl{margin:.6rem 0 0;padding-left:1.4rem}.stepsl li{margin:.25rem 0}
+.stepsl li:first-child{color:var(--maroon);font-weight:600}
+.lvls{display:flex;gap:10px;flex-wrap:wrap}
+.lv{border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;min-width:120px}
+.lv b{font-family:var(--display);font-size:1.6rem;display:block;line-height:1.1}
+.wbk{background:var(--panel);border-radius:var(--r);padding:18px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+@media (max-width:720px){.sec{grid-template-columns:1fr;gap:10px}}
+/* classroom stage */
+.stage{min-height:100%;display:flex;flex-direction:column;background:var(--bg)}
+.stage-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px max(20px,env(safe-area-inset-right,0px)) 0 max(20px,env(safe-area-inset-left,0px));color:var(--soft);font-size:clamp(.9rem,1.4vw,1.15rem)}
+.stage-bar .lvl{font-weight:600;color:var(--maroon)}
+.clock{font-family:var(--display);font-variant-numeric:tabular-nums;font-weight:600;font-size:clamp(2rem,5vw,4rem);line-height:1;color:var(--ink)}
+.clock.zero{color:var(--no)}
+.clock.paused{opacity:.55}
+.stage-main{flex:1;display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3vh,36px);padding:clamp(18px,3vh,40px) max(24px,env(safe-area-inset-right,0px)) clamp(18px,3vh,40px) max(24px,env(safe-area-inset-left,0px));max-width:1500px;width:100%;margin:0 auto}
+.stage-q{font-size:clamp(1.6rem,3.6vw,3.2rem);line-height:1.35;font-weight:500}
+.stage-kind{font-size:clamp(.9rem,1.3vw,1.1rem);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--maroon)}
+.stage-ans{font-size:clamp(1.4rem,3vw,2.6rem);font-weight:600;color:var(--ok);background:var(--okbg);border-radius:var(--r);padding:.4em .7em;align-self:flex-start;max-width:100%;overflow-x:auto}
+.stage-ans small{display:block;font-size:.42em;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);font-weight:600}
+.stage-steps{font-size:clamp(1.15rem,2.2vw,2rem);line-height:1.6;margin:0;padding-left:1.6em;max-width:100%;overflow-x:auto}
+.stage-steps li{margin:.15em 0}
+.stage-steps li:first-child{color:var(--maroon);font-weight:600}
+.dock{position:sticky;bottom:0;border-top:1px solid var(--line);background:var(--panel);padding:10px max(14px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.dock .btn{min-height:42px;padding:.45rem .9rem;font-size:.92rem}
+.dock .sep{width:1px;height:28px;background:var(--line)}
+.dock select{font:inherit;font-size:.92rem;border:1px solid var(--line);border-radius:999px;padding:.45rem .8rem;background:var(--bg);color:var(--ink);min-height:42px}
+.keys{font-size:.8rem;color:var(--soft);width:100%;text-align:center}
+.showdock{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));opacity:.35}
+.showdock:hover,.showdock:focus-visible{opacity:1}
+/* teacher controls window */
+.ctl{padding-block:20px 40px;display:grid;gap:16px}
+.ctl .peek{border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.ctl .peek .q{font-size:1.15rem}
+.ctl .row{display:flex;gap:8px;flex-wrap:wrap}
+.status{font-size:.9rem;color:var(--soft)}
+.status b{color:var(--ok)}
+/* practice */
+.pr{padding-block:22px 48px;display:grid;gap:18px}
+.pr-top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.pr-top h1{font-size:clamp(1.6rem,3.2vw,2.2rem)}
+.bar{height:8px;background:var(--chip);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--maroon);width:0}
+.score{font-size:.92rem;color:var(--soft)}
+.pq{border:1px solid var(--line);border-radius:var(--r);padding:clamp(16px,3vw,28px);display:grid;gap:16px}
+.pq-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lvchip{font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.2rem .7rem;background:var(--chip);color:var(--maroon)}
+.pq .q{font-size:clamp(1.2rem,2.4vw,1.6rem);line-height:1.45}
+.timer{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.timer .clock{font-size:clamp(1.6rem,3.6vw,2.4rem)}
+.timer .btn{min-height:40px;padding:.35rem .8rem;font-size:.9rem}
+.tiny{font-size:.85rem;color:var(--soft)}
+textarea{width:100%;min-height:84px;font:inherit;font-size:1rem;border:1px solid var(--line);border-radius:var(--r);padding:.7rem .85rem;background:var(--bg);color:var(--ink);resize:vertical}
+.reveal{border-radius:var(--r);padding:14px 16px}
+.reveal.ans{background:var(--okbg)}
+.reveal.ans b{color:var(--ok);font-size:1.25rem}
+.reveal.sol{background:var(--panel)}
+.self{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.self .btn[aria-pressed="true"].g{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.self .btn[aria-pressed="true"].p{background:var(--partbg);border-color:var(--part);color:var(--part)}
+.self .btn[aria-pressed="true"].n{background:var(--nobg);border-color:var(--no);color:var(--no)}
+.pq-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.dot{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--bg);font-size:.78rem;cursor:pointer;display:grid;place-items:center;color:var(--soft)}
+.dot.cur{border-color:var(--maroon);color:var(--maroon);font-weight:700}
+.dot.g{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.dot.p{background:var(--partbg);border-color:var(--part);color:var(--part)}
+.dot.n{background:var(--nobg);border-color:var(--no);color:var(--no)}
+.done{border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px}
+.foot{border-top:1px solid var(--line);padding-block:22px;font-size:.85rem;color:var(--soft)}
+.qod{margin-top:26px;border:1px solid var(--maroon);border-radius:var(--r);padding:18px 20px;display:grid;gap:10px;background:var(--panel)}
+.qod .q{font-size:1.2rem}
+.qod .row,.share{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn.wa{border-color:#1F7A4D;color:#1F7A4D}
+.btn.wa:hover{background:#EEF7F1}
+.cta{margin:8px 0 40px;border-radius:var(--r);background:var(--maroon);color:#fff;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.cta h2{font-size:1.35rem;color:#fff}.cta p{margin:.3rem 0 0;color:#F3E3E3}
+.cta .btn{background:#fff;color:var(--maroon);border-color:#fff}
+.chk{display:grid;gap:8px}
+.fb{border-radius:var(--r);padding:12px 14px}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.no{background:var(--nobg);color:var(--no)}.fb.hint{background:var(--partbg);color:var(--part)}
+.foot a{color:var(--soft)}
+.nav{flex-wrap:wrap}
+.min-hero{padding-block:56px 8px}
+.min-hero h1{font-size:clamp(2.1rem,4.6vw,3.1rem);max-width:none}
+.min-hero p{margin:.7rem 0 0;color:var(--soft);font-size:1.08rem}
+a.today{display:block;margin:34px 0 8px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+a.today .eyebrow{display:block;margin-bottom:6px}
+a.today .q{font-size:1.25rem}
+a.today .go{display:inline-block;margin-top:8px;color:var(--maroon);font-weight:600}
+.tshare{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:0 0 8px;font-size:.92rem;color:var(--soft)}
+.tshare a{font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.list{border-top:1px solid var(--line);margin-bottom:56px}
+.trow{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.trow a.tt{text-decoration:none;color:var(--ink)}
+.trow a.tt b{font-family:var(--display);font-weight:600;font-size:1.3rem;display:block}
+.trow a.tt span{color:var(--soft);font-size:.9rem}
+.trow .ta{display:flex;gap:18px}
+.trow .ta a{text-decoration:none;font-weight:600}
+.quiet{color:var(--soft);font-size:.92rem}
+.buy{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1.5px solid var(--maroon);border-radius:var(--r);padding:16px 18px;margin:18px 0 8px}
+.buy div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.buy strong{font-family:var(--display);font-size:1.05rem}
+.buy span{color:var(--soft);font-size:.88rem}
+.buy .btn{white-space:nowrap}
+.quiet a{color:var(--soft)}
+.textlink{background:none;border:0;padding:0;color:var(--maroon);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+input.ans{width:100%;font:inherit;font-size:1.05rem;border:1px solid var(--line);border-radius:var(--r);padding:.7rem .85rem;background:var(--bg);color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ---------- big screens (laptops, desktops, projectors): use the whole width ---------- */
+.stage{min-height:100vh}
+.pad{display:none}
+@media (min-width:1100px){
+  .wrap{max-width:1320px;padding-left:40px;padding-right:40px}
+  /* topic list: heading and today's question side by side, topics as cards */
+  main.wrap:has(>.min-hero){display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:56px;align-items:end}
+  main.wrap:has(>.min-hero)>.min-hero{grid-column:1;grid-row:1/3;padding-block:64px 24px}
+  main.wrap:has(>.min-hero)>a.today{grid-column:2;grid-row:1;margin:64px 0 10px;padding:22px 26px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+  main.wrap:has(>.min-hero)>.tshare{grid-column:2;grid-row:2;margin:0 0 24px}
+  main.wrap:has(>.min-hero)>.filters,main.wrap:has(>.min-hero)>.list{grid-column:1/-1}
+  .list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;border-top:0}
+  .trow{flex-direction:column;align-items:flex-start;justify-content:space-between;gap:18px;border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
+  .trow:hover{border-color:var(--maroon)}
+  /* topic page */
+  .sec{grid-template-columns:240px minmax(0,1fr)}
+  .rules{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sec>div:has(>.ex){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+  .sec>div:has(>.ex)>.ex{margin:0}
+  /* practice: question on the left, working-out space on the right */
+  .pq{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px;align-items:start}
+  .pq>*{grid-column:1}
+  .pq>.pad{display:flex;grid-column:2;grid-row:1/span 30;align-self:stretch;min-height:440px;flex-direction:column;gap:4px;border-radius:var(--r);padding:16px 18px;cursor:crosshair;background:var(--panel)}
+  .pq>.pad span{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+  .pq>.pad small{font-size:.85rem;color:var(--soft)}
+  
+  input.ans{max-width:520px}
+  /* classroom (projector): big question, answer and working beside it, controls fixed at the bottom */
+  .stage-main{display:grid;grid-template-columns:minmax(0,1fr);align-content:center;column-gap:64px;row-gap:clamp(14px,2.4vh,28px);max-width:1680px;padding-inline:clamp(40px,5vw,96px)}
+  .stage-main:has(.stage-ans){grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+  .stage-main>.stage-kind,.stage-main>.stage-q{grid-column:1}
+  .stage-main>.stage-ans,.stage-main>.stage-steps{grid-column:2}
+  .stage-main>.stage-ans{grid-row:1/3;align-self:end;justify-self:start}
+  .stage-main:has(.stage-steps)>.stage-ans{grid-row:1;align-self:end}
+  .stage-main>.stage-steps{grid-row:2/4;align-self:start}
+  .stage-q{font-size:clamp(2.2rem,3.9vw,4.4rem)}
+  .stage-bar{padding-inline:clamp(40px,5vw,96px)}
+  .dock{position:sticky;bottom:0;gap:6px}
+  .dock .btn{padding:.4rem .75rem}
+}
+/* pen and full screen buttons sit together on the right */
+.fsbtn{top:calc(58% - 58px)!important}
+
+</style>
+
+<div id="app"></div>
+
+<script>
+/* KnowledgeEmpowers · Classroom & Practice question bank.
+   Notation: \f{top}{bottom} = fraction, ^{..} = power, _{..} = small index, \r{..} = square root.
+   Each question: [level, question, final answer, [worked steps], seconds]. Steps start with the rule. */
+var SITE = location.origin, WB = SITE + '/workbooks', PACKS = SITE + '/exam-packs', CHECK = SITE + '/baseline-assessment/', TOOLS = SITE + '/digital-empowerment',
+    WA_ORDER = 'https://wa.me/27615818059', APP = window.KE_APP || '', START = window.KE_START || '';
+var TOPICS = [
+{
+ slug:'fractions', grade:'Grades 5–7', band:'4-7', title:'Fractions',
+ summary:'Equivalent fractions, the four operations and fractions of amounts.',
+ overview:'A fraction names equal parts of a whole. In this topic learners simplify fractions, compare them, and add, subtract, multiply and divide them, including mixed numbers.',
+ objectives:['Write equivalent fractions and simplify fully','Compare and order fractions using a common denominator','Add, subtract, multiply and divide fractions and mixed numbers','Find a fraction of an amount in a word problem'],
+ rules:[
+  ['Equivalent fractions','\\f{a}{b} = \\f{a × k}{b × k}','Multiply or divide the top and the bottom by the same number.'],
+  ['Add and subtract','\\f{a}{c} + \\f{b}{c} = \\f{a + b}{c}','Make the denominators the same first, then add the numerators.'],
+  ['Multiply','\\f{a}{b} × \\f{c}{d} = \\f{a × c}{b × d}','Top times top, bottom times bottom, then simplify.'],
+  ['Divide','\\f{a}{b} ÷ \\f{c}{d} = \\f{a}{b} × \\f{d}{c}','Multiply by the reciprocal of the second fraction.'],
+  ['Fraction of an amount','\\f{a}{b} of N = N ÷ b × a','Divide by the denominator, then multiply by the numerator.']
+ ],
+ examples:[
+  ['Calculate \\f{2}{3} + \\f{1}{4}.','\\f{11}{12}',['Rule: make the denominators the same, then add the numerators.','The lowest common denominator of 3 and 4 is 12.','\\f{2}{3} = \\f{8}{12} and \\f{1}{4} = \\f{3}{12}','\\f{8}{12} + \\f{3}{12} = \\f{11}{12}']],
+  ['Calculate 1\\f{1}{2} ÷ \\f{3}{4}.','2',['Rule: \\f{a}{b} ÷ \\f{c}{d} = \\f{a}{b} × \\f{d}{c}','Change the mixed number: 1\\f{1}{2} = \\f{3}{2}','\\f{3}{2} × \\f{4}{3} = \\f{12}{6}','= 2']]
+ ],
+ qs:[
+  ['easy','Simplify \\f{12}{18} fully.','\\f{2}{3}',['Rule: divide the top and the bottom by the same number (the HCF).','HCF of 12 and 18 is 6.','\\f{12 ÷ 6}{18 ÷ 6} = \\f{2}{3}'],60],
+  ['easy','Calculate \\f{3}{8} + \\f{2}{8}.','\\f{5}{8}',['Rule: \\f{a}{c} + \\f{b}{c} = \\f{a + b}{c}','The denominators are already the same.','\\f{3 + 2}{8} = \\f{5}{8}'],60],
+  ['easy','Find \\f{3}{5} of 40.','24',['Rule: \\f{a}{b} of N = N ÷ b × a','40 ÷ 5 = 8','8 × 3 = 24'],60],
+  ['easy','Write \\f{7}{4} as a mixed number.','1\\f{3}{4}',['Rule: divide the numerator by the denominator; the remainder stays over the denominator.','7 ÷ 4 = 1 remainder 3','\\f{7}{4} = 1\\f{3}{4}'],60],
+  ['easy','Calculate \\f{2}{3} × \\f{3}{5}.','\\f{2}{5}',['Rule: \\f{a}{b} × \\f{c}{d} = \\f{a × c}{b × d}','\\f{2 × 3}{3 × 5} = \\f{6}{15}','Simplify (÷ 3): \\f{2}{5}'],60],
+  ['medium','Calculate \\f{2}{3} + \\f{1}{6}.','\\f{5}{6}',['Rule: make the denominators the same, then add.','\\f{2}{3} = \\f{4}{6}','\\f{4}{6} + \\f{1}{6} = \\f{5}{6}'],120],
+  ['medium','Calculate \\f{5}{6} − \\f{1}{4}.','\\f{7}{12}',['Rule: make the denominators the same, then subtract.','LCD of 6 and 4 is 12: \\f{5}{6} = \\f{10}{12}, \\f{1}{4} = \\f{3}{12}','\\f{10}{12} − \\f{3}{12} = \\f{7}{12}'],120],
+  ['medium','Calculate 2\\f{1}{2} × 1\\f{1}{5}.','3',['Rule: change mixed numbers to improper fractions, then multiply top × top and bottom × bottom.','2\\f{1}{2} = \\f{5}{2} and 1\\f{1}{5} = \\f{6}{5}','\\f{5}{2} × \\f{6}{5} = \\f{30}{10}','= 3'],120],
+  ['medium','Calculate \\f{3}{4} ÷ \\f{3}{8}.','2',['Rule: \\f{a}{b} ÷ \\f{c}{d} = \\f{a}{b} × \\f{d}{c}','\\f{3}{4} × \\f{8}{3} = \\f{24}{12}','= 2'],120],
+  ['medium','Write \\f{3}{5}, \\f{2}{3} and \\f{7}{10} from smallest to biggest.','\\f{3}{5}, \\f{2}{3}, \\f{7}{10}',['Rule: write the fractions with the same denominator, then compare the numerators.','LCD of 5, 3 and 10 is 30.','\\f{3}{5} = \\f{18}{30}, \\f{2}{3} = \\f{20}{30}, \\f{7}{10} = \\f{21}{30}','18 < 20 < 21, so: \\f{3}{5}, \\f{2}{3}, \\f{7}{10}'],120],
+  ['hard','A book has 150 pages. Ayesha reads \\f{2}{5} of the book on Monday and \\f{1}{3} of the remaining pages on Tuesday. How many pages are left?','60 pages',['Rule: \\f{a}{b} of N = N ÷ b × a','Monday: \\f{2}{5} of 150 = 150 ÷ 5 × 2 = 60 pages','Remaining: 150 − 60 = 90 pages','Tuesday: \\f{1}{3} of 90 = 30 pages','Left: 90 − 30 = 60 pages'],180],
+  ['hard','Calculate 3\\f{1}{3} − 1\\f{3}{4}.','1\\f{7}{12}',['Rule: change to improper fractions, make the denominators the same, then subtract.','3\\f{1}{3} = \\f{10}{3} and 1\\f{3}{4} = \\f{7}{4}','LCD 12: \\f{40}{12} − \\f{21}{12} = \\f{19}{12}','\\f{19}{12} = 1\\f{7}{12}'],180],
+  ['hard','Calculate (\\f{2}{3} + \\f{1}{2}) ÷ \\f{7}{12}.','2',['Rule (order of operations): brackets first. Then \\f{a}{b} ÷ \\f{c}{d} = \\f{a}{b} × \\f{d}{c}','Brackets: \\f{4}{6} + \\f{3}{6} = \\f{7}{6}','\\f{7}{6} × \\f{12}{7} = \\f{84}{42}','= 2'],180],
+  ['hard','A recipe uses \\f{3}{4} cup of sugar for 6 muffins. How much sugar is needed for 10 muffins?','1\\f{1}{4} cups',['Rule (unit rate): find the amount for 1 muffin, then multiply.','For 1 muffin: \\f{3}{4} ÷ 6 = \\f{3}{24} = \\f{1}{8} cup','For 10 muffins: 10 × \\f{1}{8} = \\f{10}{8}','= 1\\f{1}{4} cups'],180],
+  ['hard','Which is bigger, \\f{5}{7} or \\f{7}{10}? By how much?','\\f{5}{7}, by \\f{1}{70}',['Rule: write both fractions with the same denominator.','LCD of 7 and 10 is 70.','\\f{5}{7} = \\f{50}{70} and \\f{7}{10} = \\f{49}{70}','\\f{5}{7} is bigger by \\f{1}{70}'],150]
+ ]
+},
+{
+ slug:'integers', grade:'Grades 6–9', band:'4-7', title:'Integers',
+ summary:'Positive and negative numbers on the number line, and the sign rules.',
+ overview:'Integers are the whole numbers and their negatives. Learners order integers on a number line and calculate with them, using the sign rules and the order of operations.',
+ objectives:['Order integers on a number line','Add and subtract integers, including subtracting a negative','Multiply and divide integers with the sign rules','Use the order of operations with integers and powers'],
+ rules:[
+  ['Adding a negative','a + (−b) = a − b','Adding a negative number moves you left on the number line.'],
+  ['Subtracting a negative','a − (−b) = a + b','Two minus signs next to each other make a plus.'],
+  ['Multiply and divide','(+)(+) = +  (−)(−) = +  (+)(−) = −','Same signs give a positive answer; different signs give a negative answer.'],
+  ['Powers of negatives','(−3)^{2} = 9 but −3^{2} = −9','The power belongs only to what is directly in front of it.'],
+  ['Order of operations','brackets → powers → × ÷ → + −','Work left to right within each level.']
+ ],
+ examples:[
+  ['Calculate −7 − (−3).','−4',['Rule: a − (−b) = a + b','−7 − (−3) = −7 + 3','= −4']],
+  ['Calculate (−3)^{2} − 4 × (−2).','17',['Rule (order of operations): powers, then ×, then −.','(−3)^{2} = 9','4 × (−2) = −8','9 − (−8) = 9 + 8 = 17']]
+ ],
+ qs:[
+  ['easy','Calculate −5 + 8.','3',['Rule: start at −5 on the number line and move 8 to the right.','−5 + 8 = 3'],60],
+  ['easy','Calculate 4 − 9.','−5',['Rule: subtracting moves you left on the number line.','4 − 9 = −5'],60],
+  ['easy','Calculate (−6) × 3.','−18',['Rule: different signs give a negative answer.','6 × 3 = 18','(−6) × 3 = −18'],60],
+  ['easy','Calculate (−20) ÷ (−4).','5',['Rule: same signs give a positive answer.','20 ÷ 4 = 5','(−20) ÷ (−4) = 5'],60],
+  ['easy','Write −3, 2, −7 and 0 from smallest to biggest.','−7, −3, 0, 2',['Rule: on a number line, numbers to the left are smaller.','−7 is furthest left, then −3, then 0, then 2.','−7, −3, 0, 2'],60],
+  ['medium','Calculate −8 − (−5).','−3',['Rule: a − (−b) = a + b','−8 − (−5) = −8 + 5','= −3'],90],
+  ['medium','Calculate (−2)^{3}.','−8',['Rule: (−2)^{3} = (−2) × (−2) × (−2); an odd number of negatives gives a negative answer.','(−2) × (−2) = 4','4 × (−2) = −8'],90],
+  ['medium','Calculate −12 + 4 × (−3).','−24',['Rule (order of operations): × before +.','4 × (−3) = −12','−12 + (−12) = −24'],120],
+  ['medium','At night the temperature is −4 °C. At noon it is 9 °C. By how many degrees did it rise?','13 °C',['Rule: rise = higher value − lower value.','9 − (−4) = 9 + 4','= 13 °C'],120],
+  ['medium','Calculate (−3) × (−4) × (−5).','−60',['Rule: three negative factors give a negative answer.','(−3) × (−4) = 12','12 × (−5) = −60'],90],
+  ['hard','Calculate (−2)^{2} × (−3) − (−18) ÷ 6.','−9',['Rule (order of operations): powers, then × and ÷, then + and −.','(−2)^{2} = 4','4 × (−3) = −12 and (−18) ÷ 6 = −3','−12 − (−3) = −12 + 3 = −9'],180],
+  ['hard','A submarine is at −120 m. It rises 45 m and then dives 70 m. What is its new depth?','−145 m',['Rule: rising adds, diving subtracts.','−120 + 45 = −75','−75 − 70 = −145 m'],150],
+  ['hard','Find two integers with a sum of −2 and a product of −15.','3 and −5',['Rule: a negative product means one number is positive and one is negative.','Factor pairs of 15: 1 and 15, 3 and 5.','3 + (−5) = −2 and 3 × (−5) = −15','The integers are 3 and −5.'],180],
+  ['hard','Find the value of −x^{2} + 3x when x = −2.','−10',['Rule (substitution): put the number in brackets, then use the order of operations.','−(−2)^{2} + 3(−2)','= −4 + (−6)','= −10'],180],
+  ['hard','Thandi says −3^{2} = 9. Is she right? Explain.','No: −3^{2} = −9',['Rule: the power belongs only to what is directly in front of it.','−3^{2} = −(3 × 3) = −9','Only (−3)^{2} = (−3) × (−3) = 9','Thandi is wrong: −3^{2} = −9.'],150]
+ ]
+},
+{
+ slug:'algebraic-expressions', grade:'Grades 8–9', band:'8-9', title:'Algebraic expressions',
+ summary:'Like terms, expanding brackets and factorising.',
+ overview:'An algebraic expression uses letters for numbers. Learners simplify by collecting like terms, expand brackets with the distributive law, and factorise expressions back into brackets.',
+ objectives:['Collect like terms and use the laws of exponents','Expand single and double brackets','Recognise squares and the difference of two squares','Factorise using a common factor and trinomials'],
+ rules:[
+  ['Like terms','3x + 5x = 8x','Only terms with the same letters and powers can be added.'],
+  ['Distributive law','a(b + c) = ab + ac','Multiply every term inside the bracket.'],
+  ['Two brackets','(a + b)(c + d) = ac + ad + bc + bd','Each term in the first bracket multiplies each term in the second.'],
+  ['Square of a bracket','(a + b)^{2} = a^{2} + 2ab + b^{2}','The middle term is twice the product.'],
+  ['Difference of squares','a^{2} − b^{2} = (a + b)(a − b)','Two perfect squares with a minus sign between them.'],
+  ['Trinomial','x^{2} + bx + c = (x + m)(x + n)','Find m and n with m + n = b and m × n = c.']
+ ],
+ examples:[
+  ['Expand (x + 3)(x − 5).','x^{2} − 2x − 15',['Rule: (a + b)(c + d) = ac + ad + bc + bd','x × x − 5x + 3x − 15','= x^{2} − 2x − 15']],
+  ['Factorise x^{2} + 7x + 12.','(x + 3)(x + 4)',['Rule: x^{2} + bx + c = (x + m)(x + n) with m + n = b and m × n = c.','m + n = 7 and m × n = 12: m = 3, n = 4','(x + 3)(x + 4)']]
+ ],
+ qs:[
+  ['easy','Simplify 3x + 5y − x + 2y.','2x + 7y',['Rule: only like terms can be added or subtracted.','x-terms: 3x − x = 2x','y-terms: 5y + 2y = 7y','2x + 7y'],60],
+  ['easy','Expand 4(2a − 3).','8a − 12',['Rule: a(b + c) = ab + ac','4 × 2a − 4 × 3','= 8a − 12'],60],
+  ['easy','Simplify 2x^{2} × 3x^{3}.','6x^{5}',['Rule: a^{m} × a^{n} = a^{m + n}','Numbers: 2 × 3 = 6','Powers: x^{2} × x^{3} = x^{5}','6x^{5}'],60],
+  ['easy','Factorise 6x + 9.','3(2x + 3)',['Rule: take out the highest common factor (HCF).','HCF of 6x and 9 is 3.','6x + 9 = 3(2x + 3)'],60],
+  ['easy','Find the value of 2x^{2} − 5 when x = 3.','13',['Rule (substitution): replace x, then powers before × and −.','2 × 3^{2} − 5 = 2 × 9 − 5','= 18 − 5 = 13'],60],
+  ['medium','Expand (x + 4)(x + 2).','x^{2} + 6x + 8',['Rule: (a + b)(c + d) = ac + ad + bc + bd','x^{2} + 2x + 4x + 8','= x^{2} + 6x + 8'],120],
+  ['medium','Expand (x − 3)^{2}.','x^{2} − 6x + 9',['Rule: (a − b)^{2} = a^{2} − 2ab + b^{2}','a = x, b = 3','x^{2} − 2 × x × 3 + 9 = x^{2} − 6x + 9'],120],
+  ['medium','Factorise x^{2} − 49.','(x + 7)(x − 7)',['Rule: a^{2} − b^{2} = (a + b)(a − b)','x^{2} − 49 = x^{2} − 7^{2}','= (x + 7)(x − 7)'],120],
+  ['medium','Factorise x^{2} + 5x + 6.','(x + 2)(x + 3)',['Rule: x^{2} + bx + c = (x + m)(x + n), m + n = b, m × n = c','m + n = 5 and m × n = 6: m = 2, n = 3','(x + 2)(x + 3)'],120],
+  ['medium','Simplify 3(x − 2) − 2(x + 1).','x − 8',['Rule: a(b + c) = ab + ac, then collect like terms.','3x − 6 − 2x − 2','= x − 8'],120],
+  ['hard','Factorise x^{2} − x − 12.','(x − 4)(x + 3)',['Rule: x^{2} + bx + c = (x + m)(x + n), m + n = b, m × n = c','m + n = −1 and m × n = −12: m = −4, n = 3','(x − 4)(x + 3)'],150],
+  ['hard','Factorise 2x^{2} − 18 fully.','2(x + 3)(x − 3)',['Rule: take out the common factor first, then look for a difference of squares.','2x^{2} − 18 = 2(x^{2} − 9)','a^{2} − b^{2} = (a + b)(a − b): x^{2} − 9 = (x + 3)(x − 3)','2(x + 3)(x − 3)'],150],
+  ['hard','Expand (2x + 1)(x − 3).','2x^{2} − 5x − 3',['Rule: (a + b)(c + d) = ac + ad + bc + bd','2x^{2} − 6x + x − 3','= 2x^{2} − 5x − 3'],150],
+  ['hard','Simplify \\f{x^{2} − 9}{x + 3}.','x − 3',['Rule: factorise the top, then cancel the common factor.','x^{2} − 9 = (x + 3)(x − 3)','\\f{(x + 3)(x − 3)}{x + 3} = x − 3'],150],
+  ['hard','Sipho writes (x + 5)^{2} = x^{2} + 25. Explain his mistake and give the correct expansion.','x^{2} + 10x + 25',['Rule: (a + b)^{2} = a^{2} + 2ab + b^{2}','He left out the middle term 2ab = 2 × x × 5 = 10x.','(x + 5)^{2} = x^{2} + 10x + 25','Check with x = 1: (1 + 5)^{2} = 36, and 1 + 10 + 25 = 36.'],180]
+ ]
+},
+{
+ slug:'functions-graphs', grade:'Grades 10–12', band:'10-12', title:'Functions and graphs',
+ summary:'Straight lines, parabolas, hyperbolas and exponential graphs.',
+ overview:'Learners find the key features of the four main graphs: intercepts, turning points, asymptotes and ranges, and use given information to find a graph’s equation.',
+ objectives:['Find intercepts, gradients and equations of straight lines','Find the turning point and range of a parabola','Write down the asymptotes of hyperbolas and exponential graphs','Find an equation from given points and solve where graphs meet'],
+ rules:[
+  ['Straight line','y = mx + c,   m = \\f{y_{2} − y_{1}}{x_{2} − x_{1}}','m is the gradient and c is the y-intercept.'],
+  ['Intercepts','y-intercept: x = 0;   x-intercept: y = 0',''],
+  ['Parabola (turning point form)','y = a(x + p)^{2} + q → turning point (−p; q)','If a > 0 it has a minimum; if a < 0 a maximum.'],
+  ['Parabola (standard form)','y = ax^{2} + bx + c → axis x = \\f{−b}{2a}','Put this x back into the formula to get the turning point.'],
+  ['Hyperbola','y = \\f{a}{x + p} + q → asymptotes x = −p and y = q',''],
+  ['Exponential graph','y = a·b^{x} + q → asymptote y = q','The y-intercept is a + q.']
+ ],
+ examples:[
+  ['Find the equation of the line through (1; 2) and (3; 8).','y = 3x − 1',['Formula: m = \\f{y_{2} − y_{1}}{x_{2} − x_{1}}','m = \\f{8 − 2}{3 − 1} = \\f{6}{2} = 3','Formula: y = mx + c. Put in (1; 2): 2 = 3 + c, so c = −1','y = 3x − 1']],
+  ['Find the turning point of y = x^{2} − 6x + 5.','(3; −4)',['Formula: axis of symmetry x = \\f{−b}{2a}','x = \\f{6}{2} = 3','y = 9 − 18 + 5 = −4','Turning point (3; −4)']]
+ ],
+ qs:[
+  ['easy','Find the x- and y-intercepts of y = −2x + 6.','x-intercept 3; y-intercept 6',['Rule: y-intercept, put x = 0; x-intercept, put y = 0.','x = 0: y = 6','y = 0: −2x + 6 = 0, so x = 3'],60],
+  ['easy','Find the gradient of the line through (1; 2) and (3; 8).','3',['Formula: m = \\f{y_{2} − y_{1}}{x_{2} − x_{1}}','m = \\f{8 − 2}{3 − 1} = \\f{6}{2}','= 3'],60],
+  ['easy','Write down the turning point of y = (x − 3)^{2} + 1.','(3; 1)',['Formula: y = a(x + p)^{2} + q has turning point (−p; q).','Here p = −3 and q = 1.','Turning point (3; 1)'],60],
+  ['easy','Write down the asymptotes of y = \\f{6}{x} + 1.','x = 0 and y = 1',['Formula: y = \\f{a}{x + p} + q has asymptotes x = −p and y = q.','p = 0 and q = 1','x = 0 and y = 1'],60],
+  ['easy','For y = 2^{x} − 4, write down the asymptote and the y-intercept.','y = −4; y-intercept −3',['Formula: y = a·b^{x} + q has asymptote y = q; y-intercept a + q.','q = −4: asymptote y = −4','x = 0: 2^{0} − 4 = 1 − 4 = −3'],60],
+  ['medium','Find the equation of the line through (2; 1) and (5; 7).','y = 2x − 3',['Formula: m = \\f{y_{2} − y_{1}}{x_{2} − x_{1}}','m = \\f{7 − 1}{5 − 2} = 2','Formula: y = mx + c. Put in (2; 1): 1 = 4 + c, so c = −3','y = 2x − 3'],120],
+  ['medium','Find the turning point of y = x^{2} − 4x − 5.','(2; −9)',['Formula: x = \\f{−b}{2a}','x = \\f{4}{2} = 2','y = 4 − 8 − 5 = −9','Turning point (2; −9)'],120],
+  ['medium','Find the x-intercepts of y = x^{2} + 2x − 8.','x = 2 and x = −4',['Rule: put y = 0, factorise, then set each factor equal to 0.','x^{2} + 2x − 8 = 0','(x + 4)(x − 2) = 0','x = −4 or x = 2'],120],
+  ['medium','Write down the asymptotes of y = \\f{3}{x − 1} + 2.','x = 1 and y = 2',['Formula: y = \\f{a}{x + p} + q has asymptotes x = −p and y = q.','x − 1 = 0 gives x = 1','q = 2','x = 1 and y = 2'],90],
+  ['medium','Write down the range of y = −x^{2} + 6x − 5.','y ≤ 4',['Formula: x = \\f{−b}{2a} gives the turning point.','x = \\f{−6}{−2} = 3; y = −9 + 18 − 5 = 4','a < 0, so the graph has a maximum of 4.','Range: y ≤ 4'],150],
+  ['hard','A parabola cuts the x-axis at −1 and 3 and the y-axis at −3. Find its equation.','y = x^{2} − 2x − 3',['Formula: y = a(x − x_{1})(x − x_{2})','y = a(x + 1)(x − 3)','Put in (0; −3): a(1)(−3) = −3, so a = 1','y = (x + 1)(x − 3) = x^{2} − 2x − 3'],180],
+  ['hard','f(x) = x^{2} − 4 and g(x) = x + 2. Find the points where the graphs meet.','(3; 5) and (−2; 0)',['Rule: where graphs meet, f(x) = g(x).','x^{2} − 4 = x + 2, so x^{2} − x − 6 = 0','(x − 3)(x + 2) = 0: x = 3 or x = −2','g(3) = 5 and g(−2) = 0','(3; 5) and (−2; 0)'],180],
+  ['hard','A hyperbola has asymptotes x = 1 and y = 2 and passes through (2; 5). Find its equation.','y = \\f{3}{x − 1} + 2',['Formula: y = \\f{a}{x + p} + q with asymptotes x = −p and y = q.','y = \\f{a}{x − 1} + 2','Put in (2; 5): \\f{a}{1} + 2 = 5, so a = 3','y = \\f{3}{x − 1} + 2'],180],
+  ['hard','y = a·2^{x} + q has the asymptote y = −1 and passes through (0; 2). Find a and q.','a = 3, q = −1',['Formula: y = a·b^{x} + q has asymptote y = q.','q = −1','Put in (0; 2): a·2^{0} − 1 = 2, so a = 3','y = 3·2^{x} − 1'],180],
+  ['hard','For which values of k does x^{2} − 2x − 3 = k have two different real roots?','k > −4',['Formula: x = \\f{−b}{2a} gives the turning point.','x = 1; y = 1 − 2 − 3 = −4 (the minimum)','Rule: f(x) = k has two roots where the line y = k cuts the graph twice.','k > −4'],180]
+ ]
+},
+{
+ slug:'trigonometry', grade:'Grades 10–12', band:'10-12', title:'Trigonometry',
+ summary:'Trig ratios, special angles, reduction formulas and trig equations.',
+ overview:'Trigonometry links the angles and sides of triangles. Learners use the three ratios in right-angled triangles, work without a calculator using special angles and reduction formulas, and solve trig equations.',
+ objectives:['Use sin, cos and tan in right-angled triangles','Work with special angles without a calculator','Use a sketch with x, y and r for any angle','Use reduction formulas and identities, and solve trig equations'],
+ rules:[
+  ['Ratios','sin θ = \\f{opp}{hyp}   cos θ = \\f{adj}{hyp}   tan θ = \\f{opp}{adj}','For right-angled triangles.'],
+  ['Any angle','sin θ = \\f{y}{r}   cos θ = \\f{x}{r}   tan θ = \\f{y}{x},   r^{2} = x^{2} + y^{2}','Sketch the angle in its quadrant; r is always positive.'],
+  ['Special angles','sin 30° = \\f{1}{2}   cos 30° = \\f{\\r{3}}{2}   tan 45° = 1   tan 60° = \\r{3}',''],
+  ['Identities','sin^{2}θ + cos^{2}θ = 1   tan θ = \\f{sin θ}{cos θ}',''],
+  ['Reduction (CAST)','sin(180° − θ) = sin θ   cos(180° + θ) = −cos θ   sin(360° − θ) = −sin θ','All ratios are positive in quadrant 1; sin in 2; tan in 3; cos in 4.']
+ ],
+ examples:[
+  ['In a right-angled triangle the hypotenuse is 13 and the side opposite θ is 5. Find sin θ and cos θ.','sin θ = \\f{5}{13}, cos θ = \\f{12}{13}',['Rule (Pythagoras): adj^{2} = 13^{2} − 5^{2} = 144, so adj = 12','Formula: sin θ = \\f{opp}{hyp} = \\f{5}{13}','Formula: cos θ = \\f{adj}{hyp} = \\f{12}{13}']],
+  ['Find sin 150° without a calculator.','\\f{1}{2}',['Rule (reduction): sin(180° − θ) = sin θ','sin 150° = sin(180° − 30°) = sin 30°','= \\f{1}{2}']]
+ ],
+ qs:[
+  ['easy','In △ABC, ∠B = 90°, AB = 8, BC = 6 and AC = 10. Find sin A.','\\f{3}{5}',['Formula: sin θ = \\f{opp}{hyp}','Opposite A is BC = 6; the hypotenuse is AC = 10.','sin A = \\f{6}{10} = \\f{3}{5}'],60],
+  ['easy','Write down tan 45°.','1',['Rule (special angles): tan 45° = 1','tan 45° = 1'],45],
+  ['easy','Calculate sin 30° + cos 60° without a calculator.','1',['Rule (special angles): sin 30° = \\f{1}{2} and cos 60° = \\f{1}{2}','\\f{1}{2} + \\f{1}{2} = 1'],60],
+  ['easy','A 5 m ladder leans against a wall and makes an angle of 60° with the ground. How high up the wall does it reach?','≈ 4,33 m',['Formula: sin θ = \\f{opp}{hyp}','sin 60° = \\f{h}{5}','h = 5 sin 60° = 5 × \\f{\\r{3}}{2} ≈ 4,33 m'],90],
+  ['easy','Solve sin θ = 0,5 for 0° ≤ θ ≤ 90°.','30°',['Rule (special angles): sin 30° = \\f{1}{2}','θ = 30°'],60],
+  ['medium','cos θ = 0,6 and θ is acute. Find tan θ without a calculator.','\\f{4}{3}',['Formula: cos θ = \\f{x}{r}, tan θ = \\f{y}{x}, r^{2} = x^{2} + y^{2}','cos θ = \\f{3}{5}: x = 3, r = 5','y^{2} = 25 − 9 = 16, so y = 4','tan θ = \\f{4}{3}'],120],
+  ['medium','Find cos 210° without a calculator.','−\\f{\\r{3}}{2}',['Rule (reduction): cos(180° + θ) = −cos θ','cos 210° = cos(180° + 30°) = −cos 30°','= −\\f{\\r{3}}{2}'],120],
+  ['medium','Simplify \\f{sin(180° − x)}{cos(90° − x)}.','1',['Rule (reduction): sin(180° − x) = sin x and cos(90° − x) = sin x','\\f{sin x}{sin x}','= 1'],120],
+  ['medium','From a point 35 m from the foot of a 20 m tower, find the angle of elevation to the top.','≈ 29,7°',['Formula: tan θ = \\f{opp}{adj}','tan θ = \\f{20}{35}','θ ≈ 29,7°'],120],
+  ['medium','13 sin θ = 5 and θ is in the 2nd quadrant. Find cos θ without a calculator.','−\\f{12}{13}',['Formula: sin θ = \\f{y}{r}, cos θ = \\f{x}{r}, r^{2} = x^{2} + y^{2}','sin θ = \\f{5}{13}: y = 5, r = 13','x^{2} = 169 − 25 = 144; 2nd quadrant, so x = −12','cos θ = −\\f{12}{13}'],150],
+  ['hard','Prove that \\f{1 − cos^{2}x}{sin x} = sin x.','Proved',['Identity: sin^{2}x + cos^{2}x = 1, so 1 − cos^{2}x = sin^{2}x','Left side: \\f{sin^{2}x}{sin x}','= sin x = right side'],150],
+  ['hard','Solve 2 sin x = −1 for 0° ≤ x ≤ 360°.','x = 210° or x = 330°',['Rule: make sin x the subject, find the reference angle, then use the quadrants where sin is negative (3 and 4).','sin x = −\\f{1}{2}; reference angle 30°','Quadrant 3: 180° + 30° = 210°','Quadrant 4: 360° − 30° = 330°'],180],
+  ['hard','Find the general solution of tan x = \\r{3}.','x = 60° + k·180°, k ∈ ℤ',['Rule (general solution): if tan x = a, x = reference angle + k·180°','tan 60° = \\r{3}','x = 60° + k·180°, k ∈ ℤ'],150],
+  ['hard','Simplify \\f{sin(360° − x)·cos(180° + x)}{sin(−x)}.','−cos x',['Rule (reduction): sin(360° − x) = −sin x, cos(180° + x) = −cos x, sin(−x) = −sin x','\\f{(−sin x)(−cos x)}{−sin x}','= −cos x'],180],
+  ['hard','Solve 2cos^{2}x − cos x − 1 = 0 for 0° ≤ x ≤ 360°.','x = 0°, 120°, 240°, 360°',['Rule: treat it as a quadratic in cos x and factorise.','(2cos x + 1)(cos x − 1) = 0','cos x = −\\f{1}{2}: x = 120° or 240°','cos x = 1: x = 0° or 360°'],210]
+ ]
+}
+];
+
+</script>
+<script>
+(function(){
+'use strict';
+var $=function(s,el){return (el||document).querySelector(s)};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+/* ---------- notation: \f{a}{b}, ^{..}, _{..}, \r{..} ---------- */
+function grab(s,i){ // s[i]=='{' -> [content,endIndex]
+  var d=0;for(var j=i;j<s.length;j++){if(s[j]==='{')d++;else if(s[j]==='}'){d--;if(d===0)return [s.slice(i+1,j),j+1]}}return [s.slice(i+1),s.length]}
+function M(src){
+  var s=String(src),out='',i=0;
+  while(i<s.length){
+    if(s.startsWith('\\f{',i)){var a=grab(s,i+2),b=grab(s,a[1]);out+='<span class="fr"><span class="nu">'+M(a[0])+'</span><span class="de">'+M(b[0])+'</span></span>';i=b[1];continue}
+    if(s.startsWith('\\r{',i)){var r=grab(s,i+2);out+='<span class="rt">√<span class="rad">'+M(r[0])+'</span></span>';i=r[1];continue}
+    if(s.startsWith('^{',i)){var p=grab(s,i+1);out+='<sup>'+M(p[0])+'</sup>';i=p[1];continue}
+    if(s.startsWith('_{',i)){var q=grab(s,i+1);out+='<sub>'+M(q[0])+'</sub>';i=q[1];continue}
+    out+=esc(s[i]);i++;
+  }
+  return out;
+}
+var LV={easy:'Easy',medium:'Medium',hard:'Challenging'};
+function topic(slug){return TOPICS.filter(function(t){return t.slug===slug})[0]}
+function store(k,v){try{if(v===undefined){var x=localStorage.getItem('ke-cp-'+k);return x?JSON.parse(x):null}localStorage.setItem('ke-cp-'+k,JSON.stringify(v))}catch(e){return null}}
+
+/* ---------- a timer based on clock time, so it stays right when the tab is hidden ---------- */
+function Timer(sec,onTick){this.dur=sec;this.left=sec*1000;this.end=0;this.run=false;this.onTick=onTick;var me=this;this.h=setInterval(function(){me.tick()},200)}
+Timer.prototype.tick=function(){if(this.run){this.left=Math.max(0,this.end-Date.now());if(this.left===0)this.run=false}this.onTick&&this.onTick(this)};
+Timer.prototype.start=function(){if(this.left<=0)return;this.end=Date.now()+this.left;this.run=true;this.tick()};
+Timer.prototype.pause=function(){if(this.run){this.left=Math.max(0,this.end-Date.now());this.run=false}this.tick()};
+Timer.prototype.toggle=function(){this.run?this.pause():this.start()};
+Timer.prototype.reset=function(sec){if(sec!=null)this.dur=sec;this.run=false;this.left=this.dur*1000;this.tick()};
+Timer.prototype.add=function(s){var nd=Math.max(15,this.dur+s);var diff=(nd-this.dur)*1000;this.dur=nd;this.left=Math.max(0,this.left+diff);if(this.run)this.end+=diff;this.tick()};
+Timer.prototype.kill=function(){clearInterval(this.h)};
+function fmt(ms){var s=Math.ceil(ms/1000),m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0')}
+
+/* ---------- routing (#topics, #topic-x, #class-x, #practice-x, #controls-x) ---------- */
+var app=$('#app'),cleanup=[];
+function go(h){location.hash=h}
+function route(){
+  cleanup.forEach(function(f){f()});cleanup=[];
+  var h=(location.hash||'').slice(1),m=h.match(/^(topic|class|practice|controls)-([a-z0-9-]+)(?:@(\d+))?$/);
+  var t=m&&topic(m[2]);
+  if(!t){library();return}
+  ({topic:topicPage,'class':classroom,practice:practice,controls:controls})[m[1]](t,m[3]!=null?+m[3]:null);
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+
+/* on the website the site's own menu is enough, so the app's top line is hidden there */
+var EMBED=(function(){try{var d=0,w=window;while(w!==w.top&&d<10){w=w.parent;d++}return d>2}catch(e){return false}})();
+function header(){
+  if(EMBED)return '';
+  return '<header class="top"><div class="wrap"><a class="brand" href="#topics"><b>KnowledgeEmpowers</b></a>'+
+  '<nav class="nav" aria-label="Main">'+(APP?'<a href="'+APP+'" target="_top">Workbook login</a>':'<a href="'+WB+'" target="_blank" rel="noopener">Workbooks</a>')+'</nav></div></header>';
+}
+function footer(){return '<footer class="foot"><div class="wrap"><a href="'+CHECK+'" target="_blank" rel="noopener">Free maths check</a> · <a href="'+WB+'" target="_blank" rel="noopener">Workbooks</a> · <a href="'+PACKS+'" target="_blank" rel="noopener">Exam packs</a> · <a href="'+TOOLS+'" target="_blank" rel="noopener">Free maths tools</a> · <a href="'+WA_ORDER+'" target="_blank" rel="noopener">WhatsApp</a></div></footer>'}
+/* ---------- sharing: every topic and question has its own link ---------- */
+function link(slug,mode,q){return SITE+'/free-classroom-practice/'+(slug?'?t='+slug+'&m='+(mode||'topic')+(q!=null?'&q='+q:''):'')}
+function buyBox(t){var msg='Hi KnowledgeEmpowers, I would like every topic online for a year (I came from '+t.title+'). My child is in Grade ';return '<div class="buy"><div><strong>Get every topic, including '+esc(t.title)+'</strong><span>Every answer step by step · works on a phone</span><span>R149 a year (Grades 4–9) · R199 a year (Grades 10–12)</span></div><a class="btn pri" target="_blank" rel="noopener" href="'+WA_ORDER+'?text='+encodeURIComponent(msg)+'">Buy on WhatsApp</a></div>'}
+function waBtn(text,slug,mode,label){return '<a class="quiet" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(text+' '+link(slug,mode))+'">'+(label||'Share on WhatsApp')+'</a>'}
+function plain(s){return String(s).replace(/\\r\{([^{}]*)\}/g,'√($1)').replace(/(\d)\\f\{/g,'$1 \\f{').replace(/\\f\{([^{}]*)\}\{([^{}]*)\}/g,function(m,a,b){return /^[\d.,]+$/.test(a)&&/^[\d.,]+$/.test(b)?a+'/'+b:'('+a+')/('+b+')'}).replace(/\^\{([^{}]*)\}/g,'^$1').replace(/_\{([^{}]*)\}/g,'$1')}
+/* question of the day: the same for everyone today, changes every day */
+function qod(){var all=[];TOPICS.forEach(function(t){t.qs.forEach(function(q,n){if(q[0]!=='hard')all.push([t,n])})});var d=Math.floor((Date.now()+7200000)/864e5);return all[d%all.length]}
+/* answer check: numbers and fractions by value, everything else by its written form */
+function num(s){s=s.replace(/\s+/g,' ').trim();var m=s.match(/^(-?\d+(?:\.\d+)?)$/);if(m)return +m[1];m=s.match(/^(-?)(\d+) \(?(\d+)\)?\/\(?(\d+)\)?$/);if(m)return (m[1]?-1:1)*(+m[2]+m[3]/m[4]);m=s.match(/^(-?)\(?(-?\d+(?:\.\d+)?)\)?\/\(?(\d+(?:\.\d+)?)\)?$/);if(m)return (m[1]?-1:1)*(m[2]/m[3]);return null}
+function norm(s){return plain(s).toLowerCase().replace(/[−–]/g,'-').replace(/(\d),(\d)/g,'$1.$2').replace(/(\d)\s(?=\d{3}\b)/g,'$1').replace(/≈|°|cups?|pages?|\bm\b|c$/g,'').replace(/\s*([=;,+\-×*/()])\s*/g,'$1').replace(/\s+/g,' ').trim()}
+function checkable(a){return !/proved|no:|by |bigger|,.*,/i.test(plain(a))&&plain(a).length<=32}
+function gcd(a,b){return b?gcd(b,a%b):a}
+function fac(s){var m=s.match(/^(-?\d*)((?:\([^()]+\))+)$/);if(!m)return null;return m[1]+'|'+m[2].match(/\([^()]+\)/g).sort().join('')}
+function same(mine,a){var x=norm(mine),y=norm(a);if(!x)return false;if(x===y)return true;var nx=num(x.replace(/[()]/g,'').replace(/^[a-z]=/,'')),ny=num(y.replace(/[()]/g,'').replace(/^[a-z]=/,''));if(nx!=null&&ny!=null){if(Math.abs(nx-ny)>1e-9)return false;var fm=x.match(/(\d+)\/(\d+)$/);if(fm&&gcd(+fm[1],+fm[2])>1)return 'simplify';return true}if(!/[a-z]/.test(y)&&x.replace(/[()]/g,'')===y.replace(/[()]/g,''))return true;
+  var fx=fac(x),fy=fac(y);if(fx&&fy&&fx===fy)return true;
+  var sx=x.split(/;|and|or/).map(function(s){return s.trim().replace(/^[a-z]=/,'')}).sort().join('|'),sy=y.split(/;|and|or/).map(function(s){return s.trim().replace(/^[a-z]=/,'')}).sort().join('|');return sx===sy}
+window.__ke={same:same,checkable:checkable,plain:plain};
+
+/* ---------- library ---------- */
+var band=store('band')||'all';
+function library(){
+  var bands=[['all','All'],['4-7','Grades 4–7'],['8-9','Grades 8–9'],['10-12','Grades 10–12']];
+  var x=qod(),qt=x[0],qq=qt.qs[x[1]];
+  app.innerHTML=header()+
+  '<main class="wrap"><section class="min-hero"><h1>Maths, one question at a time.</h1><p>Free for Grades 4 to 12. Show it on the classroom screen, or practise at home.</p></section>'+
+  '<a class="today" href="#practice-'+qt.slug+'@'+x[1]+'"><span class="eyebrow">Today’s question · '+esc(qt.title)+'</span><span class="q">'+M(qq[1])+'</span><br><span class="go">Try it →</span></a>'+
+  '<div class="tshare"><span>Share today’s question:</span><a target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent('Today’s maths question: '+plain(qq[1])+' Try it free: '+link(qt.slug,'practice',x[1]))+'">WhatsApp</a><button class="textlink" type="button" id="qCopy">Copy link</button></div>'+
+  '<div class="filters" role="group" aria-label="Filter by grade">'+bands.map(function(b){return '<button class="chip" data-band="'+b[0]+'" aria-pressed="'+(band===b[0])+'">'+b[1]+'</button>'}).join('')+'</div>'+
+  '<div class="list" id="grid"></div></main>'+footer();
+  function draw(){
+    var list=TOPICS.filter(function(t){return band==='all'||t.band===band});
+    $('#grid').innerHTML=list.map(function(t){return '<div class="trow"><a class="tt" href="#topic-'+t.slug+'"><b>'+esc(t.title)+'</b><span>'+t.grade+'</span></a>'+
+      '<span class="ta"><a href="#class-'+t.slug+'">Teach</a><a href="#practice-'+t.slug+'">Practise</a></span></div>'}).join('')||'<p class="muted">More topics for these grades are on the way.</p>';
+  }
+  app.querySelectorAll('.chip').forEach(function(c){c.onclick=function(){band=c.dataset.band;store('band',band);app.querySelectorAll('.chip').forEach(function(x){x.setAttribute('aria-pressed',x===c)});draw()}});
+  draw();
+  var cp=$('#qCopy');if(cp)cp.onclick=function(){copyText(link(qt.slug,'practice',x[1]),function(ok){cp.textContent=ok?'Link copied':'Could not copy';setTimeout(function(){cp.textContent='Copy link'},2500)})};
+}
+/* copy to the clipboard; the older way still works when the page sits inside the website */
+function copyText(s,done){function old(){var ta=document.createElement('textarea');ta.value=s;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
+  try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(s).then(function(){done(true)},old);return}}catch(e){}old()}
+
+/* ---------- topic page ---------- */
+function topicPage(t){
+  app.innerHTML=header()+'<main class="wrap"><div class="crumbs"><a href="#topics">Topics</a> › '+esc(t.title)+'</div>'+
+  '<section class="tp-head"><div class="gr">'+t.grade+'</div><h1>'+esc(t.title)+'</h1><p>'+esc(t.overview)+'</p>'+
+  '<div class="tp-acts"><a class="btn pri" href="#class-'+t.slug+'">Teach</a><a class="btn" href="#practice-'+t.slug+'">Practise</a></div></section>'+
+  '<section class="sec"><h2>Key rules</h2><div class="rules">'+t.rules.map(function(r){return '<div class="rule"><h3>'+esc(r[0])+'</h3><div class="f">'+M(r[1])+'</div>'+(r[2]?'<p>'+esc(r[2])+'</p>':'')+'</div>'}).join('')+'</div></section>'+
+  '<section class="sec"><h2>Worked examples</h2><div>'+t.examples.map(function(e,i){return '<div class="ex"><div class="q">'+M(e[0])+'</div><button class="textlink" data-ex="'+i+'" style="margin-top:.6rem">Show the working</button><ol class="stepsl" id="ex'+i+'" hidden>'+e[2].map(function(s){return '<li>'+M(s)+'</li>'}).join('')+'</ol></div>'}).join('')+'</div></section>'+
+  buyBox(t)+'<p class="quiet" style="margin:8px 0 48px">'+waBtn('Free '+t.title+' practice:',t.slug,'practice','Share this topic')+'</p>'+
+  '</main>'+footer();
+  app.querySelectorAll('[data-ex]').forEach(function(b){b.onclick=function(){var ol=$('#ex'+b.dataset.ex);ol.hidden=!ol.hidden;b.textContent=ol.hidden?'Show the working':'Hide the working'}});
+}
+
+/* ---------- shared classroom state + sync between the projected screen and the teacher window ---------- */
+var chan=null;try{chan=new BroadcastChannel('ke-classroom')}catch(e){}
+function items(t,set){return set==='examples'?t.examples.map(function(e){return {kind:'Worked example',lvl:'',q:e[0],a:e[1],s:e[2],sec:120}}):t.qs.map(function(q){return {kind:'Question',lvl:q[0],q:q[1],a:q[2],s:q[3],sec:q[4]}})}
+
+function classroom(t){
+  var set='questions',list=items(t,set),i=0,mem={},showDock=true;
+  function st(){var k=set+i;return mem[k]||(mem[k]={ans:false,steps:false,timer:null})}
+  var timer=new Timer(list[0].sec,paintClock);cleanup.push(function(){timer.kill()});
+  function save(){var s=st();s.timerLeft=timer.left;s.timerDur=timer.dur}
+  function load(){var s=st();timer.pause();if(s.timerDur){timer.dur=s.timerDur;timer.left=s.timerLeft;timer.tick()}else timer.reset(list[i].sec)}
+  app.innerHTML='<div class="stage" id="stage"><div class="stage-bar"><div><span id="sTopic">'+esc(t.title)+'</span> · <span id="sPos"></span> <span class="lvl" id="sLvl"></span></div><div class="clock" id="sClock" aria-live="off"></div></div>'+
+  '<main class="stage-main" id="sMain"></main>'+
+  '<div class="dock" id="dock">'+
+   '<a class="btn" href="#topics" title="Back to the list of topics">All topics</a><a class="btn" href="#topic-'+t.slug+'" title="Back to the topic page">Exit</a>'+
+   '<select id="dSet" aria-label="What to show"><option value="questions">Questions</option><option value="examples">Worked examples</option></select><span class="sep"></span>'+
+   '<button class="btn" id="dPrev">← Previous</button><button class="btn" id="dNext">Next →</button><span class="sep"></span>'+
+   '<button class="btn" id="dTimer">Start timer</button><button class="btn" id="dReset">Reset</button><span class="sep"></span>'+
+   '<button class="btn pri" id="dAns">Reveal answer</button><button class="btn pri" id="dSteps">Reveal working</button><span class="sep"></span>'+
+   '<button class="btn" id="dRestart">Restart</button><button class="btn" id="dFull">Full screen</button><button class="btn" id="dHide">Hide controls</button>'+
+   '<div class="keys">Keys: ← → move · Space timer · A answer · W working · R reset timer · F full screen · H hide controls</div></div>'+
+   '<button class="btn showdock" id="dShow" hidden>Show controls</button></div>';
+  function paintClock(tm){var c=$('#sClock');if(!c)return;c.textContent=fmt(tm.left);c.classList.toggle('zero',tm.left<=0);c.classList.toggle('paused',!tm.run&&tm.left>0&&tm.left<tm.dur*1000);var b=$('#dTimer');if(b)b.textContent=tm.left<=0?'Time is up':tm.run?'Pause timer':(tm.left<tm.dur*1000?'Resume timer':'Start timer');broadcast()}
+  function paint(){
+    var it=list[i],s=st();
+    $('#sPos').textContent=it.kind+' '+(i+1)+' of '+list.length;$('#sLvl').textContent=it.lvl?'· '+LV[it.lvl]:'';
+    $('#sMain').innerHTML='<div class="stage-kind">'+it.kind+' '+(i+1)+'</div><div class="stage-q">'+M(it.q)+'</div>'+
+      (s.ans?'<div class="stage-ans"><small>Answer</small>'+M(it.a)+'</div>':'')+
+      (s.steps?'<ol class="stage-steps">'+it.s.map(function(x){return '<li>'+M(x)+'</li>'}).join('')+'</ol>':'');
+    $('#dPrev').disabled=i===0;$('#dNext').disabled=i===list.length-1;
+    $('#dAns').textContent=s.ans?'Hide answer':'Reveal answer';$('#dSteps').textContent=s.steps?'Hide working':'Reveal working';
+    broadcast();
+  }
+  function move(d){var n=i+d;if(n<0||n>=list.length)return;save();i=n;load();paint()}
+  function setSet(v){save();set=v;list=items(t,set);i=0;load();$('#dSet').value=v;paint()}
+  function full(){var el=document.documentElement;try{if(!document.fullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}else{document.exitFullscreen()}}catch(e){}}
+  function hide(v){showDock=!v;$('#dock').hidden=v;$('#dShow').hidden=!v}
+  var A={prev:function(){move(-1)},next:function(){move(1)},timer:function(){timer.toggle()},reset:function(){timer.reset()},plus:function(){timer.add(30)},minus:function(){timer.add(-30)},
+    ans:function(){var s=st();s.ans=!s.ans;paint()},steps:function(){var s=st();s.steps=!s.steps;if(s.steps)s.ans=true;paint()},
+    restart:function(){mem={};i=0;timer.reset(list[0].sec);paint()},full:full,hide:function(){hide(showDock)},set:setSet,go:function(n){save();i=Math.max(0,Math.min(list.length-1,n));load();paint()}};
+  $('#dPrev').onclick=A.prev;$('#dNext').onclick=A.next;$('#dTimer').onclick=A.timer;$('#dReset').onclick=A.reset;
+  $('#dAns').onclick=A.ans;$('#dSteps').onclick=A.steps;$('#dRestart').onclick=A.restart;$('#dFull').onclick=full;$('#dHide').onclick=function(){hide(true)};$('#dShow').onclick=function(){hide(false)};
+  $('#dSet').onchange=function(){setSet(this.value)};
+  function key(e){if(e.target.closest&&e.target.closest('input,textarea,select'))return;var k=e.key.toLowerCase();
+    if(k==='arrowright'||k==='pagedown'){A.next();e.preventDefault()}else if(k==='arrowleft'||k==='pageup'){A.prev();e.preventDefault()}
+    else if(k===' '){A.timer();e.preventDefault()}else if(k==='a')A.ans();else if(k==='w')A.steps();else if(k==='r')A.reset();else if(k==='f')full();else if(k==='h')hide(showDock)}
+  document.addEventListener('keydown',key);cleanup.push(function(){document.removeEventListener('keydown',key)});
+  var last=0;function broadcast(){if(!chan)return;var now=Date.now();if(now-last<150)return;last=now;var it=list[i],s=st();chan.postMessage({type:'state',slug:t.slug,set:set,i:i,n:list.length,q:it.q,a:it.a,s:it.s,lvl:it.lvl,kind:it.kind,ans:s.ans,steps:s.steps,left:timer.left,run:timer.run,dur:timer.dur})}
+  if(chan){var onmsg=function(ev){var m=ev.data;if(!m||m.slug!==t.slug)return;if(m.type==='cmd'&&A[m.cmd]){A[m.cmd](m.arg);if(m.cmd!=='hide')hide(true)}if(m.type==='hello'){last=0;broadcast()}};chan.addEventListener('message',onmsg);cleanup.push(function(){chan.removeEventListener('message',onmsg)})}
+  load();paint();
+}
+
+/* ---------- teacher controls window: sees the answer before the class does ---------- */
+function controls(t){
+  app.innerHTML=header()+'<main class="wrap ctl"><div><div class="eyebrow">Teacher controls</div><h1 style="font-size:1.8rem">'+esc(t.title)+'</h1>'+
+  '<p class="status" id="cStat">Waiting for the projected screen. Open Classroom Mode for this topic on the projector screen.</p></div>'+
+  '<div class="peek"><div class="tiny" id="cPos"></div><div class="q" id="cQ"></div><div class="reveal ans" style="margin-top:10px"><span class="tiny">Answer (only you see this until you reveal it)</span><div id="cA"></div></div><ol class="stepsl" id="cS"></ol></div>'+
+  '<div class="timer"><div class="clock" id="cClock">–:––</div><button class="btn pri" data-c="timer" id="cTimer">Start / pause</button><button class="btn" data-c="reset">Reset</button><button class="btn" data-c="minus">−30 s</button><button class="btn" data-c="plus">+30 s</button></div>'+
+  '<div class="row"><button class="btn" data-c="prev">← Previous</button><button class="btn" data-c="next">Next →</button><button class="btn pri" data-c="ans" id="cAns">Reveal answer</button><button class="btn pri" data-c="steps" id="cSteps">Reveal working</button><button class="btn" data-c="restart">Restart</button></div>'+
+  '<div class="row"><button class="btn" data-c="set" data-arg="questions">Show questions</button><button class="btn" data-c="set" data-arg="examples">Show worked examples</button></div>'+
+  '<p class="tiny">Keep this window on your own screen. The projector shows only the question, the timer and what you reveal. Both windows must be open in the same browser.</p></main>';
+  if(!chan){$('#cStat').textContent='This browser cannot link two windows. Use the controls at the bottom of the projected screen instead.';return}
+  var seen=0;
+  app.querySelectorAll('[data-c]').forEach(function(b){b.onclick=function(){chan.postMessage({type:'cmd',slug:t.slug,cmd:b.dataset.c,arg:b.dataset.arg})}});
+  var onmsg=function(ev){var m=ev.data;if(!m||m.type!=='state'||m.slug!==t.slug)return;seen=Date.now();
+    $('#cStat').innerHTML='<b>Linked</b> to the projected screen. Its controls are hidden while you use this window.';
+    $('#cPos').textContent=m.kind+' '+(m.i+1)+' of '+m.n+(m.lvl?' · '+LV[m.lvl]:'');$('#cQ').innerHTML=M(m.q);$('#cA').innerHTML=M(m.a);$('#cS').innerHTML=m.s.map(function(x){return '<li>'+M(x)+'</li>'}).join('');
+    $('#cClock').textContent=fmt(m.left);$('#cAns').textContent=m.ans?'Hide answer':'Reveal answer';$('#cSteps').textContent=m.steps?'Hide working':'Reveal working'};
+  chan.addEventListener('message',onmsg);chan.postMessage({type:'hello',slug:t.slug});
+  var h=setInterval(function(){if(Date.now()-seen>4000){chan.postMessage({type:'hello',slug:t.slug});if(seen)$('#cStat').textContent='Lost the link. Check that Classroom Mode is still open.'}},2000);
+  cleanup.push(function(){clearInterval(h);chan.removeEventListener('message',onmsg)});
+}
+
+/* ---------- practice ---------- */
+function practice(t,startAt){
+  var key='pr-'+t.slug,P=store(key)||{marks:{},lvl:'all'},lvl=P.lvl||'all',view=[],i=0,shown={};
+  function filter(){view=t.qs.map(function(q,n){return n}).filter(function(n){return lvl==='all'||t.qs[n][0]===lvl});i=Math.min(i,view.length-1)}
+  filter();if(startAt!=null){lvl='all';filter();i=Math.max(0,view.indexOf(startAt))}
+  var tries={};
+  var timer=new Timer(t.qs[view[0]][4],function(tm){var c=$('#pClock');if(!c)return;c.textContent=fmt(tm.left);c.classList.toggle('zero',tm.left<=0);c.classList.toggle('paused',!tm.run&&tm.left>0&&tm.left<tm.dur*1000);
+    var b=$('#pStart');if(b)b.textContent=tm.left<=0?'':tm.run?'Pause':(tm.left<tm.dur*1000?'Resume':'Start timer');var z=$('#pZero');if(z)z.hidden=tm.left>0});
+  cleanup.push(function(){timer.kill()});
+  app.innerHTML=header()+'<main class="wrap pr"><div class="crumbs"><a href="#topics">Topics</a> › <a href="#topic-'+t.slug+'">'+esc(t.title)+'</a> › Practice</div>'+
+  '<div class="pr-top"><h1>'+esc(t.title)+'</h1></div>'+
+  '<div><div class="bar"><i id="pBar"></i></div><div class="score" id="pScore" style="margin-top:6px"></div></div><div id="pDots" hidden></div><div id="pCard"></div>'+buyBox(t)+'</main>'+footer();
+  function save(){P.lvl=lvl;store(key,P)}
+  function score(){var g=0,p=0,n=0,done=0;view.forEach(function(k){var m=P.marks[k];if(m){done++;if(m==='g')g++;else if(m==='p')p++;else n++}});
+    $('#pBar').style.width=(view.length?done/view.length*100:0)+'%';
+    $('#pScore').textContent=done?g+' right so far':'';
+    $('#pDots').innerHTML=view.map(function(k,n){var m=P.marks[k]||'';return '<button class="dot '+m+(n===i?' cur':'')+'" data-n="'+n+'" aria-label="Question '+(k+1)+'">'+(k+1)+'</button>'}).join('');
+    app.querySelectorAll('.dot').forEach(function(d){d.onclick=function(){i=+d.dataset.n;open()}});
+    return done}
+  function open(){
+    var k=view[i],q=t.qs[k],s=shown[k]||(shown[k]={a:false,s:false}),m=P.marks[k]||'';
+    timer.reset(q[4]);
+    $('#pCard').innerHTML='<article class="pq"><div class="pad" id="pPad" role="button" tabindex="0"><span>Working out</span><small>Tap here, then write with the pen</small></div><div class="pq-head"><span class="tiny">Question '+(k+1)+' of '+t.qs.length+'</span><span class="lvchip">'+LV[q[0]]+'</span></div>'+
+     '<div class="q">'+M(q[1])+'</div>'+
+     '<div class="timer"><div class="clock" id="pClock" style="font-size:1.4rem"></div><button class="textlink" id="pStart">Start timer</button><span class="tiny" id="pZero" hidden>Time is up.</span></div>'+
+     (checkable(q[2])?'<div class="chk"><input class="ans" id="pMine" autocomplete="off" placeholder="Your answer, e.g. 3/4 or −5"><div class="self"><button class="btn pri" id="pCheck">Check</button><button class="textlink" id="pS">'+(s.s?'Hide solution':'Show solution')+'</button></div><div id="pFb"></div></div>':
+     '<div class="chk"><input class="ans" id="pMine" autocomplete="off" placeholder="Write your answer, then compare"><div class="self"><button class="btn pri" id="pS">'+(s.s?'Hide solution':'Show solution')+'</button></div></div>')+
+
+     (s.a?'<div class="reveal ans"><span class="tiny">Answer</span><div><b>'+M(q[2])+'</b></div></div>':'')+
+     (s.s?'<div class="reveal sol"><span class="tiny">Worked solution</span><ol class="stepsl">'+q[3].map(function(x){return '<li>'+M(x)+'</li>'}).join('')+'</ol></div>':'')+
+     (checkable(q[2])?'':'<div class="self"><span class="tiny">Did you get it?</span><button class="textlink" data-m="g">Yes</button><button class="textlink" data-m="n">Not yet</button></div>')+
+     '<div class="pq-nav"><button class="textlink" id="pPrev"'+(i===0?' hidden':'')+'>← Back</button><button class="btn" id="pNext">'+(i===view.length-1?'Finish':'Next →')+'</button></div></article>';
+    var mine=$('#pMine');mine.value=(P.notes&&P.notes[k])||'';mine.oninput=function(){P.notes=P.notes||{};P.notes[k]=mine.value;save()};
+    var ck=$('#pCheck');if(ck){var fb=$('#pFb'),tr=tries[k]||0;
+      if(tr===1&&!s.a)fb.innerHTML='<div class="fb hint"><b>Not quite. Here is a hint:</b> '+M(q[3][0])+'</div>';
+      ck.onclick=function(){if(!mine.value.trim()){fb.innerHTML='<div class="fb hint">Type your answer first.</div>';return}
+        var res=same(mine.value,q[2]);if(res==='simplify'){fb.innerHTML='<div class="fb hint"><b>Right value.</b> Now simplify your fraction fully.</div>';return}
+        if(res){P.marks[k]='g';save();score();fb.innerHTML='<div class="fb ok"><b>Correct!</b></div>';return}
+        tries[k]=(tries[k]||0)+1;
+        if(tries[k]===1){fb.innerHTML='<div class="fb hint"><b>Not quite. Here is a hint:</b> '+M(q[3][0])+'</div>'}
+        else{P.marks[k]=P.marks[k]||'n';save();s.a=true;s.s=true;keep(open);var f2=$('#pFb');if(f2)f2.innerHTML='<div class="fb no"><b>Not yet.</b> Follow the steps below, then try the next one.</div>'}}}
+    $('#pStart').onclick=function(){timer.toggle()};
+    $('#pS').onclick=function(){s.s=!s.s;s.a=s.s;keep(open)};
+    app.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){P.marks[k]=b.dataset.m;save();app.querySelectorAll('[data-m]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});score()}});
+    $('#pPrev').onclick=function(){i--;open()};$('#pNext').onclick=function(){if(i<view.length-1){i++;open()}else finish()};
+    var pd=$('#pPad');if(pd)pd.onclick=pd.onkeydown=function(e){if(e.type==='keydown'&&e.key!=='Enter'&&e.key!==' ')return;if(window.__ink)window.__ink.open()};
+    score();timer.tick();
+  }
+  function keep(fn){var left=timer.left,run=timer.run,dur=timer.dur;fn();timer.dur=dur;timer.left=left;if(run)timer.start();else timer.tick()}
+  function finish(){timer.pause();var done=score();var g=0,p=0;view.forEach(function(k){if(P.marks[k]==='g')g++;if(P.marks[k]==='p')p++});
+    $('#pCard').innerHTML='<div class="done"><h2>Done</h2><p>'+g+' of '+view.length+' right. Try the ones you missed again.</p>'+
+    '<div class="self"><button class="btn" id="pAgain">Start again</button>'+waBtn('I just practised '+t.title+'. Try it free:',t.slug,'practice','Share')+'</div></div>';
+    $('#pAgain').onclick=function(){view.forEach(function(k){delete P.marks[k]});shown={};save();i=0;open()}}
+  app.querySelectorAll('.chip[data-l]').forEach(function(c){c.onclick=function(){lvl=c.dataset.l;save();app.querySelectorAll('.chip[data-l]').forEach(function(x){x.setAttribute('aria-pressed',x===c)});i=0;filter();open()}});
+  open();
+}
+if(!location.hash&&START)location.hash=START;
+route();
+})();
+</script>
+
+<style>
+/* ---------- writing on the screen: pen, highlighter, eraser ---------- */
+#inkCv{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:60;pointer-events:none}
+body.inking #inkCv{pointer-events:auto;touch-action:none;cursor:crosshair}
+body.inking.ink-erase #inkCv{cursor:cell}
+.inkbtn{position:fixed;right:max(10px,env(safe-area-inset-right,0px));top:58%;z-index:61;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--maroon);font-size:1.35rem;line-height:1;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;place-items:center;padding:0}
+.inkbtn:hover,.inkbtn:focus-visible{border-color:var(--maroon)}
+.inkbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:61;display:flex;align-items:center;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:5px;box-shadow:0 4px 18px rgba(0,0,0,.14);max-width:calc(100vw - 16px)}
+.inkbar button{display:inline-flex;align-items:center;border:1px solid transparent;background:none;border-radius:999px;min-height:42px;padding:.3rem .8rem;font-size:.88rem;font-weight:600;cursor:pointer;color:var(--ink);white-space:nowrap}
+.inkbar button:hover{border-color:var(--line)}
+.inkbar button[aria-pressed="true"]{background:var(--chip);border-color:var(--maroon);color:var(--maroon)}
+.inkbar .sw{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.inkbar i{width:1px;height:24px;background:var(--line);flex:none}
+.inkbar .done{background:var(--maroon);color:var(--bg)}
+.inkbar .done:hover{background:var(--maroon-ink)}
+@media (max-width:560px){.inkbar{gap:0;padding:4px}.inkbar button{padding:.3rem .5rem;font-size:.78rem}.inkbar .sw{margin-right:4px}}
+@media print{#inkCv,.inkbtn,.inkbar{display:none}}
+</style>
+<script>
+/* Write on any screen. Lines are kept in page position, so they stay on the working when the page scrolls.
+   They are wiped when the topic, slide or question changes. Nothing is saved. */
+(function(){
+  'use strict';
+  var cv=document.createElement('canvas');cv.id='inkCv';cv.setAttribute('aria-hidden','true');
+  var btn=document.createElement('button');btn.className='inkbtn';btn.type='button';btn.textContent='✎';btn.title='Write on the screen';btn.setAttribute('aria-label','Write on the screen');
+  var bar=document.createElement('div');bar.className='inkbar';bar.hidden=true;bar.setAttribute('role','toolbar');bar.setAttribute('aria-label','Writing tools');
+  bar.innerHTML='<button type="button" data-t="pen" aria-pressed="true"><span class="sw" style="background:var(--maroon)"></span>Pen</button>'+
+    '<button type="button" data-t="hi" aria-pressed="false"><span class="sw" style="background:#F5D33A"></span>Highlight</button>'+
+    '<button type="button" data-t="er" aria-pressed="false">Eraser</button><i></i>'+
+    '<button type="button" data-a="undo">Undo</button><button type="button" data-a="clear">Clear</button>'+
+    '<button type="button" class="done" data-a="done">Done</button>';
+  document.body.appendChild(cv);document.body.appendChild(btn);document.body.appendChild(bar);
+  var ctx=cv.getContext('2d'),strokes=[],cur=null,tool='pen',dpr=1;
+  function size(){dpr=window.devicePixelRatio||1;cv.width=Math.round(innerWidth*dpr);cv.height=Math.round(innerHeight*dpr);draw()}
+  function penColour(){return getComputedStyle(document.documentElement).getPropertyValue('--maroon').trim()||'#7A0000'}
+  function draw(){
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,innerWidth,innerHeight);
+    var sx=scrollX,sy=scrollY;
+    strokes.forEach(function(s){
+      if(!s.p.length)return;
+      ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+      if(s.t==='hi'){ctx.globalAlpha=.35;ctx.strokeStyle='#F5D33A';ctx.fillStyle='#F5D33A';ctx.lineWidth=18}
+      else{ctx.strokeStyle=penColour();ctx.fillStyle=ctx.strokeStyle;ctx.lineWidth=3}
+      ctx.beginPath();
+      if(s.p.length===1){ctx.arc(s.p[0][0]-sx,s.p[0][1]-sy,ctx.lineWidth/2,0,7);ctx.fill()}
+      else{ctx.moveTo(s.p[0][0]-sx,s.p[0][1]-sy);for(var k=1;k<s.p.length;k++)ctx.lineTo(s.p[k][0]-sx,s.p[k][1]-sy);ctx.stroke()}
+      ctx.restore();
+    });
+  }
+  function pt(e){return [e.clientX+scrollX,e.clientY+scrollY]}
+  function rub(p){var r=14,before=strokes.length;
+    strokes=strokes.filter(function(s){var w=s.t==='hi'?9:2;return !s.p.some(function(q){var dx=q[0]-p[0],dy=q[1]-p[1];return dx*dx+dy*dy<(r+w)*(r+w)})});
+    if(strokes.length!==before)draw()}
+  cv.addEventListener('pointerdown',function(e){if(!document.body.classList.contains('inking'))return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(x){}
+    if(tool==='er'){cur={er:true};rub(pt(e));return}
+    cur={t:tool,p:[pt(e)]};strokes.push(cur);draw()});
+  cv.addEventListener('pointermove',function(e){if(!cur)return;e.preventDefault();
+    if(cur.er){rub(pt(e));return}
+    var evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];if(!evs.length)evs=[e];
+    evs.forEach(function(v){cur.p.push(pt(v))});draw()});
+  function end(){cur=null}
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);cv.addEventListener('lostpointercapture',end);
+  function open(v){document.body.classList.toggle('inking',v);bar.hidden=!v;btn.hidden=v;if(v)setTool(tool==='er'?'pen':tool)}
+  function setTool(t){tool=t;document.body.classList.toggle('ink-erase',t==='er');bar.querySelectorAll('[data-t]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.t===t)})}
+  function clear(){strokes=[];cur=null;draw()}
+  btn.onclick=function(){open(true)};
+  bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+    if(b.dataset.t)setTool(b.dataset.t);
+    else if(b.dataset.a==='undo'){strokes.pop();draw()}
+    else if(b.dataset.a==='clear')clear();
+    else if(b.dataset.a==='done')open(false)});
+  /* new topic, slide or question: start with a clean screen */
+  var sig='';function key(){var q=document.querySelector('.stage-q,.pq .q,.done h2');return location.hash+'|'+(q?q.textContent:'')}
+  function check(){var k=key();if(k!==sig){sig=k;clear()}}
+  addEventListener('hashchange',function(){setTimeout(check,0)});setInterval(check,300);
+  addEventListener('scroll',draw,{passive:true});addEventListener('resize',size);
+  document.addEventListener('fullscreenchange',function(){setTimeout(size,100)});
+  window.__ink={strokes:function(){return strokes.length},clear:clear,open:function(){open(true)}};
+  sig=key();size();
+})();
+</script>
+
+<style>
+/* ---------- full screen button ---------- */
+.fsbtn{position:fixed;right:max(10px,env(safe-area-inset-right,0px));top:42%;z-index:70;width:46px;height:46px;border-radius:50%;border:1px solid #E6DEDE;background:#fff;color:#7A0000;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;place-items:center;padding:0}
+.fsbtn:hover,.fsbtn:focus-visible{border-color:#7A0000;outline:none}
+.fsbtn svg{width:22px;height:22px}
+@media print{.fsbtn{display:none!important}}
+</style>
+<script>
+/* Full screen: fills the whole screen (the website menu and browser bars go away). Press again or Esc to leave. */
+(function(){
+  var d=document,el=d.documentElement;
+  var can=!!(el.requestFullscreen||el.webkitRequestFullscreen)&&(d.fullscreenEnabled!==false||d.webkitFullscreenEnabled);
+  if(!can)return;                                   // e.g. iPhone: not allowed for web pages, so no button
+  var OPEN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  var SHUT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+  var b=d.createElement('button');b.type='button';b.className='fsbtn';
+  function isFull(){return !!(d.fullscreenElement||d.webkitFullscreenElement)}
+  function paint(){var f=isFull();b.innerHTML=f?SHUT:OPEN;b.title=f?'Leave full screen':'Full screen';b.setAttribute('aria-label',b.title)}
+  b.onclick=function(){try{if(isFull())(d.exitFullscreen||d.webkitExitFullscreen).call(d);else(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(e){}};
+  d.addEventListener('fullscreenchange',paint);d.addEventListener('webkitfullscreenchange',paint);
+  paint();
+  function place(){if(d.body&&!b.isConnected)d.body.appendChild(b)}   // put it back if a page change removes it
+  if(window.__fsTimer)clearInterval(window.__fsTimer);           // only one button, even after the page is replaced
+  Array.prototype.forEach.call(d.querySelectorAll('.fsbtn'),function(x){x.remove()});
+  place();window.__fsTimer=setInterval(place,1000);
+})();
+</script>
+</body></html>
