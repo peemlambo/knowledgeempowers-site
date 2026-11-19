@@ -344,3 +344,36 @@ footer img{height:44px;width:auto}
 .says figcaption b{color:var(--ink)}
 @media (max-width:760px){.says-grid{grid-template-columns:1fr}.says figure{padding:24px}}
 .says figcaption{text-align:left;margin:0}
+
+/* ===== Fuller, easier to read: bigger text, less empty space (every page) ===== */
+html,html:has(body.home){font-size:19px}
+.eb{font-size:.8rem;letter-spacing:.18em}
+.nav{font-size:.82rem}
+.lead,.hero .lead,.brand-hero .lead,.phead .lead{font-size:1.12rem;line-height:1.65}
+.offer p,.path-card p,.sample .mut,.who-facts .mut,.faq details p,.cards p,.row p{font-size:1rem}
+section,body.home section{padding-block:64px}
+.sec-head{margin-bottom:36px;max-width:760px}
+.brand-hero .wrap,body.home .brand-hero .wrap{padding-block:56px 64px}
+.phead .hero,.phead .hero.solo{padding-block:44px 52px}
+.samples-wrap{margin-top:44px}
+.page.after{padding-top:40px}
+.page{font-size:1.02rem}
+h2{font-size:clamp(1.55rem,2.6vw,2.05rem)}
+.hero h1,.phead .hero h1,.phead .hero.solo h1{font-size:clamp(2.1rem,4vw,3.1rem)}
+footer{font-size:.95rem}
+@media (min-width:1181px){
+  html,html:has(body.home){font-size:20px}
+  .wrap{max-width:1120px}
+  section,body.home section{padding-block:72px}
+  .brand-hero .wrap,body.home .brand-hero .wrap{padding-block:64px 72px}
+  .phead .hero,.phead .hero.solo{padding-block:52px 60px}
+  .page.after{padding-top:48px}
+  .nav{font-size:.74rem}
+}
+@media (max-width:900px){section,body.home section{padding-block:48px}.sec-head{margin-bottom:28px}}
+.top .wrap>a:first-child{flex:none}
+.top .wrap>a:first-child img{display:block;width:auto}
+@media (min-width:1181px){
+  .hero,.phead .hero{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:56px}
+  .brand-hero .wrap,body.home .brand-hero .wrap{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:56px}
+}
