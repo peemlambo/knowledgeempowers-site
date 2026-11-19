@@ -8,7 +8,7 @@ GA = '''<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V
 WA = 'https://wa.me/27615818059'
 def wa(text): return WA + '?text=' + quote(text)
 LOGIN = '/workbooks/digital-math-workbooks/'
-NAV = [('/baseline-assessment/', 'Free maths check'), ('/free-classroom-practice/', 'Free practice'), ('/workbooks/', 'Workbooks'),
+NAV = [('/', 'Home'), ('/baseline-assessment/', 'Free maths check'), ('/free-classroom-practice/', 'Free practice'), ('/workbooks/', 'Workbooks'),
        ('/exam-packs/', 'Exam packs'), ('/shop/', 'Shop'), ('/tutoring/', 'Tutoring'), ('/about/', 'About')]
 
 def page(path, title, desc, body, current=None):
