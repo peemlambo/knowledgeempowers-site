@@ -272,3 +272,64 @@ body.home .brand-hero .book{width:min(380px,100%)}
 .top img{height:48px;width:auto}
 @media (max-width:1180px){.top img{height:40px}}
 footer img{height:44px;width:auto}
+
+/* ===== Home v4: grade picker, two paths, value, samples, who, FAQ ===== */
+.picker{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#fff;padding:10px 10px 10px 18px;border-radius:2px;max-width:520px;box-shadow:0 20px 40px -24px rgba(0,0,0,.5)}
+.picker label{color:var(--ink);font-weight:600;font-size:.92rem}
+.picker select{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 12px;border-radius:2px;min-height:46px}
+.picker button{margin-left:auto;font:600 .9rem "Public Sans",sans-serif;letter-spacing:.03em;background:var(--m);color:#fff;border:0;border-radius:2px;padding:0 20px;min-height:46px;cursor:pointer}
+.picker button:hover{background:var(--m2)}
+.picker-note{font-size:.88rem;color:rgba(255,255,255,.8)}
+.picker-note a{color:#fff}
+@media (max-width:560px){.picker{padding:14px}.picker select{flex:1}.picker button{margin-left:0;width:100%}}
+.paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.path-card{background:#fff;border:1px solid var(--line);padding:36px;display:grid;gap:14px;align-content:start}
+.path-card ol{margin:6px 0 8px;padding-left:1.3em;display:grid;gap:8px;color:var(--ink)}
+.path-card ol li::marker{color:var(--m);font-family:"Bitter";font-weight:600}
+.path-card .btns{margin-top:6px}
+@media (max-width:860px){.paths{grid-template-columns:1fr}.path-card{padding:26px}}
+.value{background:var(--m);color:#fff}
+.value .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
+.value .eb{color:#E9D3A6}
+.value h2{color:#fff}
+.value .v-txt{display:grid;gap:16px}
+.value .v-txt p{color:rgba(255,255,255,.86);max-width:44ch}
+.v-cmp{background:#fff;color:var(--ink);padding:28px 30px;display:grid;gap:4px;box-shadow:0 30px 60px -30px rgba(0,0,0,.5)}
+.v-row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.v-row b{font-family:"Bitter";font-weight:600;white-space:nowrap}
+.v-row:first-child b{color:var(--m)}
+.v-row.mut b{color:var(--mut);font-weight:500}
+.v-cmp .btns{margin-top:18px}
+@media (max-width:860px){.value .wrap{grid-template-columns:1fr;gap:32px}}
+.samples-wrap{margin-top:64px;display:grid;gap:12px;justify-items:center;text-align:center}
+.samples{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;width:100%;margin-top:14px;text-align:left}
+.sample{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;background:#fff;border:1px solid var(--line);padding:22px;text-decoration:none;color:var(--ink);transition:border-color .2s}
+.sample:hover{border-color:var(--m)}
+.sample .pdf{grid-row:span 2;width:44px;height:56px;border:1px solid var(--m);color:var(--m);font:700 .7rem "Public Sans";letter-spacing:.1em;display:grid;place-items:center;position:relative;background:var(--soft)}
+.sample b{display:block;font-family:"Bitter";font-weight:600}
+.sample small{display:block;color:var(--gold);font-weight:600;font-size:.78rem;margin:2px 0 6px}
+.sample .mut{font-size:.88rem}
+.sample .go{grid-column:2;color:var(--m);font-weight:600;font-size:.9rem}
+@media (max-width:900px){.samples{grid-template-columns:1fr}}
+.who{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:64px;align-items:start}
+.who-facts{display:grid;gap:22px}
+.who-facts div{display:grid;gap:4px;padding-left:18px;border-left:2px solid var(--gold)}
+.who-facts b{font-family:"Bitter";font-weight:600}
+.who-facts .mut{font-size:.92rem}
+@media (max-width:860px){.who{grid-template-columns:1fr;gap:32px}}
+.faq{display:grid;border-top:1px solid var(--line);margin-top:8px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-family:"Bitter";font-weight:600;font-size:1.05rem;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);color:var(--m);font:400 1.5rem "Public Sans"}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 40px 22px 0;color:var(--mut)}
+
+/* launch banner and WhatsApp button, every page */
+.launch{background:#1E1414;color:#E9E1DC;font-size:.82rem;text-align:center;padding:9px 16px;line-height:1.4}
+.launch a{color:#E9D3A6;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(233,211,166,.5);margin-left:6px}
+.wa-float{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:9998;display:flex;align-items:center;gap:10px;background:#1F7A4D;color:#fff;text-decoration:none;font:600 .85rem "Public Sans",system-ui,sans-serif;padding:12px 18px 12px 14px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
+.wa-float svg{width:22px;height:22px;flex:none}
+.wa-float:hover{background:#18653F}
+@media (max-width:600px){.wa-float span{display:none}.wa-float{padding:13px}}
+@media print{.wa-float,.launch{display:none}}

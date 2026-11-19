@@ -62,6 +62,7 @@ def page(path, title, desc, body, current=None):
 %(ga)s
 </head>
 <body%(bc)s>
+<div class="launch">2027 back to school: start with the free maths check.<a href="/baseline-assessment/">Find the gaps</a></div>
 <header class="top"><div class="wrap">
   <a href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.svg" alt="KnowledgeEmpowers"></a>
   <button class="menu" aria-expanded="false" aria-controls="nav">Menu</button>
@@ -80,6 +81,7 @@ def page(path, title, desc, body, current=None):
   <small>© KnowledgeEmpowers. Licensed to the subscriber for use with their own learners. Not for resale.</small>
 </div></footer>
 <script>document.querySelector('.menu').addEventListener('click',function(){var n=document.getElementById('nav'),o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)});</script>
+<a class="wa-float" href="https://wa.me/27615818059" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg><span>WhatsApp us</span></a>
 </body>
 </html>
 ''' % dict(title=html.escape(title), desc=html.escape(desc), ga=GA, nav=nav, login=LOGIN, body=body, wa=WA, bc=' class="home"' if path == '/' else '')
@@ -529,13 +531,39 @@ TRY2 = TRY2.replace('\n</div></section>\n<script>', '\n</div></div></section>\n<
 def offer(href, img, pos, title, text, price, go):
     return '<a href="%s"><div class="pic"><img src="/assets/preview/%s" alt="" loading="lazy" style="object-position:%s"></div><div class="body"><h3>%s</h3><p class="mut">%s</p><p class="price">%s</p><span class="go">%s →</span></div></a>' % (href, img, pos, title, text, price, go)
 
-HOME = '''<section class="brand-hero" style="padding:0"><div class="wrap">
+GOOGLE = 'https://share.google/AsMWbROCykluLpB91'
+FAQ = [
+ ("How does my child get access?", "Message us on WhatsApp and we send the payment details. Once you have paid, your child's personal code arrives on WhatsApp, usually the same day."),
+ ("How long does access last?", "Online workbooks: 12 months from the day you pay, for every topic in the series. Exam packs: one school term."),
+ ("Which grade should I buy?", "Workbooks are made by topic, not by grade, so one book takes a learner from the first idea to the last. Not sure where to start? The free maths check shows which topics to work on first."),
+ ("Does it work with my child's school?", "Yes. It works alongside any curriculum: public schools, IEB and Cambridge."),
+ ("Which devices does it work on?", "Any phone, tablet or computer with a browser. Each code works on up to two devices."),
+ ("Do you have prices for more than one child?", "A second child in the same family pays half price. Tutors and schools pay R79 per learner for 10 learners or more."),
+ ("How are printed books delivered?", "We print in full colour, bind them and post them to you. Delivery is charged separately."),
+]
+def faq(items=FAQ):
+    return '<div class="faq">' + ''.join('<details><summary>%s</summary><p>%s</p></details>' % (q, a) for q, a in items) + '</div>'
+def path(eb, h, p, items, b1, b2):
+    return '<div class="path-card"><div class="eb">%s</div><h3>%s</h3><p class="mut">%s</p>%s%s</div>' % (eb, h, p, '<ol>' + ''.join('<li>%s</li>' % i for i in items) + '</ol>', btns(b1, b2))
+GRADES = ''.join('<option value="%d"%s>Grade %d</option>' % (g, ' selected' if g == 7 else '', g) for g in range(4, 13))
+SAMPLES = [('KnowledgeEmpowers-Fractions-sample.pdf', 'Fractions workbook', 'Grades 4 to 9 · 7 pages', 'The cover, how the book works, the Diagnose page and one full concept from Teach to Master.'),
+           ('KnowledgeEmpowers-Functions-and-graphs-sample.pdf', 'Functions and graphs', 'Grades 10 to 12 · 6 pages', 'The Diagnose page and the first full concept, with a worked example.'),
+           ('KnowledgeEmpowers-Maths-Diary-sample.pdf', 'My Maths Diary', 'Grades 8 and 9 · 5 pages', 'One full week, how the diary works, and a reference page that shows the reasoning behind each formula.')]
+def sample(fn, t, meta, d):
+    return '<a class="sample" href="/assets/samples/%s" download><span class="pdf">PDF</span><span><b>%s</b><small>%s</small><span class="mut">%s</span></span><span class="go">Download</span></a>' % (fn, t, meta, d)
+
+HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
   <div class="txt">
     <div class="eb">KnowledgeEmpowers · Maths for Grades 4 to 12</div>
     <h1>One topic, <em>in depth.</em></h1>
     <hr class="rule">
     <p class="lead">Workbooks, exam packs and free practice that take each maths topic from the rule to the answer. Works alongside any curriculum: public, IEB and Cambridge.</p>
-    %s
+    <form class="picker" action="/baseline-assessment/" method="get">
+      <label for="pk">My child is in</label>
+      <select id="pk" name="grade">%(grades)s</select>
+      <button type="submit">Find the gaps, free</button>
+    </form>
+    <p class="picker-note">10 to 30 minutes, with a report straight away. Or <a href="/workbooks/">see the workbooks</a>.</p>
   </div>
   <figure><div class="book"><img src="/assets/preview/book-cover.jpg" alt="The Fractions workbook cover, with nine steps from Diagnose to Master"></div>
   <div class="tag"><b>Diagnose to Master</b>Nine steps in every topic</div></figure>
@@ -547,26 +575,63 @@ HOME = '''<section class="brand-hero" style="padding:0"><div class="wrap">
   <div><span class="i">4</span><span><b>Free maths check</b>Start where your child really is</span></div>
 </div></div>
 <section><div class="wrap">
-  <div class="sec-head"><div class="eb">What we offer</div><h2>Everything for one topic, in one place</h2></div>
-  <div class="offer">%s%s%s</div>
+  <div class="sec-head"><div class="eb">Who it is for</div><h2>Two ways to start</h2></div>
+  <div class="paths">%(p1)s%(p2)s</div>
 </div></section>
-%s
+<section class="band"><div class="wrap">
+  <div class="sec-head"><div class="eb">What we offer</div><h2>Everything for one topic, in one place</h2></div>
+  <div class="offer">%(o1)s%(o2)s%(o3)s</div>
+</div></section>
+<section class="value"><div class="wrap">
+  <div class="v-txt"><div class="eb">Fair price</div><h2>R149 a year. About R12 a month.</h2><p>Every maths topic online for a full year costs less than one hour with a tutor. One payment, no monthly debit order.</p></div>
+  <div class="v-cmp">
+    <div class="v-row"><span>KnowledgeEmpowers online workbooks</span><b>R149 a year</b></div>
+    <div class="v-row mut"><span>One tutoring lesson</span><b>R250 an hour</b></div>
+    <div class="v-row mut"><span>Monthly learning apps</span><b>R149 a month</b></div>
+    %(vb)s
+  </div>
+</div></section>
+%(try2)s
 <section><div class="wrap">
   <div class="sec-head"><div class="eb">Free for everyone</div><h2>Start today, no sign-up</h2></div>
-  <div class="offer">%s%s%s</div>
+  <div class="offer">%(f1)s%(f2)s%(f3)s</div>
+  <div class="samples-wrap"><h3>Free sample pages</h3><p class="mut">See exactly what your child gets before you buy. Print them, try them, keep them.</p>
+  <div class="samples">%(s)s</div></div>
+</div></section>
+<section class="band"><div class="wrap who">
+  <div><div class="eb">Who is behind it</div><h2>A registered South African company</h2><hr class="rule" style="margin-top:18px">
+  <p class="mut" style="margin-top:18px">KnowledgeEmpowers and GROW are run by Pelocus Org (Pty) Ltd (Reg. No. 2020/864381/07). One small team writes the workbooks, the exam packs and the free practice, and teaches the tutoring lessons. When you message us, you speak to the people who made it.</p></div>
+  <div class="who-facts">
+    <div><b>Real people on WhatsApp</b><span class="mut">We usually reply within 2 to 4 hours. <a href="https://wa.me/27615818059">061 581 8059</a></span></div>
+    <div><b>Reviewed on Google</b><span class="mut">Read what parents say on our Google business profile. <a href="%(google)s" target="_blank" rel="noopener">See our reviews</a></span></div>
+    <div><b>Tutors are checked</b><span class="mut">Every tutor is vetted, with police clearance and reference checks, before they work with a child.</span></div>
+  </div>
+</div></section>
+<section><div class="wrap" style="max-width:860px">
+  <div class="sec-head"><div class="eb">Questions</div><h2>Common questions</h2></div>
+  %(faq)s
+  <p class="mut" style="text-align:center;margin-top:28px">Something else? <a href="https://wa.me/27615818059">Ask us on WhatsApp</a>.</p>
 </div></section>
 <section class="quote"><img src="/assets/img/seedling.jpg" alt=""><div class="wrap">
   <div class="eb">Our promise</div><h2>“Don't give up. Grow through what you go through.”</h2>
-  %s
-</div></section>''' % (
-    btns(('/baseline-assessment/', "Find my child's gaps, free"), ('/workbooks/', 'See the workbooks')),
-    offer('/workbooks/', 'practice-hint.jpg', 'left top', 'Online workbooks', 'Every topic for a year, with a hint after one wrong try, then the full worked solution.', 'From R149 a year', 'See the workbooks'),
-    offer('/shop/', 'book-cover.jpg', 'center top', 'Printed workbooks', 'About 100 pages in full colour for each topic: teach, worked example, watch out.', 'From R169', 'Visit the shop'),
-    offer('/exam-packs/', 'exam-menu.jpg', 'left top', 'Exam packs', 'Revision, mock papers with full memos, a formula sheet and a progress tracker.', 'From R100', 'See the exam packs'),
-    TRY2,
-    offer('/baseline-assessment/', 'maths-check.svg', 'center', 'Free maths check', 'Find the gaps in 10 to 30 minutes, with a report straight away.', 'Free · Grades 4–12', 'Start the check'),
-    offer('/free-classroom-practice/', 'classroom.svg', 'center', 'Free classroom and practice', 'Show a lesson on the classroom screen, or practise at home.', 'Free · no sign-up', 'Start practising'),
-    offer('/shop/', 'diary-covers.jpg', 'center', 'My Maths Diary', 'A full-year diary: weekly summaries, a mistake bank and a marks tracker.', 'From R79', 'See the diaries'),
-    btns(('/baseline-assessment/', 'Take the free maths check')).replace('class="btn"', 'class="btn" style="background:#fff;color:var(--m);border-color:#fff;margin-top:10px"'))
+  %(qb)s
+</div></section>""" % dict(
+    grades=GRADES,
+    p1=path('For parents', 'Find the gaps, then fix them at home', 'Start where your child really is, not where their grade says.',
+            ['Take the free maths check: a report straight away.', 'Get the workbook for each topic it shows, online or printed.', 'Keep track every week with My Maths Diary.'],
+            ('/baseline-assessment/', 'Start the free check'), ('/shop/', 'Visit the shop')),
+    p2=path('For teachers and tutors', 'Teach one topic on the big screen', 'Show a lesson in class, then let learners practise on their own.',
+            ['Open Classroom mode, free and with no sign-up.', 'Give each learner a code: R79 per learner for 10 or more.', 'Order printed sets for your class or centre.'],
+            ('/free-classroom-practice/', 'Open Classroom mode'), (wa("Hi KnowledgeEmpowers, I'm a teacher/tutor and I'd like prices for my learners."), 'Ask about group prices')),
+    o1=offer('/workbooks/', 'practice-hint.jpg', 'left top', 'Online workbooks', 'Every topic for a year, with a hint after one wrong try, then the full worked solution.', 'From R149 a year', 'See the workbooks'),
+    o2=offer('/shop/', 'book-cover.jpg', 'center top', 'Printed workbooks', 'About 100 pages in full colour for each topic: teach, worked example, watch out.', 'From R169', 'Visit the shop'),
+    o3=offer('/exam-packs/', 'exam-menu.jpg', 'left top', 'Exam packs', 'Revision, mock papers with full memos, a formula sheet and a progress tracker.', 'From R100', 'See the exam packs'),
+    vb=btns(('/shop/', 'Get the online workbooks')),
+    try2=TRY2,
+    f1=offer('/baseline-assessment/', 'maths-check.svg', 'center', 'Free maths check', 'Find the gaps in 10 to 30 minutes, with a report straight away.', 'Free · Grades 4–12', 'Start the check'),
+    f2=offer('/free-classroom-practice/', 'classroom.svg', 'center', 'Free classroom and practice', 'Show a lesson on the classroom screen, or practise at home.', 'Free · no sign-up', 'Start practising'),
+    f3=offer('/shop/', 'diary-covers.jpg', 'center', 'My Maths Diary', 'A full-year diary: weekly summaries, a mistake bank and a marks tracker.', 'From R79', 'See the diaries'),
+    s=''.join(sample(*x) for x in SAMPLES), google=GOOGLE, faq=faq(),
+    qb=btns(('/baseline-assessment/', 'Take the free maths check')).replace('class="btn"', 'class="btn" style="background:#fff;color:var(--m);border-color:#fff;margin-top:10px"'))
 page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
-print('home v3 built')
+print('home v4 built')

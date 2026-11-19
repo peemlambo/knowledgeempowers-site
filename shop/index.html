@@ -95,6 +95,14 @@ h2{font-size:clamp(1.4rem,2.3vw,1.85rem)!important}
 .lead{font-size:1.02rem!important}
 .band .in{padding-block:56px 64px!important}
 @media (min-width:1181px){html{font-size:18px!important}h1{font-size:2.8rem!important}.band .in{padding-block:72px 80px!important}.sec{padding-block:80px 0!important}}
+
+.faq{max-width:860px;width:100%;margin:0 auto;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:18px 40px 18px 0;font-family:var(--f-head);font-weight:600;font-size:1.02rem;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);color:var(--m);font:400 1.5rem var(--f-body)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin:0;padding:0 40px 20px 0;color:var(--mut);font-size:.95rem}
 </style><script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script><style id="kehdr-css">
 html{padding-top:72px!important}
 #kehdr{position:fixed;top:0;left:0;right:0;z-index:9999;height:72px;background:rgba(251,248,244,.97);backdrop-filter:blur(6px);border-bottom:1px solid #E6DCD6;font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
@@ -118,9 +126,12 @@ html{padding-top:72px!important}
  #kehdr nav a{padding:14px 0;border-bottom:1px solid #E6DCD6}
  #kehdr nav .kh-login{margin-top:14px;text-align:center}
 }
-@media print{#kehdr{display:none}html{padding-top:0!important}}
+.kh-wa{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:9998;display:flex;align-items:center;gap:10px;background:#1F7A4D;color:#fff!important;text-decoration:none!important;font:600 14px "Public Sans",system-ui,sans-serif;padding:12px 18px 12px 14px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
+.kh-wa svg{width:22px;height:22px;flex:none}
+@media (max-width:600px){.kh-wa span{display:none}.kh-wa{padding:13px}}
+@media print{.kh-wa{display:none}#kehdr{display:none}html{padding-top:0!important}}
 
-</style></head><body><div id="kehdr"><div class="kh-w"><a class="kh-logo" href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.svg" alt="KnowledgeEmpowers"></a><button class="kh-menu" type="button" aria-expanded="false">Menu</button><nav aria-label="Main"><a href="/">Home</a><a href="/baseline-assessment/">Free maths check</a><a href="/free-classroom-practice/">Free practice</a><a href="/workbooks/">Workbooks</a><a href="/exam-packs/">Exam packs</a><a href="/shop/" aria-current="page">Shop</a><a href="/tutoring/">Tutoring</a><a href="/about/">About</a><a class="kh-login" href="/workbooks/digital-math-workbooks/">Log in</a></nav></div></div><script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script>
+</style></head><body><div id="kehdr"><div class="kh-w"><a class="kh-logo" href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.svg" alt="KnowledgeEmpowers"></a><button class="kh-menu" type="button" aria-expanded="false">Menu</button><nav aria-label="Main"><a href="/">Home</a><a href="/baseline-assessment/">Free maths check</a><a href="/free-classroom-practice/">Free practice</a><a href="/workbooks/">Workbooks</a><a href="/exam-packs/">Exam packs</a><a href="/shop/" aria-current="page">Shop</a><a href="/tutoring/">Tutoring</a><a href="/about/">About</a><a class="kh-login" href="/workbooks/digital-math-workbooks/">Log in</a></nav></div></div><a class="kh-wa" href="https://wa.me/27615818059" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg><span>WhatsApp us</span></a><script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script>
 
 <section class="band"><div class="in">
     <div class="eyebrow">Shop</div>
@@ -246,6 +257,10 @@ html{padding-top:72px!important}
   </section>
 
 
+  <section class="sec" aria-labelledby="h-faq">
+    <div class="sec-head"><div class="eyebrow">Questions</div><h2 id="h-faq">Before you buy</h2></div>
+    <div class="faq"><details><summary>How does my child get access?</summary><p>Message us on WhatsApp and we send the payment details. Once you have paid, your child's personal code arrives on WhatsApp, usually the same day.</p></details><details><summary>How long does access last?</summary><p>Online workbooks: 12 months from the day you pay, for every topic in the series. Exam packs: one school term.</p></details><details><summary>Which grade should I buy?</summary><p>Workbooks are made by topic, not by grade, so one book takes a learner from the first idea to the last. Not sure where to start? The free maths check shows which topics to work on first.</p></details><details><summary>Does it work with my child's school?</summary><p>Yes. It works alongside any curriculum: public schools, IEB and Cambridge.</p></details><details><summary>Which devices does it work on?</summary><p>Any phone, tablet or computer with a browser. Each code works on up to two devices.</p></details><details><summary>Do you have prices for more than one child?</summary><p>A second child in the same family pays half price. Tutors and schools pay R79 per learner for 10 learners or more.</p></details><details><summary>How are printed books delivered?</summary><p>We print in full colour, bind them and post them to you. Delivery is charged separately.</p></details></div>
+  </section>
 </div>
 <section class="help" aria-label="Help"><div class="in">
     <div><b>Not sure where to start?</b><span>Do the free maths check. It shows the topics to work on first.</span></div>

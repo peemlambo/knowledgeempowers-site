@@ -26,7 +26,10 @@ html{padding-top:72px!important}
  #kehdr nav a{padding:14px 0;border-bottom:1px solid #E6DCD6}
  #kehdr nav .kh-login{margin-top:14px;text-align:center}
 }
-@media print{#kehdr{display:none}html{padding-top:0!important}}
+.kh-wa{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:9998;display:flex;align-items:center;gap:10px;background:#1F7A4D;color:#fff!important;text-decoration:none!important;font:600 14px "Public Sans",system-ui,sans-serif;padding:12px 18px 12px 14px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
+.kh-wa svg{width:22px;height:22px;flex:none}
+@media (max-width:600px){.kh-wa span{display:none}.kh-wa{padding:13px}}
+@media print{.kh-wa{display:none}#kehdr{display:none}html{padding-top:0!important}}
 %EXTRA%
 </style>'''
 def header(cur):
@@ -34,6 +37,7 @@ def header(cur):
     return ('<div id="kehdr"><div class="kh-w"><a class="kh-logo" href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.svg" alt="KnowledgeEmpowers"></a>'
             '<button class="kh-menu" type="button" aria-expanded="false">Menu</button>'
             '<nav aria-label="Main">%s<a class="kh-login" href="/workbooks/digital-math-workbooks/">Log in</a></nav></div></div>'
+            '<a class="kh-wa" href="https://wa.me/27615818059" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg><span>WhatsApp us</span></a>'
             '<script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script>') % nav
 
 PAGES = {
