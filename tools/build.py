@@ -541,6 +541,17 @@ FAQ = [
  ("Do you have prices for more than one child?", "A second child in the same family pays half price. Tutors and schools pay R79 per learner for 10 learners or more."),
  ("How are printed books delivered?", "We print in full colour, bind them and post them to you. Delivery is charged separately."),
 ]
+
+# Real Google reviews (add more here as they come in: quote, name, what it was about)
+QUOTES = [
+ ("The tutor was professional, supportive, and always willing to help. She provided quality service and created a welcoming environment.", "Oluhle S.", "Tutoring"),
+ ("Very excellent service! The tutor is very friendly, knowledgeable, and very helpful. I had a great experience with her and I would really recommend her service to others.", "Asanda N.", "Tutoring"),
+]
+def quotes():
+    return ('<section class="says"><div class="wrap"><div class="sec-head"><div class="eb">What people say</div><h2>Rated 5.0 on Google</h2>'
+            '<p class="mut"><span class="stars" aria-label="5 out of 5 stars">★★★★★</span> From every review so far. <a href="%s" target="_blank" rel="noopener">Read them on Google</a></p></div>'
+            '<div class="says-grid">%s</div></div></section>') % (GOOGLE, ''.join(
+            '<figure><span class="stars" aria-hidden="true">★★★★★</span><blockquote>“%s”</blockquote><figcaption><b>%s</b> · Google review · %s</figcaption></figure>' % q for q in QUOTES))
 def faq(items=FAQ):
     return '<div class="faq">' + ''.join('<details><summary>%s</summary><p>%s</p></details>' % (q, a) for q, a in items) + '</div>'
 def path(eb, h, p, items, b1, b2):
@@ -598,6 +609,7 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
   <div class="samples-wrap"><h3>Free sample pages</h3><p class="mut">See exactly what your child gets before you buy. Print them, try them, keep them.</p>
   <div class="samples">%(s)s</div></div>
 </div></section>
+%(says)s
 <section class="band"><div class="wrap who">
   <div><div class="eb">Who is behind it</div><h2>A registered South African company</h2><hr class="rule" style="margin-top:18px">
   <blockquote class="founder">“I started KnowledgeEmpowers after seeing too many learners fall behind in maths, not because they couldn't do it, but because one small gap was never filled. So every workbook starts where the learner really is, and shows every step.”<cite>Founder, KnowledgeEmpowers</cite></blockquote>
@@ -632,7 +644,7 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
     f1=offer('/baseline-assessment/', 'maths-check.svg', 'center', 'Free maths check', 'Find the gaps in 10 to 30 minutes, with a report straight away.', 'Free · Grades 4–12', 'Start the check'),
     f2=offer('/free-classroom-practice/', 'classroom.svg', 'center', 'Free classroom and practice', 'Show a lesson on the classroom screen, or practise at home.', 'Free · no sign-up', 'Start practising'),
     f3=offer('/shop/', 'diary-covers.jpg', 'center', 'My Maths Diary', 'A full-year diary: weekly summaries, a mistake bank and a marks tracker.', 'From R79', 'See the diaries'),
-    s=''.join(sample(*x) for x in SAMPLES), google=GOOGLE, faq=faq(),
+    s=''.join(sample(*x) for x in SAMPLES), google=GOOGLE, faq=faq(), says=quotes(),
     qb=btns(('/baseline-assessment/', 'Take the free maths check')).replace('class="btn"', 'class="btn" style="background:#fff;color:var(--m);border-color:#fff;margin-top:10px"'))
 page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
 print('home v4 built')

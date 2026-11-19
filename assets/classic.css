@@ -335,3 +335,12 @@ footer img{height:44px;width:auto}
 @media print{.wa-float,.launch{display:none}}
 .founder{margin:22px 0 0;padding:0;font-family:"Bitter",Georgia,serif;font-style:italic;font-weight:500;font-size:1.15rem;line-height:1.55;color:var(--ink)}
 .founder cite{display:block;margin-top:12px;font:600 .78rem "Public Sans",sans-serif;font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.says .sec-head p{margin-top:4px}
+.stars{color:#C99A2E;letter-spacing:.12em}
+.says-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;max-width:980px;margin:0 auto}
+.says figure{margin:0;background:#fff;border:1px solid var(--line);padding:32px;display:grid;gap:14px;align-content:start}
+.says blockquote{margin:0;font-family:"Bitter",Georgia,serif;font-style:italic;font-weight:500;font-size:1.12rem;line-height:1.55;color:var(--ink)}
+.says figcaption{font-size:.85rem;color:var(--mut)}
+.says figcaption b{color:var(--ink)}
+@media (max-width:760px){.says-grid{grid-template-columns:1fr}.says figure{padding:24px}}
+.says figcaption{text-align:left;margin:0}
