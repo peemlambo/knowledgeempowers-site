@@ -487,3 +487,54 @@ page('/tutoring/', 'Tutoring', 'One-to-one online maths and English lessons for 
    ul(['One-on-one online lessons', 'Group classes available', 'Exam preparation and revision', 'Homework support', 'Problem-solving and confidence']),
    ul(['Group classes', 'Essay and creative writing support', 'Comprehension strategies', 'Speaking and listening skills'])), '/tutoring/')
 print('visual pages built')
+
+# ---------------- Home (brand hero, orderly grid) — final version
+_h = TRY.index('<div class="sec-head">'); _e = TRY.index('</div>', TRY.index('<p class="mut">Get it wrong')) + len('</div>')
+TRY2 = TRY[:_h] + '''<div class="try-split"><div style="display:grid;gap:18px"><div class="eb">Try it now</div><h2>See how a question works</h2><hr class="rule">
+<p class="mut">Get it wrong on purpose. You'll see a hint first, then every step, starting with the rule. That's how every question in our workbooks works, so learners can keep going on their own.</p></div>''' + TRY[_e:]
+TRY2 = TRY2.replace('\n</div></section>\n<script>', '\n</div></div></section>\n<script>', 1)
+
+def offer(href, img, pos, title, text, price, go):
+    return '<a href="%s"><div class="pic"><img src="/assets/preview/%s" alt="" loading="lazy" style="object-position:%s"></div><div class="body"><h3>%s</h3><p class="mut">%s</p><p class="price">%s</p><span class="go">%s →</span></div></a>' % (href, img, pos, title, text, price, go)
+
+HOME = '''<section class="brand-hero" style="padding:0"><div class="wrap">
+  <div class="txt">
+    <div class="eb">KnowledgeEmpowers · Maths for Grades 4 to 12</div>
+    <h1>One topic, <em>in depth.</em></h1>
+    <hr class="rule">
+    <p class="lead">Workbooks, exam packs and free practice that take each maths topic from the rule to the answer. Works alongside any curriculum: public, IEB and Cambridge.</p>
+    %s
+  </div>
+  <figure><div class="book"><img src="/assets/preview/book-cover.jpg" alt="The Fractions workbook cover, with nine steps from Diagnose to Master"></div>
+  <div class="tag"><b>Diagnose to Master</b>Nine steps in every topic</div></figure>
+</div></section>
+<div class="trust"><div class="wrap">
+  <div><span class="i">1</span><span><b>Every answer step by step</b>Rule first, no steps skipped</span></div>
+  <div><span class="i">2</span><span><b>Hint first, then the steps</b>Learners can work on their own</span></div>
+  <div><span class="i">3</span><span><b>Online or printed</b>Phone, tablet, computer or paper</span></div>
+  <div><span class="i">4</span><span><b>Free maths check</b>Start where your child really is</span></div>
+</div></div>
+<section><div class="wrap">
+  <div class="sec-head"><div class="eb">What we offer</div><h2>Everything for one topic, in one place</h2></div>
+  <div class="offer">%s%s%s</div>
+</div></section>
+%s
+<section><div class="wrap">
+  <div class="sec-head"><div class="eb">Free for everyone</div><h2>Start today, no sign-up</h2></div>
+  <div class="offer">%s%s%s</div>
+</div></section>
+<section class="quote"><img src="/assets/img/seedling.jpg" alt=""><div class="wrap">
+  <div class="eb">Our promise</div><h2>“Don't give up. Grow through what you go through.”</h2>
+  %s
+</div></section>''' % (
+    btns(('/baseline-assessment/', "Find my child's gaps, free"), ('/workbooks/', 'See the workbooks')),
+    offer('/workbooks/', 'practice-hint.jpg', 'left top', 'Online workbooks', 'Every topic for a year, with a hint after one wrong try, then the full worked solution.', 'R149 a year · Grades 10–12 R199', 'See the workbooks'),
+    offer('/shop/', 'book-teach.jpg', 'center top', 'Printed workbooks', 'About 100 pages in full colour for each topic: teach, worked example, watch out.', 'R199 · members R169', 'Visit the shop'),
+    offer('/exam-packs/', 'classroom.jpg', 'left top', 'Exam packs', 'Revision, mock papers with full memos, a formula sheet and a progress tracker.', 'From R100', 'See the exam packs'),
+    TRY2,
+    offer('/baseline-assessment/', 'check-phone.jpg', 'center top', 'Free maths check', 'Find the gaps in 10 to 30 minutes, with a report straight away.', 'Free · Grades 4–12', 'Start the check'),
+    offer('/free-classroom-practice/', 'topics.jpg', 'left top', 'Free classroom and practice', 'Show a lesson on the classroom screen, or practise at home.', 'Free · no sign-up', 'Start practising'),
+    offer('/shop/', 'diary-summary.jpg', 'center top', 'My Maths Diary', 'A full-year diary: weekly summaries, a mistake bank and a marks tracker.', 'From R79', 'See the diaries'),
+    btns(('/baseline-assessment/', 'Take the free maths check')).replace('class="btn"', 'class="btn" style="background:#fff;color:var(--m);border-color:#fff;margin-top:10px"'))
+page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free practice for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.', HOME)
+print('home v3 built')
