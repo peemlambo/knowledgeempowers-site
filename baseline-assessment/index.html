@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><!--seo--><title>Free maths check, Grades 4 to 12 · KnowledgeEmpowers</title><meta name="description" content="Find your child's maths gaps in 10 to 30 minutes. A free check for Grades 4 to 12 with a report straight away and the topics to work on first."><link rel="canonical" href="https://www.knowledgeempowers.online/baseline-assessment/"><meta property="og:type" content="website"><meta property="og:site_name" content="KnowledgeEmpowers"><meta property="og:url" content="https://www.knowledgeempowers.online/baseline-assessment/"><meta property="og:title" content="Free maths check, Grades 4 to 12 · KnowledgeEmpowers"><meta property="og:description" content="Find your child's maths gaps in 10 to 30 minutes. A free check for Grades 4 to 12 with a report straight away and the topics to work on first."><meta property="og:image" content="https://www.knowledgeempowers.online/assets/img/share.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><!--/seo--><script>window.KE_API="https://script.google.com/macros/s/AKfycbybv60cJxiSEmLvPTdi1wdkMUhsgs2hTVUcAMMN4XukKUAA7IQgk2DC-V5cvC2OxZ9h/exec";</script><script src="/assets/gas.js"></script>
+<head><!--seo--><title>Free maths check, Grades 4 to 12 · KnowledgeEmpowers</title><meta name="description" content="Find your child's maths gaps in 10 to 30 minutes. A free check for Grades 4 to 12 with a report straight away and the topics to work on first."><link rel="canonical" href="https://www.knowledgeempowers.online/baseline-assessment/"><meta property="og:type" content="website"><meta property="og:site_name" content="KnowledgeEmpowers"><meta property="og:url" content="https://www.knowledgeempowers.online/baseline-assessment/"><meta property="og:title" content="Free maths check, Grades 4 to 12 · KnowledgeEmpowers"><meta property="og:description" content="Find your child's maths gaps in 10 to 30 minutes. A free check for Grades 4 to 12 with a report straight away and the topics to work on first."><meta property="og:image" content="https://www.knowledgeempowers.online/assets/img/share.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><!--/seo--><script>window.KE_API="https://script.google.com/macros/s/AKfycbybv60cJxiSEmLvPTdi1wdkMUhsgs2hTVUcAMMN4XukKUAA7IQgk2DC-V5cvC2OxZ9h/exec";</script><link rel="stylesheet" href="/assets/app.css?v=2"><script src="/assets/app.js?v=2"></script><script src="/assets/gas.js"></script>
 <!--
   KnowledgeEmpowers · Free baseline maths check (Grades 4–12)
   ==========================================================
@@ -145,6 +145,12 @@ html{padding-top:72px!important}
 @media (max-width:600px){.kh-wa span{display:none}.kh-wa{padding:13px}}
 @media print{.kh-wa{display:none}#kehdr{display:none}html{padding-top:0!important}}
 div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:min(1100px,90vw)!important}}
+body.bq-on .wrap{max-width:1180px;padding:0 clamp(20px,5vw,72px) 60px}
+body.bq-on .kq-head{margin-top:1.8rem}
+body:not(.bq-on) .inkbtn,body:not(.bq-on) .inkbar{display:none!important}
+.bq{margin-top:1.8rem}
+.bq .qt{margin-top:0}
+@media (min-width:1100px){body.bq-on .qt{font-size:1.6rem}}
 </style></head>
 <body><div id="kehdr"><div class="kh-w"><a class="kh-logo" href="/" aria-label="KnowledgeEmpowers home"><img src="/assets/img/logo.svg" alt="KnowledgeEmpowers"></a><button class="kh-menu" type="button" aria-expanded="false">Menu</button><nav aria-label="Main"><a href="/">Home</a><a href="/baseline-assessment/" aria-current="page">Free maths check</a><a href="/free-classroom-practice/">Free practice</a><a href="/workbooks/">Workbooks</a><a href="/exam-packs/">Exam packs</a><a href="/shop/">Shop</a><a href="/tutoring/">Tutoring</a><a href="/about/">About</a><a class="kh-login" href="/workbooks/digital-math-workbooks/">Log in</a></nav></div></div><a class="kh-wa" href="https://wa.me/27615818059" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg><span>WhatsApp us</span></a><script>(function(){var b=document.querySelector("#kehdr .kh-menu"),n=document.querySelector("#kehdr nav");b.addEventListener("click",function(){var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o)})})();</script>
 <div class="wrap" id="app"></div>
@@ -194,6 +200,7 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
   function totalFor(g) { return BANK.topics.filter(function (t) { return t.lo <= g && g <= t.hi && BANK.skip.indexOf(t.no) < 0; }); }
 
   function start() {
+    leaveBar();
     document.body.classList.remove('rep');
     app.innerHTML = top() +
       '<div class="kick">Free maths check</div><h1>Where does your child stand in maths?</h1>' +
@@ -217,6 +224,15 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
   function top() { return '<div class="top"><img src="' + LOGO + '" alt="KnowledgeEmpowers"><span>Free maths check</span>' +
     (window.KE_HOME ? '<a href="#" class="small noprint" onclick="window.KE_HOME();return false">Back</a>' : '') + '</div>'; }
 
+  // while the questions run: the same slim top bar as the workbooks, and a wider page with room to work
+  function checkBar() {
+    if (!window.KEApp) return;
+    document.body.classList.add('bq-on');
+    KEApp.bar({ title: 'Free maths check', sub: S.name ? S.name + ' · Grade ' + S.grade : '', onTitle: function () {},
+      write: !!window.__ink,
+      items: [{ label: 'Start again', icon: 'home', minor: true, act: function () { if (confirm('Start the check again? The answers so far will be cleared.')) start(); } }] });
+  }
+  function leaveBar() { document.body.classList.remove('bq-on'); if (window.KEApp) KEApp.hideBar(); }
   function ask() {
     if (S.i >= S.list.length) return finish();
     var no = S.list[S.i], q = item(no, S.step);
@@ -226,12 +242,16 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
     var input = q.form === 'mc'
       ? '<div class="grades" id="mc">' + q.opts.map(function (o, k) { return '<button class="choice" data-k="' + k + '">' + o + '</button>'; }).join('') + '</div>'
       : '<input class="inp" id="ans" autocomplete="off" inputmode="text" placeholder="Type your answer">' + (q.unit && q.unit !== 'R' ? '<span class="unit">' + esc(q.unit) + '</span>' : '');
-    app.innerHTML = top() + '<div class="prog"><i style="width:' + pct + '%"></i></div>' +
+    checkBar();
+    app.innerHTML = '<div class="kq-head"><div class="kq-lab">Question ' + S.asked + ' <span>· ' + S.i + ' of ' + est + ' topics checked</span></div>' +
+      '<div class="kq-bar"><i style="width:' + pct + '%"></i></div></div>' +
+      '<div class="bq kq-cur kq-work"><div class="bq-q">' +
       (S.skips >= 5 ? '<p class="nudge" id="nudge">That’s fine. Try the next one if you can.</p>' : '') +
-      '<div class="qno">' + S.asked + '</div><div class="qt">' + q.text + '</div>' + input +
+      '<div class="qt">' + q.text + '</div>' + input +
       '<div class="row"><button class="btn" id="next"' + (q.form === 'mc' ? ' disabled' : '') + '>Next</button></div>' +
       '<a href="#" class="idk" id="idk">I haven’t learnt this yet</a>' +
-      '<p class="small" style="margin-top:1.4rem">Type fractions like 3/4 and mixed numbers like 2 1/2. Use a comma or a point for decimals.</p>';
+      '<p class="small" style="margin-top:1.4rem">Type fractions like 3/4 and mixed numbers like 2 1/2. Use a comma or a point for decimals.</p></div></div>';
+    window.scrollTo(0, 0);
     var choice = null;
     if (q.form === 'mc') Array.prototype.forEach.call(app.querySelectorAll('[data-k]'), function (b) {
       b.onclick = function () { choice = +b.getAttribute('data-k'); Array.prototype.forEach.call(app.querySelectorAll('[data-k]'), function (x) { x.classList.toggle('sel', x === b); }); document.getElementById('next').disabled = false; };
@@ -443,6 +463,7 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
       '<button class="btn" id="send">Send</button><div class="msg" id="msg"></div></div>' +
       '<p class="small noprint" style="margin-top:2rem"><a href="#" id="again">Start a new check</a></p>' +
       '<div class="rfoot"><img src="' + LOGO + '" alt=""><div><b>One topic, in depth. Works alongside any curriculum.</b><br>www.knowledgeempowers.online</div></div>';
+    leaveBar();
     app.innerHTML = h; document.body.classList.add('rep'); window.scrollTo(0, 0);
     var secure = ready.length;
 
@@ -500,6 +521,95 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
   paint();
   function place(){if(d.body&&!b.isConnected)d.body.appendChild(b)}   // put it back if a page change removes it
   place();setInterval(place,1000);
+})();
+</script>
+<style>
+/* ---------- writing on the screen: pen, highlighter, eraser ---------- */
+#inkCv{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:60;pointer-events:none}
+body.inking #inkCv{pointer-events:auto;touch-action:none;cursor:crosshair}
+body.inking.ink-erase #inkCv{cursor:cell}
+.inkbtn{position:fixed;right:max(10px,env(safe-area-inset-right,0px));top:58%;z-index:61;width:48px;height:48px;border-radius:50%;border:1px solid #E6DEDE;background:#fff;color:#7A0000;font-size:1.35rem;line-height:1;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;place-items:center;padding:0}
+.inkbtn:hover,.inkbtn:focus-visible{border-color:#7A0000}
+.inkbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:61;display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #E6DEDE;border-radius:999px;padding:5px;box-shadow:0 4px 18px rgba(0,0,0,.14);max-width:calc(100vw - 16px)}
+.inkbar button{display:inline-flex;align-items:center;border:1px solid transparent;background:none;border-radius:999px;min-height:42px;padding:.3rem .8rem;font-size:.88rem;font-weight:600;cursor:pointer;color:#1F1B1B;white-space:nowrap}
+.inkbar button:hover{border-color:#E6DEDE}
+.inkbar button[aria-pressed="true"]{background:#F1EAEA;border-color:#7A0000;color:#7A0000}
+.inkbar .sw{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.inkbar i{width:1px;height:24px;background:#E6DEDE;flex:none}
+.inkbar .done{background:#7A0000;color:#fff}
+.inkbar .done:hover{background:#5C0000}
+@media (max-width:560px){.inkbar{gap:0;padding:4px}.inkbar button{padding:.3rem .5rem;font-size:.78rem}.inkbar .sw{margin-right:4px}}
+@media print{#inkCv,.inkbtn,.inkbar{display:none}}
+.fsbtn{top:calc(58% - 58px)!important}   /* full screen button sits just above the pen */
+.inkbtn[hidden],.inkbar[hidden]{display:none!important}
+/* the side pen replaces the small Write buttons on each question */
+button[onclick^="Pad.open"],.tools [data-ink]{display:none!important}
+.card.q>.tools:not(:has(>:not([data-ink]))){display:none!important}
+</style>
+<script>
+/* Write on any screen. Lines are kept in page position, so they stay on the working when the page scrolls.
+   They are wiped when the topic, slide or question changes. Nothing is saved. */
+(function(){
+  'use strict';
+  var cv=document.createElement('canvas');cv.id='inkCv';cv.setAttribute('aria-hidden','true');
+  var btn=document.createElement('button');btn.className='inkbtn';btn.type='button';btn.textContent='✎';btn.title='Write on the screen';btn.setAttribute('aria-label','Write on the screen');
+  var bar=document.createElement('div');bar.className='inkbar';bar.hidden=true;bar.setAttribute('role','toolbar');bar.setAttribute('aria-label','Writing tools');
+  bar.innerHTML='<button type="button" data-t="pen" aria-pressed="true"><span class="sw" style="background:#7A0000"></span>Pen</button>'+
+    '<button type="button" data-t="hi" aria-pressed="false"><span class="sw" style="background:#F5D33A"></span>Highlight</button>'+
+    '<button type="button" data-t="er" aria-pressed="false">Eraser</button><i></i>'+
+    '<button type="button" data-a="undo">Undo</button><button type="button" data-a="clear">Clear</button>'+
+    '<button type="button" class="done" data-a="done">Done</button>';
+  if(window.__inkTimer)clearInterval(window.__inkTimer);   // only one pen, even after the page is replaced
+  Array.prototype.forEach.call(document.querySelectorAll('#inkCv,.inkbtn,.inkbar'),function(x){x.remove()});
+  function place(){[cv,btn,bar].forEach(function(n){if(document.body&&!n.isConnected)document.body.appendChild(n)})}
+  place();
+  var ctx=cv.getContext('2d'),strokes=[],cur=null,tool='pen',dpr=1;
+  function size(){dpr=window.devicePixelRatio||1;cv.width=Math.round(innerWidth*dpr);cv.height=Math.round(innerHeight*dpr);draw()}
+  function penColour(){return getComputedStyle(document.documentElement).getPropertyValue('--maroon').trim()||'#7A0000'}
+  function draw(){
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,innerWidth,innerHeight);
+    var sx=scrollX,sy=scrollY;
+    strokes.forEach(function(s){
+      if(!s.p.length)return;
+      ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+      if(s.t==='hi'){ctx.globalAlpha=.35;ctx.strokeStyle='#F5D33A';ctx.fillStyle='#F5D33A';ctx.lineWidth=18}
+      else{ctx.strokeStyle=penColour();ctx.fillStyle=ctx.strokeStyle;ctx.lineWidth=3}
+      ctx.beginPath();
+      if(s.p.length===1){ctx.arc(s.p[0][0]-sx,s.p[0][1]-sy,ctx.lineWidth/2,0,7);ctx.fill()}
+      else{ctx.moveTo(s.p[0][0]-sx,s.p[0][1]-sy);for(var k=1;k<s.p.length;k++)ctx.lineTo(s.p[k][0]-sx,s.p[k][1]-sy);ctx.stroke()}
+      ctx.restore();
+    });
+  }
+  function pt(e){return [e.clientX+scrollX,e.clientY+scrollY]}
+  function rub(p){var r=14,before=strokes.length;
+    strokes=strokes.filter(function(s){var w=s.t==='hi'?9:2;return !s.p.some(function(q){var dx=q[0]-p[0],dy=q[1]-p[1];return dx*dx+dy*dy<(r+w)*(r+w)})});
+    if(strokes.length!==before)draw()}
+  cv.addEventListener('pointerdown',function(e){if(!document.body.classList.contains('inking'))return;e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(x){}
+    if(tool==='er'){cur={er:true};rub(pt(e));return}
+    cur={t:tool,p:[pt(e)]};strokes.push(cur);draw()});
+  cv.addEventListener('pointermove',function(e){if(!cur)return;e.preventDefault();
+    if(cur.er){rub(pt(e));return}
+    var evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];if(!evs.length)evs=[e];
+    evs.forEach(function(v){cur.p.push(pt(v))});draw()});
+  function end(){cur=null}
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);cv.addEventListener('lostpointercapture',end);
+  function open(v){document.body.classList.toggle('inking',v);bar.hidden=!v;btn.hidden=v;if(v)setTool(tool==='er'?'pen':tool)}
+  function setTool(t){tool=t;document.body.classList.toggle('ink-erase',t==='er');bar.querySelectorAll('[data-t]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.t===t)})}
+  function clear(){strokes=[];cur=null;draw()}
+  btn.onclick=function(){open(true)};
+  bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+    if(b.dataset.t)setTool(b.dataset.t);
+    else if(b.dataset.a==='undo'){strokes.pop();draw()}
+    else if(b.dataset.a==='clear')clear();
+    else if(b.dataset.a==='done')open(false)});
+  /* new topic, slide or question: start with a clean screen */
+  var sig='';function key(){var q=document.querySelector('.bq .qt,.stage-q,.pq .q,.done h2,main h1,h1');return location.hash+'|'+(q?q.textContent:'')}
+  function check(){var k=key();if(k!==sig){sig=k;clear()}}
+  addEventListener('hashchange',function(){setTimeout(check,0)});window.__inkTimer=setInterval(function(){place();check()},300);
+  addEventListener('scroll',draw,{passive:true});addEventListener('resize',size);
+  document.addEventListener('fullscreenchange',function(){setTimeout(size,100)});
+  window.__ink={strokes:function(){return strokes.length},clear:clear,open:function(){open(true)}};
+  sig=key();size();
 })();
 </script>
 </body>
