@@ -2,6 +2,10 @@
    1. Top bar   2. One question at a time   3. Workbooks   4. Exam packs */
 
 /* ===================== 1. Top bar ===================== */
+/* reading size inside the workbooks and exam packs (A+ in a topic still makes it bigger again) */
+html.ka-big{font-size:calc(21px * var(--scale,1))!important}
+@media (min-width:1000px){html.ka-big{font-size:calc(clamp(22px,calc(14px + .62vw),25px) * var(--scale,1))!important}}
+
 html.kb-html{padding-top:0!important}
 body.kb-on{padding-top:64px!important}
 body.kb-on #kehdr,body.kb-on .kh-wa,body.kb-on .fsbtn,body.kb-on .inkbtn{display:none!important}
@@ -13,11 +17,11 @@ body.kb-on #kehdr,body.kb-on .kh-wa,body.kb-on .fsbtn,body.kb-on .inkbtn{display
 #kbar .kb-logo img{height:34px;width:auto;display:block}
 #kbar .kb-sep{width:1px;height:28px;background:#EAE3E3;flex:none}
 #kbar .kb-title{flex:1;min-width:0;display:block;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:#222;
-  font:600 17px/1.2 'Bitter',Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  font:600 18px/1.2 'Bitter',Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #kbar .kb-title small{font:400 14px 'Public Sans',system-ui,sans-serif;color:#6B6464;margin-left:10px}
 #kbar .kb-acts{display:flex;align-items:center;gap:2px;flex:none}
-#kbar .kb-b{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 12px;border:0;border-radius:8px;background:none;
-  font:500 15px 'Public Sans',system-ui,sans-serif;color:#222;cursor:pointer;white-space:nowrap;text-decoration:none}
+#kbar .kb-b{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 12px;border:0;border-radius:8px;background:none;
+  font:500 16px 'Public Sans',system-ui,sans-serif;color:#222;cursor:pointer;white-space:nowrap;text-decoration:none}
 #kbar .kb-b:hover{background:#F6F0EF}
 #kbar .kb-b:focus-visible,#kbar .kb-title:focus-visible{outline:2px solid #7A0000;outline-offset:2px}
 #kbar .kb-b svg{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -156,7 +160,7 @@ body.kw-topic{padding-bottom:48px!important}
 body.kx{background:#fff}
 body.kx .top,body.kx .menuBtn,body.kx .sidebtn{display:none!important}
 body.kx .wrap{max-width:none!important;padding:28px clamp(18px,4vw,64px) 80px!important;gap:clamp(28px,3vw,56px)!important}
-@media (min-width:901px){body.kx .wrap{grid-template-columns:270px minmax(0,1fr)!important}body.kx.noside .wrap{grid-template-columns:minmax(0,1fr)!important}}
+@media (min-width:901px){body.kx .wrap{grid-template-columns:300px minmax(0,1fr)!important}body.kx.noside .wrap{grid-template-columns:minmax(0,1fr)!important}}
 body.kx nav.side{top:88px!important;max-height:calc(100vh - 108px)!important;border-right:1px solid #EAE3E3;padding-right:18px}
 body.kx nav.side a{border-radius:6px}
 @media (max-width:900px){body.kx nav.side{inset:64px 0 0 0!important;padding-top:16px;max-height:none!important;border-right:0}}

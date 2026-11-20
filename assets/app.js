@@ -34,6 +34,7 @@
   function setBar(o) {
     cfg = o;
     d.documentElement.classList.add('kb-html'); d.body.classList.add('kb-on');
+    d.documentElement.classList.toggle('ka-big', o.big !== false);   // larger reading size in the workbooks and exam packs
     if (!bar) { bar = d.createElement('header'); bar.id = 'kbar'; }
     if (!menu) { menu = d.createElement('div'); menu.className = 'kb-menu'; menu.hidden = true; }
     if (!bar.isConnected) d.body.insertBefore(bar, d.body.firstChild);
@@ -78,7 +79,7 @@
   d.addEventListener('click', function (e) { if (menu && !menu.hidden && !e.target.closest('.kb-menu,.kb-more')) menu.hidden = true; });
   function hideBar() {
     if (bar) bar.remove(); if (menu) menu.remove();
-    d.documentElement.classList.remove('kb-html'); d.body.classList.remove('kb-on');
+    d.documentElement.classList.remove('kb-html', 'ka-big'); d.body.classList.remove('kb-on');
   }
 
   /* ---------- one question at a time ----------
