@@ -324,3 +324,7 @@ footer small{opacity:.6;border-top:1px solid rgba(255,255,255,.12);padding-top:2
 @media print{.wa-float,.launch{display:none}}
 /* keep the full menu on one line on smaller laptops */
 @media (min-width:1181px) and (max-width:1440px){.nav{gap:clamp(12px,1.2vw,22px);letter-spacing:.08em}.top img{height:42px}}
+/* home opening without a picture: one strong column */
+.brand-hero.solo .wrap{grid-template-columns:minmax(0,1fr)}
+.brand-hero.solo .txt{max-width:46rem}
+.brand-hero.solo .lead{max-width:40rem}

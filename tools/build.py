@@ -573,7 +573,7 @@ SAMPLES = [('KnowledgeEmpowers-Fractions-sample.pdf', 'Fractions workbook', 'Gra
 def sample(fn, t, meta, d):
     return '<a class="sample" href="/assets/samples/%s" download><span class="pdf">PDF</span><span><b>%s</b><small>%s</small><span class="mut">%s</span></span><span class="go">Download</span></a>' % (fn, t, meta, d)
 
-HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
+HOME = """<section class="brand-hero solo" style="padding:0"><div class="wrap">
   <div class="txt">
     <div class="eb">KnowledgeEmpowers · Maths for Grades 4 to 12</div>
     <h1>One topic, <em>in depth.</em></h1>
@@ -587,8 +587,6 @@ HOME = """<section class="brand-hero" style="padding:0"><div class="wrap">
     <p class="picker-note">10 to 30 minutes, with a report straight away.</p>
     <a class="today-link" href="/free-classroom-practice/"><span>Today’s question</span>A new free maths question every day. Try it →</a>
   </div>
-  <figure><div class="book"><img src="/assets/preview/book-cover.jpg" alt="The Fractions workbook cover, with nine steps from Diagnose to Master"></div>
-  <div class="tag"><b>Diagnose to Master</b>Nine steps in every topic</div></figure>
 </div></section>
 <div class="trust"><div class="wrap">
   <div><span class="i">1</span><span><b>Every answer step by step</b>Rule first, no steps skipped</span></div>
