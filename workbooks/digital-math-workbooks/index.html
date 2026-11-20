@@ -157,7 +157,7 @@ html{padding-top:72px!important}
     document.getElementById('go').onclick = signIn;
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter') signIn(); });
     var other = document.getElementById('other');
-    if (other) other.onclick = function (e) { e.preventDefault(); store.del('ke-code'); showCode(''); document.getElementById('code').focus(); };
+    if (other) other.onclick = function (e) { e.preventDefault(); store.del('ke-code'); store.del('ke-me'); showCode(''); document.getElementById('code').focus(); };
   }
   function say(t, wait) { var m = document.getElementById('msg'); if (m) { m.className = 'msg' + (wait ? ' wait' : ''); m.textContent = t; } }
 
@@ -169,6 +169,7 @@ html{padding-top:72px!important}
       .withSuccessHandler(function (r) {
         if (!r || !r.ok) { document.getElementById('go').disabled = false; say((r && r.msg) || 'Something went wrong. Please try again.'); return; }
         store.set('ke-code', code);
+        store.set('ke-me', JSON.stringify(r));
         ME = r;
         if (START_TOPIC) { var k = START_TOPIC; START_TOPIC = ''; var t = ME.topics.filter(function (x) { return x.key === k; })[0];
           if (t && t.ready && t.allowed) { openTopic(t.key); return; } }
@@ -284,7 +285,7 @@ html{padding-top:72px!important}
     Array.prototype.forEach.call(shell.querySelectorAll('[data-key]'), function (b) { b.onclick = function () { openTopic(b.getAttribute('data-key')); }; });
     Array.prototype.forEach.call(shell.querySelectorAll('.gpick [data-g]'), function (b) { b.onclick = function () { store.set('ke-grade-' + ME.code, b.getAttribute('data-g')); showShelf(); }; });
     var rb = document.getElementById('rep'); if (rb) rb.onclick = showReport;
-    document.getElementById('signout').onclick = function (e) { e.preventDefault(); store.del('ke-code'); ME = null; showCode(''); };
+    document.getElementById('signout').onclick = function (e) { e.preventDefault(); store.del('ke-code'); store.del('ke-me'); ME = null; showCode(''); };
   }
 
   /* ---------- 3. open a topic (and come back) ---------- */
@@ -358,7 +359,34 @@ html{padding-top:72px!important}
   // The "Topics" button inside a topic calls this.
   window.KE_SHELF = function () { unmount(); window.KE_TOPIC_DATA = null; showShelf(); };
 
-  showCode('');
+  // Opening the page again: a learner who signed in on this device goes straight to their topics.
+  function boot() {
+    var code = store.get('ke-code');
+    if (code && /^KE\d/i.test(code)) { if (!store.get('ke-exam-code')) store.set('ke-exam-code', code); store.del('ke-code'); code = ''; }   // an exam pack code saved before the two apps had their own places
+    if (!code) { showCode(''); return; }
+    var cached = null; try { cached = JSON.parse(store.get('ke-me') || 'null'); } catch (e) {}
+    if (cached && cached.ok && String(cached.code || '').toUpperCase() === code.toUpperCase()) {
+      ME = cached;
+      var k = START_TOPIC; START_TOPIC = '';
+      var t = k && ME.topics.filter(function (x) { return x.key === k; })[0];
+      if (t && t.ready && t.allowed) openTopic(t.key); else showShelf();
+    } else {
+      shell.innerHTML = '<div class="entry"><img class="logo" src="' + LOGO + '" alt="KnowledgeEmpowers"><p class="sub" style="margin-top:2rem">Opening your workbooks…</p></div>';
+    }
+    // Check the code quietly: new topics show up, and a code that has ended goes back to the code screen.
+    google.script.run
+      .withSuccessHandler(function (r) {
+        if (!r || !r.ok) { store.del('ke-me'); unmount(); ME = null; showCode((r && r.msg) || ''); return; }
+        var was = store.get('ke-me'); store.set('ke-me', JSON.stringify(r));
+        if (!ME) { ME = r; var k2 = START_TOPIC; START_TOPIC = ''; var t2 = k2 && ME.topics.filter(function (x) { return x.key === k2; })[0];
+          if (t2 && t2.ready && t2.allowed) openTopic(t2.key); else showShelf(); return; }
+        ME = r;
+        if (was !== JSON.stringify(r) && !shell.hidden && !document.getElementById('repback')) showShelf();
+      })
+      .withFailureHandler(function () { if (!ME) showCode('Could not reach KnowledgeEmpowers. Check your internet and try again.'); })
+      .signIn(code, dev);
+  }
+  boot();
 })();
 </script>
 <style>
