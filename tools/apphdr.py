@@ -67,3 +67,39 @@ for f, (cur, extra) in PAGES.items():
         s = s.replace("function header(){\n  if(EMBED)return '';", "function header(){\n  return '';", 1)
     open(f, 'w').write(s)
     print(f, s.count('id="kehdr"'), s.count('kehome'), '</head>' in s)
+
+
+# ---------- search and share details for the app pages ----------
+SITE = 'https://www.knowledgeempowers.online'
+SEO = {
+ 'shop/index.html': ('/shop/', 'Shop: maths workbooks, exam packs and diaries · KnowledgeEmpowers',
+   'Online maths workbooks from R149 a year, printed from R169, exam packs, My Maths Diary and the Quiet Progress books. Order on WhatsApp, delivered in South Africa.', False),
+ 'baseline-assessment/index.html': ('/baseline-assessment/', 'Free maths check, Grades 4 to 12 · KnowledgeEmpowers',
+   "Find your child's maths gaps in 10 to 30 minutes. A free check for Grades 4 to 12 with a report straight away and the topics to work on first.", False),
+ 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'Free maths classroom and practice, Grades 4 to 12 · KnowledgeEmpowers',
+   'Free maths lessons for the classroom screen and practice at home, Grades 4 to 12. A new question every day, with a hint first and then the full worked steps.', False),
+ 'digital-empowerment/visual-times-table-explorer/index.html': ('/digital-empowerment/visual-times-table-explorer/', 'Times Table Explorer: free times tables practice · KnowledgeEmpowers',
+   'See each times table as rows and columns, then test yourself with short quizzes. Free interactive practice for Grades 4 to 6.', False),
+ 'digital-empowerment/interactive-ratio-and-proportion/index.html': ('/digital-empowerment/interactive-ratio-and-proportion/', 'Ratio Lab: free ratio and proportion practice · KnowledgeEmpowers',
+   'Mix parts and see how ratio and proportion scale up and down. Free interactive practice for Grades 6 to 9.', False),
+ 'digital-empowerment/interactive-fraction-decimal-and-percentage-builder/index.html': ('/digital-empowerment/interactive-fraction-decimal-and-percentage-builder/', 'Fraction Builder: fractions, decimals and percentages · KnowledgeEmpowers',
+   'Shade a shape and watch the fraction, decimal and percentage change together. Free interactive practice for Grades 4 to 7.', False),
+ 'workbooks/digital-math-workbooks/index.html': ('/workbooks/digital-math-workbooks/', 'Log in to your online workbooks · KnowledgeEmpowers', 'Log in with your personal code to open your maths workbooks.', True),
+ 'exam-packs/exam-preparation-packs/index.html': ('/exam-packs/exam-preparation-packs/', 'Log in to your exam pack · KnowledgeEmpowers', 'Log in with your personal code to open your exam pack.', True),
+}
+def esc(t): return t.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
+for f, (path, title, desc, hide) in SEO.items():
+    s = open(f).read()
+    s = re.sub(r'<!--seo-->.*?<!--/seo-->', '', s, flags=re.S)
+    s = re.sub(r'<title>.*?</title>', '', s, count=1, flags=re.S)
+    s = re.sub(r'<meta name="description"[^>]*>', '', s)
+    url = SITE + path
+    block = ('<!--seo--><title>%s</title><meta name="description" content="%s">' % (esc(title), esc(desc)) +
+             ('<meta name="robots" content="noindex">' if hide else
+              '<link rel="canonical" href="%s"><meta property="og:type" content="website"><meta property="og:site_name" content="KnowledgeEmpowers">'
+              '<meta property="og:url" content="%s"><meta property="og:title" content="%s"><meta property="og:description" content="%s">'
+              '<meta property="og:image" content="%s/assets/img/share.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+              '<meta name="twitter:card" content="summary_large_image">' % (url, url, esc(title), esc(desc), SITE)) + '<!--/seo-->')
+    s = re.sub(r'<head>', '<head>' + block, s, count=1, flags=re.I)
+    open(f, 'w').write(s)
+    print('seo', f, s.count('<title>'))

@@ -52,6 +52,21 @@ def _brand_head(path, body):
         return head + '<div class="wrap page after%s">' % m.group(1) + b[m.end():]
     return body
 
+SITE_URL = 'https://www.knowledgeempowers.online'
+import json as _json
+def ld_json(path):
+    org = {"@type": "EducationalOrganization", "@id": SITE_URL + "/#org", "name": "KnowledgeEmpowers",
+           "alternateName": "GROW", "legalName": "Pelocus Org (Pty) Ltd", "url": SITE_URL + "/",
+           "logo": SITE_URL + "/assets/img/logo.png", "image": SITE_URL + "/assets/img/share.jpg",
+           "description": "Maths workbooks, exam packs, free practice and tutoring for Grades 4 to 12. One topic, in depth. Works alongside any curriculum.",
+           "email": "knowledgeempowers08@gmail.com", "telephone": "+27615818059",
+           "address": {"@type": "PostalAddress", "streetAddress": "25 Frederick Rd, Broadacres", "addressLocality": "Johannesburg", "postalCode": "2191", "addressCountry": "ZA"},
+           "areaServed": "ZA"}
+    graph = [org]
+    if path == '/':
+        graph.append({"@type": "WebSite", "@id": SITE_URL + "/#site", "url": SITE_URL + "/", "name": "KnowledgeEmpowers", "publisher": {"@id": SITE_URL + "/#org"}, "inLanguage": "en-ZA"})
+    return _json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace('</', '<\\/')
+
 def page(path, title, desc, body, current=None):
     body = brand_head(path, body)
     nav = ''.join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if current == h else '', t) for h, t in NAV)
@@ -64,8 +79,16 @@ def page(path, title, desc, body, current=None):
 <meta name="description" content="%(desc)s">
 <meta property="og:title" content="%(title)s · KnowledgeEmpowers">
 <meta property="og:description" content="%(desc)s">
-<meta property="og:image" content="/assets/img/logo.png">
+<link rel="canonical" href="%(url)s">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KnowledgeEmpowers">
+<meta property="og:url" content="%(url)s">
+<meta property="og:image" content="https://www.knowledgeempowers.online/assets/img/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/logo.png">
+<script type="application/ld+json">%(ld)s</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,500;0,600;0,700;1,500&family=Public+Sans:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="/assets/classic.css">
@@ -94,7 +117,7 @@ def page(path, title, desc, body, current=None):
 <a class="wa-float" href="https://wa.me/27615818059" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg><span>WhatsApp us</span></a>
 </body>
 </html>
-''' % dict(title=html.escape(title), desc=html.escape(desc), ga=GA, nav=nav, login=LOGIN, body=body, wa=WA, bc=' class="home"' if path == '/' else '')
+''' % dict(title=html.escape(title), desc=html.escape(desc), ga=GA, nav=nav, login=LOGIN, body=body, wa=WA, url=SITE_URL + path, ld=ld_json(path), bc=' class="home"' if path == '/' else '')
     d = path.strip('/')
     if d: os.makedirs(d, exist_ok=True)
     open((d + '/' if d else '') + 'index.html', 'w').write(out)
@@ -667,5 +690,7 @@ print('home v4 built')
 import shutil as _sh
 page('/not-found/', 'Page not found', 'This page could not be found.', """<section class="phead"><div class="wrap hero solo"><div class="txt"><div class="eb">Page not found</div><h1>We couldn't find that page.</h1><hr class="rule"><p class="lead">It may have moved when we updated the website.</p>%s</div></div></section>
 <div class="wrap page after"><p>Try one of these:</p><ul><li><a href="/">Home</a></li><li><a href="/baseline-assessment/">Free maths check</a></li><li><a href="/workbooks/">Workbooks</a></li><li><a href="/shop/">Shop</a></li></ul></div>""" % btns(('/', 'Go to the home page'), ('https://wa.me/27615818059', 'Ask us on WhatsApp')))
-_sh.copy('not-found/index.html', '404.html'); _sh.rmtree('not-found')
+_t = open('not-found/index.html').read()
+_t = _re.sub(r'<link rel="canonical"[^>]*>\n?', '', _t).replace('<meta name="viewport"', '<meta name="robots" content="noindex">\n<meta name="viewport"', 1)
+open('404.html', 'w').write(_t); _sh.rmtree('not-found')
 print('404 built')
