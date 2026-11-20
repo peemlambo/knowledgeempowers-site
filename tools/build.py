@@ -472,11 +472,14 @@ page('/', 'Maths for Grades 4 to 12', 'Maths workbooks, exam packs and free prac
 
 # ---------------- Workbooks (visual)
 STEPS9 = ['Diagnose', 'Build', 'Teach', 'Guide', 'Practise', 'Apply', 'Assess', 'Remediate', 'Master']
-page('/workbooks/', 'Workbooks', 'One maths topic at a time, Grades 4 to 12, online and printed.', '''<div class="wrap hero">
+page('/workbooks/', 'Maths workbooks, Grades 4 to 12 · online and printed', 'Grade 4 to 12 maths workbooks, online and printed. One topic in depth, every answer worked step by step. For public school, IEB and Cambridge learners.', '''<div class="wrap hero">
   <div class="txt"><div class="eb">Workbooks</div><h1>One topic at a time, Grades 4 to 12</h1><hr class="rule">
   <p class="lead">Each workbook takes one maths topic in depth, and works alongside any curriculum.</p>%s</div>
   %s
 </div>
+<section style="padding-top:0"><div class="wrap page" style="padding-block:0;margin:0 auto">
+  <p>Looking for a Grade 4, 5, 6, 7, 8 or 9 maths workbook that actually explains the work? Each KnowledgeEmpowers workbook takes one topic, such as fractions, integers or algebra, from the first idea to exam level, with every answer worked step by step. For Grades 10 to 12, the senior series covers functions, trigonometry, algebra and more. They work alongside any curriculum: public schools, IEB and Cambridge.</p>
+</div></section>
 <section class="band"><div class="wrap">
   <div class="sec-head"><div class="eb">How every topic is built</div><h2>Nine steps, from Diagnose to Master</h2><p class="mut">Learners start where they really are, not where their grade says.</p></div>
   <div class="steps" style="grid-template-columns:repeat(3,minmax(0,1fr))">%s</div>
@@ -501,12 +504,15 @@ page('/workbooks/', 'Workbooks', 'One maths topic at a time, Grades 4 to 12, onl
    btns((wa("Hi, I'd like to order a workbook. Topic and grade: "), 'Order on WhatsApp'), ('/baseline-assessment/', 'Not sure? Take the free maths check'))), '/workbooks/')
 
 # ---------------- Exam packs (visual)
-page('/exam-packs/', 'Exam packs', 'End-of-year maths exam preparation, Grades 4 to 12.', '''<div class="wrap hero">
+page('/exam-packs/', 'Maths exam revision packs with memos, Grades 4 to 12', 'End-of-year maths exam revision for Grades 4 to 12: every topic, mock papers with full memos, a formula sheet and a progress tracker. Online, PDF or printed.', '''<div class="wrap hero">
   <div class="txt"><div class="eb">Exam packs</div><h1>Ready for the end-of-year exam</h1><hr class="rule">
   <p class="lead">One pack for your child's grade, Grades 4 to 12, for South African (public and IEB) and Cambridge learners.</p>
   <p>Inside: revision for every topic with worked examples, mock exam papers with full memos, a formula sheet and a progress tracker.</p>%s</div>
   %s
 </div>
+<section style="padding-top:0"><div class="wrap page" style="padding-block:0;margin:0 auto">
+  <p>Preparing for the end-of-year maths exam? Each exam pack has revision for every topic in your child's grade, mock exam papers with full memos, a formula sheet and a progress tracker. Use it online or print it. It suits public school, IEB and Cambridge learners in Grades 4 to 12.</p>
+</div></section>
 <section class="band"><div class="wrap page" style="padding-block:0;margin:0 auto">
   <h2>Prices</h2>
   <h3>Grades 4 to 9</h3>%s
