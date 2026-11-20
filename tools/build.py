@@ -573,20 +573,25 @@ SAMPLES = [('KnowledgeEmpowers-Fractions-sample.pdf', 'Fractions workbook', 'Gra
 def sample(fn, t, meta, d):
     return '<a class="sample" href="/assets/samples/%s" download><span class="pdf">PDF</span><span><b>%s</b><small>%s</small><span class="mut">%s</span></span><span class="go">Download</span></a>' % (fn, t, meta, d)
 
-HOME = """<section class="brand-hero solo" style="padding:0"><div class="wrap">
+HOME = """<section class="brand-hero two" style="padding:0"><div class="wrap">
   <div class="txt">
     <div class="eb">KnowledgeEmpowers · Maths for Grades 4 to 12</div>
     <h1>One topic, <em>in depth.</em></h1>
     <hr class="rule">
     <p class="lead">Workbooks, exam packs and free practice that take each maths topic from the rule to the answer. Works alongside any curriculum: public, IEB and Cambridge.</p>
-    <form class="picker" action="/baseline-assessment/" method="get">
+    <p class="hero-links"><a href="/workbooks/">See the workbooks</a><a href="/shop/">Visit the shop</a></p>
+  </div>
+  <aside class="start" aria-label="Start here">
+    <div class="start-eb">Start here · free</div>
+    <h2>Find your child’s gaps</h2>
+    <form class="picker v" action="/baseline-assessment/" method="get">
       <label for="pk">My child is in</label>
       <select id="pk" name="grade">%(grades)s</select>
-      <button type="submit">Find the gaps, free</button>
+      <button type="submit">Start the free maths check</button>
     </form>
-    <p class="picker-note">10 to 30 minutes, with a report straight away.</p>
-    <a class="today-link" href="/free-classroom-practice/"><span>Today’s question</span>A new free maths question every day. Try it →</a>
-  </div>
+    <p class="start-note">10 to 30 minutes, with a report straight away.</p>
+    <a class="start-today" href="/free-classroom-practice/"><span class="badge">Today’s question</span><b>A new free maths question every day</b><span class="go">Try today’s question →</span></a>
+  </aside>
 </div></section>
 <div class="trust"><div class="wrap">
   <div><span class="i">1</span><span><b>Every answer step by step</b>Rule first, no steps skipped</span></div>
