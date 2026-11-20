@@ -9,7 +9,7 @@ html{padding-top:72px!important}
 #kehdr *{box-sizing:border-box}
 #kehdr .kh-w{max-width:none;padding-inline:clamp(20px,5vw,96px)!important;height:100%;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative}
 #kehdr .kh-logo img{height:48px;width:auto;display:block}
-#kehdr nav{display:flex;align-items:center;gap:26px;font-size:13.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+#kehdr nav{display:flex;align-items:center;gap:clamp(12px,1.2vw,22px);font-size:15px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 #kehdr nav a{color:#1E1414;text-decoration:none;padding:6px 0;border-bottom:1px solid transparent;white-space:nowrap;line-height:1.4}
 #kehdr nav a:hover,#kehdr nav a[aria-current]{color:#7A0000;border-color:#7A0000}
 #kehdr nav .kh-login{background:#7A0000;color:#fff;padding:10px 18px;border:0}
@@ -26,7 +26,7 @@ html{padding-top:72px!important}
  #kehdr nav a{padding:14px 0;border-bottom:1px solid #E6DCD6}
  #kehdr nav .kh-login{margin-top:14px;text-align:center}
 }
-.kh-wa{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:9998;display:flex;align-items:center;gap:10px;background:#1F7A4D;color:#fff!important;text-decoration:none!important;font:600 14px "Public Sans",system-ui,sans-serif;padding:12px 18px 12px 14px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
+.kh-wa{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:9998;display:flex;align-items:center;gap:10px;background:#1F7A4D;color:#fff!important;text-decoration:none!important;font:600 15px "Public Sans",system-ui,sans-serif;padding:12px 18px 12px 14px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
 .kh-wa svg{width:22px;height:22px;flex:none}
 @media (max-width:600px){.kh-wa span{display:none}.kh-wa{padding:13px}}
 @media print{.kh-wa{display:none}#kehdr{display:none}html{padding-top:0!important}}
@@ -42,7 +42,7 @@ def header(cur):
 
 PAGES = {
  'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:min(1100px,90vw)!important}}'),
- 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}html{font-size:clamp(16px,calc(10px + .4vw),19px)}main.wrap{max-width:none!important;padding-inline:clamp(20px,5vw,96px)!important}'),
+ 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}html{font-size:clamp(18px,calc(12px + .4vw),21px)}main.wrap{max-width:none!important;padding-inline:clamp(20px,5vw,96px)!important}'),
  'shop/index.html': ('/shop/', ''),
  'workbooks/digital-math-workbooks/index.html': ('', ''),
  'exam-packs/exam-preparation-packs/index.html': ('', 'body{min-height:calc(100vh - 72px)!important}@media (max-width:1180px){body{min-height:calc(100vh - 64px)!important}}'),

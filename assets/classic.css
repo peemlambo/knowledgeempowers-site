@@ -9,8 +9,8 @@
   --gap-s:16px;--gap-m:28px;--gap-l:48px;--sec:88px;--card-gap:clamp(28px,3.4vw,56px);--side:clamp(20px,5vw,96px)}
 @media (max-width:900px){:root{--gap-l:36px;--sec:56px}}
 *{box-sizing:border-box}
-html{font-size:18px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-@media (min-width:1181px){html{font-size:clamp(18px,calc(12px + .42vw),21px)}}
+html{font-size:19.5px;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (min-width:1181px){html{font-size:clamp(20.5px,calc(14.5px + .42vw),23.5px)}}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65}
 img{max-width:100%;display:block}
 a{color:var(--m)}
@@ -322,3 +322,5 @@ footer small{opacity:.6;border-top:1px solid rgba(255,255,255,.12);padding-top:2
 .wa-float:hover{background:#18653F}
 @media (max-width:600px){.wa-float span{display:none}.wa-float{padding:13px}}
 @media print{.wa-float,.launch{display:none}}
+/* keep the full menu on one line on smaller laptops */
+@media (min-width:1181px) and (max-width:1440px){.nav{gap:clamp(12px,1.2vw,22px);letter-spacing:.08em}.top img{height:42px}}
