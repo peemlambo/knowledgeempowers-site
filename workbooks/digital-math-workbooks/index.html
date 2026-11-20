@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><!--seo--><title>Log in to your online workbooks · KnowledgeEmpowers</title><meta name="description" content="Log in with your personal code to open your maths workbooks."><meta name="robots" content="noindex"><!--/seo--><script>window.KE_API="https://script.google.com/macros/s/AKfycbx5ehslilcnulpvrMXSjk9ec-Uy74RjMN4BPMdbtfjGalDXtpTQcSYrqzGl417OGcAO/exec";</script><script src="/assets/gas.js"></script>
+<head><!--seo--><title>Log in to your online workbooks · KnowledgeEmpowers</title><meta name="description" content="Log in with your personal code to open your maths workbooks."><meta name="robots" content="noindex"><!--/seo--><script>window.KE_API="https://script.google.com/macros/s/AKfycbx5ehslilcnulpvrMXSjk9ec-Uy74RjMN4BPMdbtfjGalDXtpTQcSYrqzGl417OGcAO/exec";</script><link rel="stylesheet" href="/assets/app.css?v=1"><script src="/assets/app.js?v=1"></script><script src="/assets/gas.js"></script>
 <!--
   KnowledgeEmpowers · code screen + topic shelf
   No workbook content is in this file. After the code is checked (Code.gs → signIn), the learner
@@ -143,6 +143,7 @@ html{padding-top:72px!important}
 
   /* ---------- 1. code screen ---------- */
   function showCode(message) {
+    if (window.KEApp) KEApp.hideBar(); shell.classList.remove('wide');
     var saved = store.get('ke-code') || '';
     shell.innerHTML =
       '<div class="entry"><img class="logo" src="' + LOGO + '" alt="KnowledgeEmpowers">' +
@@ -247,17 +248,27 @@ html{padding-top:72px!important}
     document.getElementById('repprint').onclick = function () { window.print(); };
     document.getElementById('repback').onclick = showShelf;
   }
+  function shelfBar() {
+    KEApp.bar({ title: 'My workbooks', sub: ME.ends ? 'Access until ' + ME.ends : '', onTitle: showShelf,
+      items: [{ label: 'Report for my parent', icon: 'report', act: showReport }],
+      user: { name: ME.name || '', out: signOut } });
+  }
+  function signOut() { store.del('ke-code'); store.del('ke-me'); ME = null; unmount(); showCode(''); }
   function showShelf() {
-    var h = '<div class="top"><img src="' + LOGO + '" alt="KnowledgeEmpowers"><div class="who"><b>' + esc(ME.name || 'Welcome') + '</b>' +
-            (ME.ends ? ', access until ' + esc(ME.ends) : '') + '</div><a href="#" id="signout" class="small">Sign out</a></div>' +
-            '<div class="shelf-head"><h1 style="margin-top:2.4rem">Your topics</h1><button id="rep" class="rep-btn" type="button">Report for my parent</button></div>' +
-            '<p class="sub">In the order schools usually teach them through the year.</p>';
+    shelfBar(); shell.classList.add('wide');
+    var h = '<div class="ks-head"><div><h1>Your topics</h1><p class="sub">In the order schools usually teach them through the year.</p></div></div>';
     // Grade chooser: show only the topics for the learner's grade (or all of them).
     function span(t) { var m = String(t.grades || '').match(/(\d+)\D+(\d+)/) || String(t.grades || '').match(/(\d+)/); return m ? [+m[1], +(m[2] || m[1])] : [0, 99]; }
     var mine = ME.topics.filter(function (t) { return t.allowed; }), gs = [];
     mine.forEach(function (t) { var r = span(t); for (var g = Math.max(4, r[0]); g <= Math.min(12, r[1]); g++) if (gs.indexOf(g) < 0) gs.push(g); });
     gs.sort(function (a, b) { return a - b; });
     var pick = +(store.get('ke-grade-' + ME.code) || 0); if (gs.indexOf(pick) < 0) pick = 0;
+    // Continue: the topic opened most recently that is not finished
+    var open = mine.filter(function (t) { return t.ready; }).map(function (t) { return { t: t, p: progress(t.key), last: store.get('ke-last-' + t.key + '-' + ME.code) || '' }; })
+      .filter(function (x) { return x.last && x.p < 1; }).sort(function (a, b) { return b.last.localeCompare(a.last); })[0];
+    if (open) h += '<div class="ks-cont"><div class="ks-c-txt"><div class="ks-eb">Continue where you left off</div><h2>' + esc(open.t.title) + '</h2>' +
+      '<p>' + (open.p ? Math.round(open.p * 100) + '% done' : 'Started') + ' · ' + esc(open.t.grades) + '</p><div class="ks-c-bar"><i style="width:' + Math.round(open.p * 100) + '%"></i></div></div>' +
+      '<button class="ks-go" data-key="' + open.t.key + '">Continue →</button></div>';
     if (gs.length > 1) h += '<div class="gpick" role="group" aria-label="Choose your grade"><span>My grade</span>' +
       '<button data-g="0"' + (pick ? '' : ' class="on"') + '>All</button>' +
       gs.map(function (g) { return '<button data-g="' + g + '"' + (pick === g ? ' class="on"' : '') + '>Grade ' + g + '</button>'; }).join('') + '</div>';
@@ -265,27 +276,27 @@ html{padding-top:72px!important}
     [1, 2, 3, 4, 5].forEach(function (term) {
       var list = ME.topics.filter(function (t) { return t.term === term && fits(t); });
       if (!list.length) return;
-      // Show the Grades 10–12 shelf only to codes that open at least one of those books (and the Grades 5–9 terms only to codes that open one of those).
+      // Show the Grades 10–12 shelf only to codes that open at least one of those books (and the Grades 4–9 terms only to codes that open one of those).
       var band = ME.topics.filter(function (t) { return (t.term === 5) === (term === 5); });
       if (!band.some(function (t) { return t.allowed; })) return;
-      h += '<h2>' + esc(ME.terms[term]).replace(' · ', '</h2><p class="small" style="margin:0 0 .9rem">') + '</p><div class="grid">';
+      var nm = String(ME.terms[term] || '').split(' · ');
+      h += '<div class="ks-term"><h2>' + esc(nm[0]) + '</h2>' + (nm[1] ? '<span>' + esc(nm[1]) + '</span>' : '') + '</div><div class="ks-grid">';
       list.forEach(function (t) {
-        var p = t.ready && t.allowed ? progress(t.key) : 0;
-        var tag = !t.ready ? '<span class="tag">Coming soon</span>'
-                : !t.allowed ? '<span class="tag">Not on your code</span>'
-                : p ? '<span class="tag">' + Math.round(p * 100) + '%<i><b style="width:' + Math.round(p * 100) + '%"></b></i></span>' : '<span class="tag" style="color:#7A0000">Open</span>';
-        var on = t.ready && t.allowed;
-        h += '<button class="tcard' + (on ? '' : ' off') + '" ' + (on ? 'data-key="' + t.key + '"' : 'disabled') + '>' +
-             '<span class="no">' + t.no + '</span><span class="tt">' + esc(t.title) + '</span><span class="gr">' + esc(t.grades) + '</span>' + tag + '</button>';
+        var on = t.ready && t.allowed, p = on ? progress(t.key) : 0;
+        var tag = !t.ready ? '<span class="kc-p">Coming soon</span>'
+                : !t.allowed ? '<span class="kc-p">Not on your code</span>'
+                : p >= 1 ? '<span class="kc-p done">Done ✓<i><b style="width:100%"></b></i></span>'
+                : p ? '<span class="kc-p">' + Math.round(p * 100) + '% done<i><b style="width:' + Math.round(p * 100) + '%"></b></i></span>'
+                : '<span class="kc-p open">Start →</span>';
+        h += '<button class="kcard' + (on ? '' : ' off') + '" ' + (on ? 'data-key="' + t.key + '"' : 'disabled') + '>' +
+             '<span class="kc-no">Topic ' + t.no + '</span><span class="kc-t">' + esc(t.title) + '</span><span class="kc-g">' + esc(t.grades) + '</span>' + tag + '</button>';
       });
       h += '</div>';
     });
-    h += '<p class="small" style="margin-top:2.4rem">To add a topic to your code, contact KnowledgeEmpowers on www.knowledgeempowers.online.</p>';
+    h += '<p class="small ks-foot">To add a topic to your code, message KnowledgeEmpowers on WhatsApp: <a href="https://wa.me/27615818059" target="_blank" rel="noopener">061 581 8059</a>.</p>';
     shell.innerHTML = h; shell.hidden = false; window.scrollTo(0, 0);
     Array.prototype.forEach.call(shell.querySelectorAll('[data-key]'), function (b) { b.onclick = function () { openTopic(b.getAttribute('data-key')); }; });
     Array.prototype.forEach.call(shell.querySelectorAll('.gpick [data-g]'), function (b) { b.onclick = function () { store.set('ke-grade-' + ME.code, b.getAttribute('data-g')); showShelf(); }; });
-    var rb = document.getElementById('rep'); if (rb) rb.onclick = showReport;
-    document.getElementById('signout').onclick = function (e) { e.preventDefault(); store.del('ke-code'); store.del('ke-me'); ME = null; showCode(''); };
   }
 
   /* ---------- 3. open a topic (and come back) ---------- */
@@ -329,6 +340,7 @@ html{padding-top:72px!important}
     window.addEventListener('error', onErr);
     window.KE_ENGINE_VERSION = 0;
     scripts.forEach(function (s) { var n = document.createElement('script'); n.text = s.textContent; host.appendChild(n); });
+    try { topicSetup(); } catch (e) { if (window.console) console.warn(e); }
     window.scrollTo(0, 0);
     // If the workbook did not start, show why instead of a blank page.
     setTimeout(function () {
@@ -342,6 +354,65 @@ html{padding-top:72px!important}
       if (problem) { unmount(); showShelf(); showProblem(problem); }
     }, 900);
   }
+  /* ---------- the new look inside a topic: top bar, the path from Diagnose to Master, one question at a time ---------- */
+  function topicSetup() {
+    var W = window; if (!W.DATA || !W.render) return;
+    document.body.classList.add('kw-topic');
+    KEApp.bar({ title: W.DATA.meta.title, sub: W.DATA.meta.grades, onTitle: function () { W.go('home'); },
+      items: [{ label: 'Topics', icon: 'topics', act: function () { W.KE_SHELF(); } },
+              { label: 'Topic home', icon: 'home', minor: true, act: function () { W.go('home'); } },
+              { label: 'Bigger text', icon: 'text', minor: true, act: function () { W.bigger(); } },
+              { label: 'Save my progress', icon: 'save', minor: true, act: function () { W.go('backup'); } }],
+      user: { name: (ME && ME.name) || '', out: signOut } });
+    // after Check, keep the answered question in view
+    W.jump = function (n) { requestAnimationFrame(function () { var el = document.getElementById('q' + n); if (el && !el.classList.contains('kq-hide')) el.scrollIntoView({ block: 'nearest' }); }); };
+    W.pageHome = topicHome;
+    KEApp.stepper({ root: function () { return document.getElementById('app'); }, cards: '.wrap > .card[id^="q"]',
+      key: function () { return W.VIEW.page + ':' + W.VIEW.stage; }, on: function () { return W.VIEW.page !== 'final'; },
+      status: function (c) { return c.querySelector('.status.ok') ? 'ok' : c.querySelector('.status.rev') ? 'rev' : ''; }, work: true });
+    W.render();
+  }
+  function topicHome() {
+    var W = window, D = W.DATA, S = W.S, qs = W.qs;
+    function state(list) { var d = W.doneCount(list); return d === list.length ? 'done' : d ? 'part' : ''; }
+    function pctOf(list) { return Math.round(100 * W.doneCount(list) / list.length); }
+    var diagLeft = D.diag.some(function (n) { return !qs(n).status; }) && !S.diagDone;
+    var nextC = D.concepts.filter(function (c) { return c.stages.some(function (s) { return s.qs.some(function (n) { return !qs(n).status; }); }); })[0];
+    var now = diagLeft ? 'diag' : nextC ? 'c' + nextC.no : 'final';
+    var all = Object.keys(D.q).map(Number), doneAll = W.doneCount(all), overall = Math.round(100 * doneAll / all.length);
+    var finMarks = D.final.reduce(function (a, n) { return a + (D.q[n].marks || 0); }, 0);
+    function row(id, dot, title, meta, st, show, click) {
+      var cls = id === now ? 'now' : st === 'done' ? 'done' : '';
+      var right = id === now ? 'Next' : show;
+      return '<li class="' + cls + '"><button type="button" onclick="' + click + '"><span class="kw-dot">' + (cls === 'done' ? '✓' : dot) + '</span>' +
+        '<span class="kw-t">' + title + '</span><span class="kw-m">' + meta + '</span><span class="kw-s">' + (right || '') + '</span></button></li>';
+    }
+    function show(list) { var st = state(list); return st === 'done' ? 'Done' : st === 'part' ? pctOf(list) + '%' : ''; }
+    var path = '<li class="kw-grp">Start</li>' +
+      row('diag', 'D', 'Diagnose', 'Find your starting point · ' + D.diag.length + ' questions', state(D.diag), show(D.diag), "go('diag')") +
+      row('build', 'B', 'Build', 'Skills you need first · ' + D.build.length + ' questions', state(D.build), show(D.build), "go('build')") +
+      '<li class="kw-grp">Concepts</li>' +
+      D.concepts.map(function (c) { var list = c.stages.reduce(function (a, s) { return a.concat(s.qs); }, []), my = S.my[c.no];
+        return row('c' + c.no, c.no, c.title, c.route + ', ' + c.grades + (my ? ' · ' + my : ''), state(list), show(list), "go('c" + c.no + "'," + c.no + "," + (S.stage['c' + c.no] || 0) + ")"); }).join('') +
+      '<li class="kw-grp">Finish</li>' +
+      row('final', '★', 'Final assessment', finMarks + ' marks, ' + W.SETTINGS.testMinutes + ' minutes', S.final.submitted ? 'done' : '', S.final.submitted ? W.finalScore() + ' / ' + finMarks : '', "go('final')") +
+      row('next', '→', 'Your next step', 'Checklist, reflection and a summary to print', '', '', "go('next')");
+    var main = diagLeft ? '<button class="btn" onclick="go(\'diag\')">' + (D.diag.some(function (n) { return qs(n).status; }) ? 'Continue Diagnose' : 'Start with Diagnose') + '</button>'
+      : nextC ? '<button class="btn" onclick="go(\'c' + nextC.no + '\',' + nextC.no + ',' + (S.stage['c' + nextC.no] || 0) + ')">Continue with Concept ' + nextC.no + '</button>'
+      : '<button class="btn" onclick="go(\'final\')">Take the final assessment</button>';
+    var start = W.diagStart();
+    return '<div class="wrap"><div class="kw-home"><div class="kw-intro">' +
+      '<div class="kick">Topic ' + D.meta.no + '</div><h1>' + D.meta.title + '</h1>' +
+      '<p class="sub">' + D.meta.grades + (S.name || (ME && ME.name) ? '. Hello, ' + W.esc(S.name || ME.name) + '.' : '') + '</p>' +
+      '<div class="kw-meter"><div class="bar"><i style="width:' + overall + '%"></i></div><span>' + overall + '% of this topic done</span></div>' +
+      '<p>' + D.meta.journey + '</p>' +
+      (start ? '<div class="callout"><b>Where should I start?</b>' + start + '</div>' : '') +
+      '<div class="rowbtns">' + main + '</div>' +
+      '<p class="small">Progress is saved on this device. To keep a copy, use <a href="#" onclick="go(\'backup\');return false">Save my progress</a> in the top bar.' +
+      (W.GATE && W.GATE.ends ? ' Your access runs until ' + W.esc(W.GATE.ends) + '.' : '') + '</p>' +
+      '</div><ol class="kw-path">' + path + '</ol></div></div>';
+  }
+
   var ENGINE_VERSION = 4;            // must match KE_ENGINE_VERSION in Engine.html
   function showProblem(text) {
     var box = document.createElement('div');
