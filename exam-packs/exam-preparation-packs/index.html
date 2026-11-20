@@ -94,8 +94,8 @@ function render_(h, extra) {
         var fm = document.getElementById('fsmod'), k = h.toLowerCase().lastIndexOf('</body>');
         if (fm && k > -1) h = h.slice(0, k) + fm.innerHTML + h.slice(k);   // full screen button on the pack page too
         // the new look: one top bar, topics beside, one question at a time (assets/app.css and app.js)
-        var hi = h.toLowerCase().indexOf('</head>'); if (hi > -1) h = h.slice(0, hi) + '<link rel="stylesheet" href="/assets/app.css?v=3">' + h.slice(hi);
-        var be = h.toLowerCase().lastIndexOf('</body>'), app = '<scr' + 'ipt src="/assets/app.js?v=3"></scr' + 'ipt><scr' + 'ipt>try{KEApp.pack()}catch(e){}</scr' + 'ipt>';
+        var hi = h.toLowerCase().indexOf('</head>'); if (hi > -1) h = h.slice(0, hi) + '<link rel="stylesheet" href="/assets/app.css?v=4">' + h.slice(hi);
+        var be = h.toLowerCase().lastIndexOf('</body>'), app = '<scr' + 'ipt src="/assets/app.js?v=4"></scr' + 'ipt><scr' + 'ipt>try{KEApp.pack()}catch(e){}</scr' + 'ipt>';
         h = be > -1 ? h.slice(0, be) + app + h.slice(be) : h + app;
         if (extra) { var eb = h.toLowerCase().lastIndexOf('</body>'); h = eb > -1 ? h.slice(0, eb) + extra + h.slice(eb) : h + extra; }
         document.open(); document.write(h); document.close();
