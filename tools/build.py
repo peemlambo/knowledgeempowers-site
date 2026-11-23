@@ -521,7 +521,7 @@ page('/exam-packs/', 'Maths exam revision packs with memos, Grades 4 to 12', 'En
   <div class="note"><b>How to order:</b> message us on WhatsApp with your child's grade and the pack you want. Pay using the details we send you. Then receive your pack and personal code. Each code is for one learner and works for one school term on up to 2 devices.</div>
   %s
 </div></section>''' % (btns((wa("Hi, I'd like to order an Exam Pack. Grade: "), 'Order on WhatsApp'), ('/exam-packs/exam-preparation-packs/', 'I already have a code')),
-   '<figure class="pic cutout"><img src="/assets/img/exam-pack-printed.webp" alt="The printed Grade 7 exam pack, comb bound" style="filter:drop-shadow(0 26px 30px rgba(0,0,0,.4));max-height:560px;width:auto;margin:auto;display:block"></figure>',
+   '<figure class="pic"><img src="/assets/img/printed-in-hand.jpg" alt="A printed, comb-bound Grade 7 exam pack and My Maths Diary" style="border-radius:6px"></figure>',
    prices([('Online', 'R149'), ('PDF', 'R100'), ('Printed', 'R199')]), prices([('Online', 'R199'), ('PDF', 'R149'), ('Printed', 'R250')]),
    btns((wa("Hi, I'd like to order an Exam Pack. Grade: "), 'Order on WhatsApp'))), '/exam-packs/')
 
