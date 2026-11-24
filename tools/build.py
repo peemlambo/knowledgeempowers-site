@@ -400,7 +400,7 @@ def row(fig, eb, h, p, price, link, text, flip=False):
 TRY = '''<section class="band"><div class="wrap">
   <div class="sec-head"><div class="eb">Try it now</div><h2>See how a question works</h2><p class="mut">Get it wrong on purpose. You'll see a hint first, then every step, the way it works in our workbooks.</p></div>
   <div class="try" id="try">
-    <div class="eb" style="color:var(--m)">Fractions · Grades 5–6</div>
+    <div class="eb" style="color:var(--m)">Fractions · Grades 4–9</div>
     <div class="q">Simplify %s fully.</div>
     <form id="tryF"><input id="tryA" inputmode="text" autocomplete="off" placeholder="Your answer, e.g. 3/4" aria-label="Your answer"><button class="btn" type="submit">Check</button></form>
     <div class="fb" id="tryFb"></div>
