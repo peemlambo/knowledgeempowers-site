@@ -269,12 +269,14 @@ html{padding-top:72px!important}
     if (open) h += '<div class="ks-cont"><div class="ks-c-txt"><div class="ks-eb">Continue where you left off</div><h2>' + esc(open.t.title) + '</h2>' +
       '<p>' + (open.p ? Math.round(open.p * 100) + '% done' : 'Started') + ' · ' + esc(open.t.grades) + '</p><div class="ks-c-bar"><i style="width:' + Math.round(open.p * 100) + '%"></i></div></div>' +
       '<button class="ks-go" data-key="' + open.t.key + '">Continue →</button></div>';
+    if (mine.length <= 6) { gs = []; pick = 0; }   // a short list needs no grade buttons
     if (gs.length > 1) h += '<div class="gpick" role="group" aria-label="Choose your grade"><span>My grade</span>' +
       '<button data-g="0"' + (pick ? '' : ' class="on"') + '>All</button>' +
       gs.map(function (g) { return '<button data-g="' + g + '"' + (pick === g ? ' class="on"' : '') + '>Grade ' + g + '</button>'; }).join('') + '</div>';
     function fits(t) { if (!pick) return true; var r = span(t); return r[0] <= pick && pick <= r[1]; }
     [1, 2, 3, 4, 5].forEach(function (term) {
-      var list = ME.topics.filter(function (t) { return t.term === term && fits(t); });
+      // only the topics this code opens (no greyed-out cards for topics that are not on the code)
+      var list = ME.topics.filter(function (t) { return t.term === term && fits(t) && t.ready && t.allowed; });
       if (!list.length) return;
       // Show the Grades 10–12 shelf only to codes that open at least one of those books (and the Grades 4–9 terms only to codes that open one of those).
       var band = ME.topics.filter(function (t) { return (t.term === 5) === (term === 5); });
