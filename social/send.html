@@ -2,5 +2,5 @@
 <script>
 var f=new URLSearchParams(location.search).get('f');
 parent.postMessage({ready:true,f:f},'*');
-if(f&&/^[a-z0-9-]+\.(mp4|png)$/.test(f))fetch('/social/'+f).then(r=>r.blob()).then(b=>parent.postMessage({name:f,blob:b},'*')).catch(e=>parent.postMessage({err:String(e)},'*'));
+if(f&&/^[a-z0-9-]+\.(mp4|png|jpg)$/.test(f))fetch('/social/'+f).then(r=>r.blob()).then(b=>parent.postMessage({name:f,blob:b},'*')).catch(e=>parent.postMessage({err:String(e)},'*'));
 </script>
