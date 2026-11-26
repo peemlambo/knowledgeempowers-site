@@ -349,3 +349,15 @@ footer small{opacity:.6;border-top:1px solid rgba(255,255,255,.12);padding-top:2
 .start-today .go{color:var(--m);font-weight:600;font-size:.92rem}
 .start-today:hover .go{text-decoration:underline}
 @media (max-width:900px){.brand-hero.two .wrap{grid-template-columns:1fr;gap:32px}.start{justify-self:stretch;max-width:none}}
+
+/* ---------- 10. phone reading size (kept last so it wins) ---------- */
+@media (max-width:700px){
+  html{font-size:16px}
+  h1{font-size:1.75rem}
+  h2,body.home h2{font-size:1.45rem}
+  h3,body.home h3{font-size:1.08rem}
+  .brand-hero h1,.phead h1{font-size:2.05rem}
+  .hero h1{font-size:1.85rem}
+  .lead{font-size:1.04rem}
+}
+@media (min-width:701px) and (max-width:1180px){html{font-size:18px}}

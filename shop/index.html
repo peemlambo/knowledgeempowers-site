@@ -11,6 +11,8 @@
 *{box-sizing:border-box}
 html{font-size:20.5px}
 @media (min-width:1181px){html{font-size:clamp(20.5px,calc(14.5px + .42vw),23.5px)}}
+@media (max-width:700px){html{font-size:16px}h1{font-size:2.05rem}}
+@media (min-width:701px) and (max-width:1180px){html{font-size:18px}}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:var(--m)}
 a:focus-visible,button:focus-visible{outline:2px solid var(--m);outline-offset:2px}

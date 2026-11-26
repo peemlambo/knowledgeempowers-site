@@ -42,7 +42,7 @@ def header(cur):
 
 PAGES = {
  'baseline-assessment/index.html': ('/baseline-assessment/', 'div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}@media (min-width:1181px){body:not(.rep) .wrap{max-width:min(1100px,90vw)!important}}'),
- 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}html{font-size:clamp(18px,calc(12px + .4vw),21px)}main.wrap{max-width:none!important;padding-inline:clamp(20px,5vw,96px)!important}'),
+ 'free-classroom-practice/index.html': ('/free-classroom-practice/', 'h1{font-size:clamp(1.8rem,3.2vw,2.5rem)!important;line-height:1.2!important}html{font-size:clamp(18px,calc(12px + .4vw),21px)}@media (max-width:700px){html{font-size:16px}}main.wrap{max-width:none!important;padding-inline:clamp(20px,5vw,96px)!important}'),
  'shop/index.html': ('/shop/', ''),
  'workbooks/digital-math-workbooks/index.html': ('', ''),
  'exam-packs/exam-preparation-packs/index.html': ('', 'body{min-height:calc(100vh - 72px)!important}@media (max-width:1180px){body{min-height:calc(100vh - 64px)!important}}'),
