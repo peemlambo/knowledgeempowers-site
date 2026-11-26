@@ -357,6 +357,7 @@ page('/about/privacy-policy/', 'Privacy Policy', 'How KnowledgeEmpowers collects
 <p>Every tutor in the KnowledgeEmpowers network completes a Police Clearance Certificate and signs a child safeguarding declaration before they are ever matched with a learner. You're not just choosing a tutor: you're choosing someone who will spend time with your child, and we treat that responsibility accordingly. If you ever have a question or concern about a tutor's conduct, you're welcome to reach out to us directly at any time.</p>
 <p>Every tutor is police-cleared before working with learners. Every tutor signs a child safeguarding declaration. Your information is handled securely and confidentially, in line with South Africa's POPIA.</p>
 <h2>2. Information we collect</h2><p>We may collect:</p>%s
+<h2>Learner workbooks</h2><p>When a learner uses an online workbook with their personal code, we store their name, code and their work (answers, handwriting and notes) so they can continue on any device and so a parent can see their progress. We do not collect contact details, ID numbers or school details through the workbooks. Ask us at any time and we will delete a learner's work.</p>
 <h2>3. How we use your information</h2><p>We use your data to:</p>%s
 <h2>4. Affiliate disclosure</h2><p>Some links on this site are affiliate links. If you purchase through them, we may earn a small commission, at no extra cost to you. We only promote tools and platforms we believe in.</p>
 <h2>5. Data protection</h2><p>We take reasonable steps to protect your data:</p>%s
