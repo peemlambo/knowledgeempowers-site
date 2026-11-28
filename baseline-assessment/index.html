@@ -117,7 +117,7 @@ body.rep .ev{background:#FBF4F4}
   .btn{min-height:56px;padding:.8rem 1.8rem}
 }
 </style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script><style>/* page styles kept outside the shared header block */
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';if(/wa\.me|whatsapp\.com/i.test(h))gtag('event','whatsapp_click',{link_url:h,page_path:location.pathname});else if(/^tel:/i.test(h))gtag('event','phone_click',{page_path:location.pathname});else if(/^mailto:/i.test(h))gtag('event','email_click',{page_path:location.pathname});});if(/^\/shop\//.test(location.pathname))gtag('event','shop_visit');</script><style>/* page styles kept outside the shared header block */
 body.bq-on .wrap{max-width:1180px;padding:0 clamp(20px,5vw,72px) 60px}
 body.bq-on .kq-head{margin-top:1.8rem}
 body:not(.bq-on) .inkbtn,body:not(.bq-on) .inkbar{display:none!important}
@@ -219,7 +219,7 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
     try { var qg = new URLSearchParams(location.search).get('grade'); var qb = qg && app.querySelector('[data-g="' + (+qg) + '"]'); if (qb) qb.onclick(); } catch (e) {}
     go.onclick = function () {
       S.name = nm.value.trim(); S.list = totalFor(S.grade).map(function (t) { return t.no; });
-      S.i = 0; S.step = 'core'; S.res = {}; S.log = {}; S.asked = 0; S.skips = 0; S.idk = 0; S.startedAt = Date.now(); ask();
+      S.i = 0; S.step = 'core'; S.res = {}; S.log = {}; S.asked = 0; S.skips = 0; S.idk = 0; S.startedAt = Date.now(); try{gtag('event','maths_check_start',{grade:String(S.grade)})}catch(e){} ask();
     };
   }
   function top() { return '<div class="top"><img src="' + LOGO + '" alt="KnowledgeEmpowers"><span>Free maths check</span>' +
@@ -391,6 +391,7 @@ div.top{display:none!important}body>.wrap,#app{padding-top:40px}h1{font-size:cla
   function finish() {
     var rec = recommended(), ready = S.list.filter(function (n) { return S.res[n] === 's'; });
     var mins = Math.max(1, Math.round((Date.now() - S.startedAt) / 60000));
+    try{gtag('event','maths_check_complete',{grade:String(S.grade),minutes:mins})}catch(e){}
     // save to the sheet (quietly)
     if (window.google && google.script && google.script.run) {
       google.script.run.withSuccessHandler(function (r) { if (r && r.id) S.id = r.id; })

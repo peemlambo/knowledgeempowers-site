@@ -4,7 +4,7 @@ import os, re, html
 from urllib.parse import quote
 
 GA = '''<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHMHQ9V039"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');</script>'''
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YHMHQ9V039');document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';if(/wa\\.me|whatsapp\\.com/i.test(h))gtag('event','whatsapp_click',{link_url:h,page_path:location.pathname});else if(/^tel:/i.test(h))gtag('event','phone_click',{page_path:location.pathname});else if(/^mailto:/i.test(h))gtag('event','email_click',{page_path:location.pathname});});if(/^\\/shop\\//.test(location.pathname))gtag('event','shop_visit');</script>'''
 WA = 'https://wa.me/27615818059'
 def wa(text): return WA + '?text=' + quote(text)
 LOGIN = '/workbooks/digital-math-workbooks/'
